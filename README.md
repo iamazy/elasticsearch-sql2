@@ -9,7 +9,7 @@
 
 感谢
 --------------------------
-首先感谢`elasticsearch-query-toolkit`的作者`gitchennan`,本elasticsearch-sql基于`gitchennan`的`elasticsearch-query-toolkit`的版本上稍作修改和添加部分功能，感谢`gitchennan`哈哈哈哈哈
+首先感谢`elasticsearch-query-toolkit`的作者`gitchennan`,elasticsearch-sql基于`gitchennan`的`elasticsearch-query-toolkit`，并在其中稍作修改和添加部分功能，再次感谢`gitchennan`哈哈哈哈哈
 `gitchennan`的github地址:[elasticsearch-query-toolkit](https://github.com/gitchennan/elasticsearch-query-toolkit)
 
 
