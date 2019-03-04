@@ -26,7 +26,7 @@ public class DeleteTest {
 
     public static void main(String[] args) {
 
-        String sql="DELETE from device_search where match_all() limit 1100";
+        String sql="DELETE from fruits where match_all() limit 1100";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql, new String[]{"port"});
 
