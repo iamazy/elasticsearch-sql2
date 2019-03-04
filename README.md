@@ -103,8 +103,8 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES DeleteByQuery
 
 #### 未来将要添加的功能
-- [] ES Highlighter
-- [] elasticsearch-sql[NLPChina]组件中我未添加的功能!!!
+- [ ] ES Highlighter
+- [ ] elasticsearch-sql[NLPChina]组件中我未添加的功能!!!
 
 <font size="10">☀️</font>未来的想法是将功能完善的跟NLPChina团队一样多嘻嘻
 
