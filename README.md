@@ -100,6 +100,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES Include[fields]
 - [x] ES From
 - [x] ES Size
+- [x] ES Range
 
 #### `elasticsearch-sql` 新增的功能
 - [x] ES MatchAll
