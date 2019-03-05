@@ -75,6 +75,10 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] SQL Not
 - [x] SQL Null
 - [x] SQL Nvl
+- [x] SQL Max
+- [x] SQL Min
+- [x] SQL Sum
+- [x] SQL Avg
 
 - [x] ES FullText
 - [x] ES Match
