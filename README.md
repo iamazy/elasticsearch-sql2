@@ -322,10 +322,9 @@ public static void main(String[] args) {
 size=1000 是DeleteByQueryRequest中的SearchRequest的Size，默认为1000
 limit 1100 设置的是DeleteByQueryRequest的Size，只是在DSL中没有显示
 
-🌹其余的请去test目录下找吧哈哈
+🌹其余的请去test目录下找吧
 
-
-
+欢迎大家提issue
 
 
 
