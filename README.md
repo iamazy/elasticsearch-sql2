@@ -109,6 +109,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES DeleteByQuery
 - [x] ES Cardinality (目前不支持Script的方式)
 - [x] ES TopHits
+- [x] ES Nested (elasticsearch-query-toolkit中nested表达方式不合理，已修正)
 
 #### 未来将要添加的功能
 - [ ] ES Highlighter
