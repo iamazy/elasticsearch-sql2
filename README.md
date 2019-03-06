@@ -332,7 +332,7 @@ limit 1100 设置的是DeleteByQueryRequest的Size，只是在DSL中没有显示
  为了表征**nested path**这个属性,采用 $ 符号指明 <br/>
 nested path必须以 $ 在**为nested类型的属性之前**结尾（非常重要）中间是否是以 $ 连接的不重要
 
-<font color="red"><b>重要:</b></font>以`portInfo`的`bannerList`为例，`bannerList`为`nested`类型，则查询时的**nested path**应该为`portInfo.bannerList`
+<font color="red"><b>重要:</b></font>以`product`的`apple`为例，`apple`为`nested`类型，则查询时的**nested path**应该为`product.apple`
 以下两种写法均**正确**
 ```
 $product$apple.name
