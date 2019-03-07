@@ -4,7 +4,7 @@
 
 修复
 --------------------
-2019-3-6：修复原版Nested类型的nested path识别错误的问题
+2019-3-6：修复原版Nested类型的nested path识别错误的问题<br/>
 2019-3-7: 删除了大部分无用的代码，添加了geo_distance聚类方法
 
 版本
@@ -116,6 +116,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES Cardinality (目前不支持Script的方式)
 - [x] ES TopHits
 - [x] ES Nested (elasticsearch-query-toolkit中nested表达方式不合理，已修正)
+- [x] ES GeoDistance
 
 #### 未来将要添加的功能
 - [ ] ES Highlighter
