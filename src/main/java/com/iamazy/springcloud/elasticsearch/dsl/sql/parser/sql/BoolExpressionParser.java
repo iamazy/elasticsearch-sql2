@@ -16,11 +16,11 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlCondition;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.exact.InListQueryParser;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.fulltext.FullTextQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.join.JoinQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.script.ScriptQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.term.TermLevelAtomicQueryParser;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -107,7 +107,7 @@ public class BoolExpressionParser {
             MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
 
             if (scriptQueryParser.isMatchMethodInvocation(methodInvocation)) {
-                return scriptQueryParser.parseAtomMethodQuery(methodInvocation);
+                return scriptQueryParser.parseMethodQuery(methodInvocation);
             }
 
             if (fullTextAtomQueryParser.isFulltextAtomQuery(methodInvocation)) {

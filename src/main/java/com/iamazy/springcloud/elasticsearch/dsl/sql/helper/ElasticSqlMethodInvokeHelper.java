@@ -20,12 +20,10 @@ import java.util.List;
 public class ElasticSqlMethodInvokeHelper {
     public static final List<String> DATE_METHOD = ImmutableList.of("date", "to_date", "toDate");
 
-    public static final List<String> AGG_TERMS_METHOD = ImmutableList.of("terms", "terms_agg");
+
     public static final List<String> AGG_RANGE_METHOD = ImmutableList.of("range", "range_agg");
     public static final List<String> AGG_DATE_HISTOGRAM_METHOD = ImmutableList.of("histogram", "histogram_agg");
     public static final List<String> AGG_RANGE_SEGMENT_METHOD = ImmutableList.of("segment", "segment_agg");
-    public static final List<String> AGG_CARDINALITY_METHOD = ImmutableList.of("cardinality");
-    public static final List<String> AGG_TOPHITS_METHOD = ImmutableList.of("topHits","top_hits");
 
     public static final String AGG_MIN_METHOD = "min";
     public static final String AGG_MAX_METHOD = "max";
@@ -51,26 +49,8 @@ public class ElasticSqlMethodInvokeHelper {
         return methodAlias.equalsIgnoreCase(method);
     }
 
-    public static void checkTermsAggMethod(SQLMethodInvokeExpr aggInvokeExpr) {
-        if (!isMethodOf(AGG_TERMS_METHOD, aggInvokeExpr.getMethodName())) {
-            throw new ElasticSql2DslException("[syntax error] Sql not support method:" + aggInvokeExpr.getMethodName());
-        }
-    }
-
     public static void checkDateHistogramAggMethod(SQLMethodInvokeExpr aggInvokeExpr) {
         if (!isMethodOf(AGG_DATE_HISTOGRAM_METHOD, aggInvokeExpr.getMethodName())) {
-            throw new ElasticSql2DslException("[syntax error] Sql not support method:" + aggInvokeExpr.getMethodName());
-        }
-    }
-
-    public static void checkCardinalityAggMethod(SQLMethodInvokeExpr aggInvokeExpr) {
-        if (!isMethodOf(AGG_CARDINALITY_METHOD, aggInvokeExpr.getMethodName())) {
-            throw new ElasticSql2DslException("[syntax error] Sql not support method:" + aggInvokeExpr.getMethodName());
-        }
-    }
-
-    public static void checkTopHitsAggMethod(SQLMethodInvokeExpr aggInvokeExpr) {
-        if (!isMethodOf(AGG_TOPHITS_METHOD, aggInvokeExpr.getMethodName())) {
             throw new ElasticSql2DslException("[syntax error] Sql not support method:" + aggInvokeExpr.getMethodName());
         }
     }

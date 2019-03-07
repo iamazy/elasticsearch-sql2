@@ -4,9 +4,9 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.listener.ParseActionListener;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.utils.Constants;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.utils.Constants;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.PrefixQueryBuilder;
@@ -16,6 +16,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author iamazy
+ */
 public class PrefixQueryParser extends AbstractFieldSpecificMethodQueryParser {
 
     private static List<String> PREFIX_QUERY_METHOD = ImmutableList.of("prefix", "prefix_query", "prefixQuery");

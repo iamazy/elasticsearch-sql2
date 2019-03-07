@@ -36,7 +36,7 @@ public class QueryFieldParser {
 
             SQLExpr tmpLoopExpr = queryFieldExpr;
 
-            while ((tmpLoopExpr != null) && (tmpLoopExpr instanceof SQLPropertyExpr)) {
+            while ((tmpLoopExpr instanceof SQLPropertyExpr)) {
                 queryFieldTextList.add(((SQLPropertyExpr) tmpLoopExpr).getName());
                 tmpLoopExpr = ((SQLPropertyExpr) tmpLoopExpr).getOwner();
             }

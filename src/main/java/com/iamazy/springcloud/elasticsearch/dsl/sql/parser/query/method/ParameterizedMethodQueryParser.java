@@ -9,6 +9,9 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.expr.Abs
 
 import java.util.Map;
 
+/**
+ * @author iamazy
+ */
 public abstract class ParameterizedMethodQueryParser extends AbstractParameterizedMethodExpression implements MethodQueryParser {
 
     @Override
@@ -23,7 +26,7 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
     }
 
     @Override
-    public AtomicQuery parseAtomMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
+    public AtomicQuery parseMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
         if (!isMatchMethodInvocation(invocation)) {
             throw new ElasticSql2DslException(
                     String.format("[syntax error] Expected method name is one of [%s],but get [%s]",

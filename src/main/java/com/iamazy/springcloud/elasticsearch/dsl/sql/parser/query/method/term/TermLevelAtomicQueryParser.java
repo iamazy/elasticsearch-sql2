@@ -6,8 +6,8 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.exception.ElasticSql2DslExce
 import com.iamazy.springcloud.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.AtomicQuery;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlArgs;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class TermLevelAtomicQueryParser {
     public AtomicQuery parseTermLevelAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs, SqlArgs sqlArgs) {
         MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
         MethodQueryParser matchAtomQueryParser = getQueryParser(methodInvocation);
-        return matchAtomQueryParser.parseAtomMethodQuery(methodInvocation);
+        return matchAtomQueryParser.parseMethodQuery(methodInvocation);
     }
 
     private MethodQueryParser getQueryParser(MethodInvocation methodInvocation) {

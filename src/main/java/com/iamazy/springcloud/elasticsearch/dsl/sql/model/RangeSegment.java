@@ -19,6 +19,21 @@ public class RangeSegment {
 
 
     public enum SegmentType{
-        Date,Numeric
+        /**
+         * 时间类型
+         */
+        Date,
+        /**
+         * 数字类型
+         */
+        Numeric,
+        /**
+         * Ip类型
+         */
+        Ip,
+        /**
+         * 地理类型
+         */
+        Geo
     }
 }

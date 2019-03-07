@@ -6,5 +6,5 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.model.AtomicQuery;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.expr.MethodExpression;
 
 public interface MethodQueryParser extends MethodExpression {
-    AtomicQuery parseAtomMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException;
+    AtomicQuery parseMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException;
 }

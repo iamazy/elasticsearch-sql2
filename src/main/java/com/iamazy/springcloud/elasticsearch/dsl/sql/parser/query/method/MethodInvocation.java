@@ -4,11 +4,16 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlArgs;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+/**
+ * @author iamazy
+ */
 public class MethodInvocation {
+    @Getter
     private final SQLMethodInvokeExpr methodInvokeExpr;
     private final String queryAs;
     private final SqlArgs sqlArgs;

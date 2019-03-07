@@ -17,6 +17,7 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.listener.ParseActionListener
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.ElasticDslContext;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlArgs;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.aggs.GroupByAggregationParser;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.sql.*;
 
 
@@ -119,7 +120,7 @@ public class ElasticSql2DslParser {
                 //解析路由参数
                 new QueryRoutingValParser(parseActionListener),
                 //解析分组统计
-                new QueryGroupByParser(),
+                new GroupByAggregationParser(),
                 //解析SQL查询指定的字段
                 new QuerySelectFieldListParser(parseActionListener),
                 //解析SQL的分页条数

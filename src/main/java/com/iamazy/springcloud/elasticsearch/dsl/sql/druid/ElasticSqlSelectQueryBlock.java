@@ -50,7 +50,7 @@ public class ElasticSqlSelectQueryBlock extends SQLSelectQueryBlock implements S
             this.routingValues=routingValues;
             if(CollectionUtils.isNotEmpty(routingValues)){
                 for(SQLExpr sqlExpr:routingValues){
-                    sqlExpr.setParent(Routing.this);
+                    sqlExpr.setParent(ElasticSqlSelectQueryBlock.Routing.this);
                 }
             }
         }

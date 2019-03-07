@@ -28,7 +28,7 @@ public class JoinQueryParser {
     public AtomicQuery parseJoinAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs, SqlArgs sqlArgs) {
         MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
         MethodQueryParser joinAtomQueryParser = getQueryParser(methodInvocation);
-        return joinAtomQueryParser.parseAtomMethodQuery(methodInvocation);
+        return joinAtomQueryParser.parseMethodQuery(methodInvocation);
     }
 
     private MethodQueryParser getQueryParser(MethodInvocation methodInvocation) {

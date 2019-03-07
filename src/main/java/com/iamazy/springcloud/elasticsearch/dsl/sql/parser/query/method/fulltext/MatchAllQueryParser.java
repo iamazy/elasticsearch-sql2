@@ -2,10 +2,9 @@ package com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.fulltex
 
 import com.google.common.collect.ImmutableList;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.ParameterizedMethodQueryParser;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
 

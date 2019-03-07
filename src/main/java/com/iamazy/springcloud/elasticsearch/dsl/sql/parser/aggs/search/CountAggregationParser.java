@@ -5,5 +5,5 @@ package com.iamazy.springcloud.elasticsearch.dsl.sql.parser.aggs.search;
  * @date 2019/3/5
  * @descrition
  **/
-public class CountQueryParser {
+public class CountAggregationParser {
 }

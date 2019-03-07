@@ -60,4 +60,12 @@ public class AggTest {
 
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
     }
+
+    @Test
+    public void geoDistance(){
+        String sql="SELECT * FROM product.apple group by geo_distance(name#km,origin(12.0,14.0),range(0.0,100.0),range('*',100.0)),terms(name,101)";
+        ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
+        System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
+    }
 }

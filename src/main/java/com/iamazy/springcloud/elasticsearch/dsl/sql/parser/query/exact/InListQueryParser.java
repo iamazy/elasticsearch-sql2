@@ -11,7 +11,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.QueryBuilders;
 
 
-
+/**
+ * @author iamazy
+ */
 public class InListQueryParser extends AbstractExactQueryParser {
 
     public InListQueryParser(ParseActionListener parseActionListener) {

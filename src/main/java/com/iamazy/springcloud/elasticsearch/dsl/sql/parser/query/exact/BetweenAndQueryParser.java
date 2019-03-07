@@ -10,7 +10,9 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlArgs;
 import org.elasticsearch.index.query.QueryBuilders;
 
 
-
+/**
+ * @author iamazy
+ */
 public class BetweenAndQueryParser extends AbstractExactQueryParser {
 
     public BetweenAndQueryParser(ParseActionListener parseActionListener) {

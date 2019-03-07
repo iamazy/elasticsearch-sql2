@@ -13,9 +13,9 @@ import java.util.List;
 public interface ParseActionListener {
     void onSelectFieldParse(ElasticSqlQueryField field);
     void onAtomicExactQueryConditionParse(ElasticSqlQueryField paramName, Object[] params, SqlConditionOperator operator);
-    void onAtomicMethodQueryConditionParse(ElasticSqlQueryField paramName, Object[] params);
+    void onAtomicMethodQueryConditionParse(ElasticSqlQueryField paramName,Object[] params);
     void onRoutingValuesParse(List<String> routingValues);
-    void onLimitSizeParse(int from, int size);
+    void onLimitSizeParse(int from,int size);
 }
 
 

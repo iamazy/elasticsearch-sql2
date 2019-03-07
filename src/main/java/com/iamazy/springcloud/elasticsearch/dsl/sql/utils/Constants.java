@@ -5,6 +5,7 @@ package com.iamazy.springcloud.elasticsearch.dsl.sql.utils;
  */
 public interface Constants {
 
+    String POUND="#";
     String DEFAULT_ES_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     /**
      * Full Text Query Args

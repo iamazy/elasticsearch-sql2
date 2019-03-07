@@ -18,7 +18,7 @@ public class HighlighterQueryParser implements MethodQueryParser {
     private static List<String> HIGHLIGHT_METHOD = ImmutableList.of("highlight","highlighter");
 
     @Override
-    public AtomicQuery parseAtomMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
+    public AtomicQuery parseMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
         return null;
     }
 

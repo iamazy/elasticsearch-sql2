@@ -10,6 +10,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * @author iamazy
+ */
 public abstract class AbstractParameterizedMethodExpression implements ParameterizedMethodExpression {
 
     protected static final String COMMA = ",";

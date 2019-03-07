@@ -3,8 +3,8 @@ package com.iamazy.springcloud.elasticsearch.dsl.sql.parser.sql.sort;
 
 import com.iamazy.springcloud.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.expr.AbstractParameterizedMethodExpression;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;

@@ -6,8 +6,8 @@ import com.iamazy.springcloud.elasticsearch.dsl.sql.exception.ElasticSql2DslExce
 import com.iamazy.springcloud.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.AtomicQuery;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.model.SqlArgs;
-import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
+import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.springcloud.elasticsearch.dsl.sql.parser.sql.BoolExpressionParser;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -50,7 +50,7 @@ public class HasChildQueryParser implements MethodQueryParser {
     }
 
     @Override
-    public AtomicQuery parseAtomMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
+    public AtomicQuery parseMethodQuery(MethodInvocation invocation) throws ElasticSql2DslException {
         String childType = invocation.getParameterAsString(0);
         SQLExpr filter = invocation.getParameter(1);
 
