@@ -1,6 +1,12 @@
  基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
 
+
+修复
+--------------------
+2019-3-6：修复原版Nested类型的nested path识别错误的问题
+
+
 版本
 ---------------------
 |elasticsearch-sql|es version|
@@ -321,6 +327,42 @@ public static void main(String[] args) {
 🐷 DSL里的size=1000和Java中的`limit 1100`含义不一样
 size=1000 是DeleteByQueryRequest中的SearchRequest的Size，默认为1000
 limit 1100 设置的是DeleteByQueryRequest的Size，只是在DSL中没有显示
+
+### 5. Nested
+ 为了表征**nested path**这个属性,采用 **$** 符号指明 <br/>
+nested path必须以 **$** 在**为nested类型的属性之前**结尾（非常重要）中间是否是以 **$** 连接的不重要
+
+<font color="red"><b>重要:</b></font>以`product`的`apple`为例，`apple`为`nested`类型，则查询时的**nested path**应该为`product.apple`
+以下两种写法均**正确**
+```
+$product$apple.name
+product$apple.name
+```
+下面这几种写法**错误**
+```
+product.apple$name
+$product.apple$name
+$product$apple$name
+product$apple$name
+```
+Nested结构参照
+```
+"product" : {
+    "properties" : {
+        "apple" : {
+            "type" : "nested",
+            "properties" : {
+                "name" : {
+                "type" : "text"
+                },
+                "price" : {
+                "type" : "double"
+                }
+            }
+        }
+    }
+}
+```
 
 🌹其余的请去test目录下找吧
 
