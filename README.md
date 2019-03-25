@@ -1,37 +1,17 @@
  基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
 
-说明
---------------------
-目前使用文档无法及时更新出来，但是test目录中基本有所有的测试用例，可以结合生成的dsl和调试信息理解
-
-修复
---------------------
-2019-3-6：修复原版Nested类型的nested path识别错误的问题<br/>
-2019-3-7：删除了大部分无用的代码，添加了geo_distance聚类方法
-
 版本
 ---------------------
 |elasticsearch-sql|es version|
 |----|-----|
 |master|6.6.0|
 
-感谢
---------------------------
-首先感谢`elasticsearch-query-toolkit`的作者`gitchennan`,elasticsearch-sql基于`gitchennan`的`elasticsearch-query-toolkit`，并在其中稍作修改和添加部分功能，再次感谢`gitchennan`哈哈哈哈哈<br/>
-`gitchennan`的github地址:[elasticsearch-query-toolkit](https://github.com/gitchennan/elasticsearch-query-toolkit)
-
-
-介绍
--------------------------
-elasticsearch-sql是一个基于sql查询的elasticsearch编程工具包，支持sql生成elasticsearch dsl,去掉了`elasticsearch-query-toolkit`中与Spring,Mybatis
-集成的部分，有需要的话请参照`elasticsearch-query-toolkit`<br/>
-
 特点
 ----------------------
 ##### 1）elasticsearch-sql是基于Java Rest High Level Client构建elasticsearch查询的，支持elasticsearch原生rest client调用以及第三方http请求
 ##### 2）基于 `alibaba`的Druid数据连接池的SqlParser组件，解析sql速度快，自定义解析规则更方便
-##### 3）方便鉴权
+##### 3）支持鉴权
 抛弃elasticsearch传统的transport连接方式改用rest high level连接方式不仅仅是因为官方建议，而是在结合x-pack组件进行鉴权的时候更加方便
 本人不知道在transport连接方式中如何复用transport client进行多用户的搜索请求
 下面是官网的一段代码
@@ -71,8 +51,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 
 功能点
 ------------
-我本人是向[https://github.com/NLPchina/elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql)的开发团队看齐的，功能点会慢慢的一点一点的添加的
-#### `elasticsearch-query-toolkit`已有的功能
+
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
@@ -86,8 +65,8 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] SQL Nvl
 - [x] SQL Max
 - [x] SQL Min
-- [x] SQL Sum
 - [x] SQL Avg
+- [x] SQL Sum
 - [x] SQL > & < & >= & <=
 
 - [x] ES FullText
@@ -109,17 +88,11 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES Include[fields]
 - [x] ES From
 - [x] ES Size
-- [x] ES Range(Number,Date)
-
-#### `elasticsearch-sql` 新增的功能
 - [x] ES MatchAll
 - [x] ES MatchPhrase
 - [x] ES MatchPhrasePrefix
 - [x] ES DeleteByQuery
-- [x] ES Cardinality (目前不支持Script的方式)
-- [x] ES TopHits
-- [x] ES Nested (elasticsearch-query-toolkit中nested表达方式不合理，已修正)
-- [x] ES GeoDistance
+- [x] ES Cardinality 
 
 #### 未来将要添加的功能
 - [ ] ES Highlighter
@@ -127,10 +100,18 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 
 <font size="10">☀️</font>未来的想法是将功能完善的跟NLPChina团队一样多嘻嘻
 
+
+1、搜索请求SQL
+
+SELECT项，可以是通配符* 也可以是具体指定需要返回的字段（针对inner/nested文档直接通过.引用）
+FROM项，后面跟的是索引名和文档类型如：product.car 表示查询product这个索引下的car类型
+QUERY项，关键字QUERY和WHERE是同级的，不同之处是QUERY后面跟的查询条件会进行打分
+WHERE项，和QUERY同级，后面跟的查询条件不会参与打分，只是进行简单的bool匹配
+ORDER BY项，跟SQL一样后面跟排序条件
+LIMIT 项，指定分页参数对应ES的from，size参数
+
 测试用例
 ---------
-提供几个SQL转DSL的例子(在源码test文件夹里)，其他部分你们需要去[elasticsearch-query-toolkit](https://github.com/gitchennan/elasticsearch-query-toolkit)了解，或者自己看源码(推荐，原作者的代码很优秀)
-
 
 ### 1. Match
  ```java
@@ -332,45 +313,69 @@ public static void main(String[] args) {
 size=1000 是DeleteByQueryRequest中的SearchRequest的Size，默认为1000
 limit 1100 设置的是DeleteByQueryRequest的Size，只是在DSL中没有显示
 
-### 5. Nested
- 为了表征**nested path**这个属性,采用 **$** 符号指明 <br/>
-nested path必须以 **$** 在**为nested类型的属性之前**结尾（非常重要）中间是否是以 **$** 连接的不重要
-
-<font color="red"><b>重要:</b></font>以`product`的`apple`为例，`apple`为`nested`类型，则查询时的**nested path**应该为`product.apple`
-以下两种写法均**正确**
-```
-$product$apple.name
-product$apple.name
-```
-下面这几种写法**错误**
-```
-product.apple$name
-$product.apple$name
-$product$apple$name
-product$apple$name
-```
-Nested结构参照
-```
-"product" : {
-    "properties" : {
-        "apple" : {
-            "type" : "nested",
-            "properties" : {
-                "name" : {
-                "type" : "text"
-                },
-                "price" : {
-                "type" : "double"
-                }
-            }
+### 5. 在QUERY条件中指定根据文档打分排序，并能指定可选参数， 指定权重
+```json
+SELECT * FROM product.apple QUERY term(productName, 'iphone6s', 'boost:2.0f')
+{
+  "query" : {
+    "bool" : {
+      "must" : {
+        "term" : {
+          "productName" : {
+            "value" : "iphone6s",
+            "boost" : 2.0
+          }
         }
+      }
     }
+  }
+}
+```
+### 6. Query和Where结合使用，WHERE达到过滤的效果, QUERY在过滤结果基础上再进行match匹配
+```json
+SELECT * FROM product.apple QUERY match(productName, 'iphone6s', 'boost:2.0f,type:boolean,operator:or,minimum_should_match:75%') WHERE minPrice > 100
+{
+  "query" : {
+    "bool" : {
+      "must" : {
+        "match" : {
+          "productName" : {
+            "query" : "iphone6s",
+            "type" : "boolean",
+            "operator" : "OR",
+            "boost" : 2.0,
+            "minimum_should_match" : "75%"
+          }
+        }
+      },
+      "filter" : {
+        "bool" : {
+          "must" : {
+            "range" : {
+              "minPrice" : {
+                "from" : 100,
+                "to" : null,
+                "include_lower" : false,
+                "include_upper" : true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
-🌹其余的请去test目录下找吧
+与旧版本搜索服务对比
+-------
+1. 新版代码解耦高，对外提供接口，添加新功能只需实现接口即可，扩展性更好
+2. 新版搜索服务的请求Sql是完全扁平的，不用关心DSL实际上内嵌了多少层
+3. 新版本代码可以直接和Mybatis等Orm框架结合
+4. 新版本搜索添加了复杂搜索的功能
+5. 新版本更好的表达了与或非等逻辑关系的表达
+6. 新版本改进或修复了旧版本的不足
 
-欢迎大家提issue
 
 
 
