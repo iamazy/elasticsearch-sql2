@@ -5,11 +5,9 @@
 --------------------
 目前使用文档无法及时更新出来，但是test目录中基本有所有的测试用例，可以结合生成的dsl和调试信息理解
 
-修复
+CHANGELOG
 --------------------
-2019-3-6：修复原版Nested类型的nested path识别错误的问题<br/>
-2019-3-7：删除了大部分无用的代码，添加了geo_distance聚类方法<br/>
-2019-3-25: 聚类使用递归实现添加多层嵌套聚类方式([>]表示嵌套聚类[,]表示同级聚类),具体用法见test目录<br/>
+[CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
 版本
 ---------------------
