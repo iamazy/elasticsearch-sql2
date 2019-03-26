@@ -14,7 +14,6 @@ CHANGELOG
 2019-3-26: 添加scroll id深度分页
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
->>>>>>> origin/master
 
 版本
 ---------------------
