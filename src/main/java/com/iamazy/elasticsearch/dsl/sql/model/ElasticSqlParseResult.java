@@ -91,18 +91,20 @@ public class ElasticSqlParseResult {
             searchRequest.types(type);
         }
 
-        if (from < 0) {
-            log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
-            //这里不会修改from的值
-            searchSourceBuilder.from(0);
-        } else {
-            searchSourceBuilder.from(from);
-        }
-        if (size < 0) {
-            log.debug("[size] is gte zero, assign 15 to [size(int)] as default value!!!");
-            searchSourceBuilder.size(15);
-        } else {
-            searchSourceBuilder.size(size);
+        if(StringUtils.isBlank(scrollExpire)) {
+            if (from < 0) {
+                log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
+                //这里不会修改from的值
+                searchSourceBuilder.from(0);
+            } else {
+                searchSourceBuilder.from(from);
+            }
+            if (size < 0) {
+                log.debug("[size] is gte zero, assign 15 to [size(int)] as default value!!!");
+                searchSourceBuilder.size(15);
+            } else {
+                searchSourceBuilder.size(size);
+            }
         }
 
         if (whereCondition != null && whereCondition.hasClauses()) {
