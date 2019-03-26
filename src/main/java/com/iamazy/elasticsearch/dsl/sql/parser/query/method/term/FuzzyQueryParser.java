@@ -4,7 +4,7 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.commons.collections4.MapUtils;
@@ -77,29 +77,29 @@ public class FuzzyQueryParser extends AbstractFieldSpecificMethodQueryParser {
         if (MapUtils.isEmpty(extraParamMap)) {
             return;
         }
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             fuzzyQuery.boost(Float.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.TRANSPOSITIONS)) {
-            String val = extraParamMap.get(Constants.TRANSPOSITIONS);
+        if (extraParamMap.containsKey(ElasticConstants.TRANSPOSITIONS)) {
+            String val = extraParamMap.get(ElasticConstants.TRANSPOSITIONS);
             fuzzyQuery.transpositions(Boolean.parseBoolean(val));
         }
-        if (extraParamMap.containsKey(Constants.PREFIX_LENGTH)) {
-            String val = extraParamMap.get(Constants.PREFIX_LENGTH);
+        if (extraParamMap.containsKey(ElasticConstants.PREFIX_LENGTH)) {
+            String val = extraParamMap.get(ElasticConstants.PREFIX_LENGTH);
             fuzzyQuery.prefixLength(Integer.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.MAX_EXPANSIONS)) {
-            String val = extraParamMap.get(Constants.MAX_EXPANSIONS);
+        if (extraParamMap.containsKey(ElasticConstants.MAX_EXPANSIONS)) {
+            String val = extraParamMap.get(ElasticConstants.MAX_EXPANSIONS);
             fuzzyQuery.maxExpansions(Integer.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.REWRITE)) {
-            String val = extraParamMap.get(Constants.REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.REWRITE);
             fuzzyQuery.rewrite(val);
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZINESS)) {
-            String val = extraParamMap.get(Constants.FUZZINESS).toLowerCase();
+        if (extraParamMap.containsKey(ElasticConstants.FUZZINESS)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZINESS).toLowerCase();
 
             switch (val){
                 case "0":

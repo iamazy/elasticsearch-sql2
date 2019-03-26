@@ -1,9 +1,9 @@
-package com.iamazy.elasticsearch.dsl.sql.utils;
+package com.iamazy.elasticsearch.dsl.cons;
 
 /**
  * @author iamazy
  */
-public interface Constants {
+public interface ElasticConstants {
 
     String POUND="#";
     String DEFAULT_ES_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

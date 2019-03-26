@@ -2,7 +2,7 @@ package com.iamazy.elasticsearch.dsl.sql.helper;
 
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +49,7 @@ public class ElasticSqlDateParseHelper {
 
     public static String formatDefaultEsDateObjectValue(Object date) {
         if (date instanceof Date) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_ES_DATE_FORMAT);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(ElasticConstants.DEFAULT_ES_DATE_FORMAT);
             return dateFormat.format(date);
         }
         throw new ElasticSql2DslException(
@@ -61,7 +61,7 @@ public class ElasticSqlDateParseHelper {
             SimpleDateFormat dateFormat = new SimpleDateFormat(patternArg);
             Date date = dateFormat.parse(timeValArg);
 
-            dateFormat = new SimpleDateFormat(Constants.DEFAULT_ES_DATE_FORMAT);
+            dateFormat = new SimpleDateFormat(ElasticConstants.DEFAULT_ES_DATE_FORMAT);
             return dateFormat.format(date);
         }
         catch (ParseException pex) {

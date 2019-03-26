@@ -16,7 +16,7 @@ import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -126,8 +126,8 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
     private AggregationBuilder createGeoDistanceBuilder(String queryField,RangeSegment origin, List<RangeSegment> rangeSegments){
         GeoPoint originPoint=new GeoPoint((Double)origin.getFrom(),(Double) origin.getTo());
         GeoDistanceAggregationBuilder geoDistanceAggregationBuilder;
-        if(queryField.contains(Constants.POUND)){
-            String[] fieldUnit=queryField.split(Constants.POUND);
+        if(queryField.contains(ElasticConstants.POUND)){
+            String[] fieldUnit=queryField.split(ElasticConstants.POUND);
             String field=fieldUnit[0];
             String unit=fieldUnit[1];
             DistanceUnit distanceUnit=parseDistanceUnit(unit);

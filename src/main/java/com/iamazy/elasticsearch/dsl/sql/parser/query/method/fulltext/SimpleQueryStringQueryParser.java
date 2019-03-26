@@ -6,7 +6,7 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.ParameterizedMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.Operator;
@@ -43,7 +43,7 @@ public class SimpleQueryStringQueryParser extends ParameterizedMethodQueryParser
 
             if (StringUtils.isNotBlank(queryFields)) {
                 String[] tArr = queryFields.split(COLON);
-                if (Constants.FIELDS.equalsIgnoreCase(tArr[0])) {
+                if (ElasticConstants.FIELDS.equalsIgnoreCase(tArr[0])) {
                     for (String fieldItem : tArr[1].split(COMMA)) {
                         simpleQueryString.field(fieldItem);
                     }
@@ -85,7 +85,7 @@ public class SimpleQueryStringQueryParser extends ParameterizedMethodQueryParser
                 throw new ElasticSql2DslException("[syntax error] queryString method args error");
             }
 
-            if (Boolean.FALSE == Constants.FIELDS.equalsIgnoreCase(tArr[0])) {
+            if (Boolean.FALSE == ElasticConstants.FIELDS.equalsIgnoreCase(tArr[0])) {
                 throw new ElasticSql2DslException("[syntax error] Search fields name should one of [fields]");
             }
         }
@@ -96,28 +96,28 @@ public class SimpleQueryStringQueryParser extends ParameterizedMethodQueryParser
             return;
         }
 
-        if (extraParamMap.containsKey(Constants.MINIMUM_SHOULD_MATCH)) {
-            String val = extraParamMap.get(Constants.MINIMUM_SHOULD_MATCH);
+        if (extraParamMap.containsKey(ElasticConstants.MINIMUM_SHOULD_MATCH)) {
+            String val = extraParamMap.get(ElasticConstants.MINIMUM_SHOULD_MATCH);
             simpleStringQuery.minimumShouldMatch(val);
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZER)) {
-            String val = extraParamMap.get(Constants.ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZER);
             simpleStringQuery.analyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             simpleStringQuery.boost(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZE_WILDCARD)) {
-            String val = extraParamMap.get(Constants.ANALYZE_WILDCARD);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZE_WILDCARD)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZE_WILDCARD);
             simpleStringQuery.analyzeWildcard(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FLAGS)) {
-            String[] flags = extraParamMap.get(Constants.FLAGS).split("\\|");
+        if (extraParamMap.containsKey(ElasticConstants.FLAGS)) {
+            String[] flags = extraParamMap.get(ElasticConstants.FLAGS).split("\\|");
             List<SimpleQueryStringFlag> flagList = Lists.newLinkedList();
             for (String flag : flags) {
                 flagList.add(SimpleQueryStringFlag.valueOf(flag.toUpperCase()));
@@ -126,13 +126,13 @@ public class SimpleQueryStringQueryParser extends ParameterizedMethodQueryParser
         }
 
 
-        if (extraParamMap.containsKey(Constants.DEFAULT_OPERATOR)) {
-            String val = extraParamMap.get(Constants.DEFAULT_OPERATOR);
+        if (extraParamMap.containsKey(ElasticConstants.DEFAULT_OPERATOR)) {
+            String val = extraParamMap.get(ElasticConstants.DEFAULT_OPERATOR);
 
-            if (Constants.AND.equalsIgnoreCase(val)) {
+            if (ElasticConstants.AND.equalsIgnoreCase(val)) {
                 simpleStringQuery.defaultOperator(Operator.AND);
             }
-            if (Constants.OR.equalsIgnoreCase(val)) {
+            if (ElasticConstants.OR.equalsIgnoreCase(val)) {
                 simpleStringQuery.defaultOperator(Operator.OR);
             }
         }

@@ -5,7 +5,7 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.ParameterizedMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -42,13 +42,13 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
 
             if (StringUtils.isNotBlank(queryFields)) {
                 String[] tArr = queryFields.split(COLON);
-                if (Constants.FIELDS.equalsIgnoreCase(tArr[0])) {
+                if (ElasticConstants.FIELDS.equalsIgnoreCase(tArr[0])) {
                     for (String fieldItem : tArr[1].split(COMMA)) {
                         queryStringQuery.field(fieldItem);
                     }
                 }
 
-                if (Constants.DEFAULT_FIELD.equalsIgnoreCase(tArr[0])) {
+                if (ElasticConstants.DEFAULT_FIELD.equalsIgnoreCase(tArr[0])) {
                     queryStringQuery.defaultField(tArr[1]);
                 }
             }
@@ -85,7 +85,7 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
                 throw new ElasticSql2DslException("[syntax error] queryString method args error");
             }
 
-            if (Boolean.FALSE == Constants.FIELDS.equalsIgnoreCase(tArr[0]) && Boolean.FALSE == Constants.DEFAULT_FIELD.equalsIgnoreCase(tArr[0])) {
+            if (Boolean.FALSE == ElasticConstants.FIELDS.equalsIgnoreCase(tArr[0]) && Boolean.FALSE == ElasticConstants.DEFAULT_FIELD.equalsIgnoreCase(tArr[0])) {
                 throw new ElasticSql2DslException("[syntax error] Search fields name should one of [fields, default_field]");
             }
         }
@@ -96,114 +96,114 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
             return;
         }
 
-        if (extraParamMap.containsKey(Constants.MINIMUM_SHOULD_MATCH)) {
-            String val = extraParamMap.get(Constants.MINIMUM_SHOULD_MATCH);
+        if (extraParamMap.containsKey(ElasticConstants.MINIMUM_SHOULD_MATCH)) {
+            String val = extraParamMap.get(ElasticConstants.MINIMUM_SHOULD_MATCH);
             queryStringQuery.minimumShouldMatch(val);
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZER)) {
-            String val = extraParamMap.get(Constants.ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZER);
             queryStringQuery.analyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.QUOTE_ANALYZER)) {
-            String val = extraParamMap.get(Constants.QUOTE_ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.QUOTE_ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.QUOTE_ANALYZER);
             queryStringQuery.quoteAnalyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.AUTO_GENERATE_PHRASE_QUERIES)) {
-            String val = extraParamMap.get(Constants.AUTO_GENERATE_PHRASE_QUERIES);
+        if (extraParamMap.containsKey(ElasticConstants.AUTO_GENERATE_PHRASE_QUERIES)) {
+            String val = extraParamMap.get(ElasticConstants.AUTO_GENERATE_PHRASE_QUERIES);
             queryStringQuery.autoGeneratePhraseQueries(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.MAX_DETERMINIZED_STATES)) {
-            String val = extraParamMap.get(Constants.MAX_DETERMINIZED_STATES);
+        if (extraParamMap.containsKey(ElasticConstants.MAX_DETERMINIZED_STATES)) {
+            String val = extraParamMap.get(ElasticConstants.MAX_DETERMINIZED_STATES);
             queryStringQuery.maxDeterminizedStates(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.ALLOW_LEADING_WILDCARD)) {
-            String val = extraParamMap.get(Constants.ALLOW_LEADING_WILDCARD);
+        if (extraParamMap.containsKey(ElasticConstants.ALLOW_LEADING_WILDCARD)) {
+            String val = extraParamMap.get(ElasticConstants.ALLOW_LEADING_WILDCARD);
             queryStringQuery.allowLeadingWildcard(Boolean.parseBoolean(val));
         }
 
 
-        if (extraParamMap.containsKey(Constants.ENABLE_POSITION_INCREMENTS)) {
-            String val = extraParamMap.get(Constants.ENABLE_POSITION_INCREMENTS);
+        if (extraParamMap.containsKey(ElasticConstants.ENABLE_POSITION_INCREMENTS)) {
+            String val = extraParamMap.get(ElasticConstants.ENABLE_POSITION_INCREMENTS);
             queryStringQuery.enablePositionIncrements(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZY_PREFIX_LENGTH)) {
-            String val = extraParamMap.get(Constants.FUZZY_PREFIX_LENGTH);
+        if (extraParamMap.containsKey(ElasticConstants.FUZZY_PREFIX_LENGTH)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZY_PREFIX_LENGTH);
             queryStringQuery.fuzzyPrefixLength(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZY_MAX_EXPANSIONS)) {
-            String val = extraParamMap.get(Constants.FUZZY_MAX_EXPANSIONS);
+        if (extraParamMap.containsKey(ElasticConstants.FUZZY_MAX_EXPANSIONS)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZY_MAX_EXPANSIONS);
             queryStringQuery.fuzzyMaxExpansions(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             queryStringQuery.boost(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZY_REWRITE)) {
-            String val = extraParamMap.get(Constants.FUZZY_REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.FUZZY_REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZY_REWRITE);
             queryStringQuery.fuzzyRewrite(val);
         }
 
-        if (extraParamMap.containsKey(Constants.REWRITE)) {
-            String val = extraParamMap.get(Constants.REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.REWRITE);
             queryStringQuery.rewrite(val);
         }
 
-        if (extraParamMap.containsKey(Constants.PHRASE_SLOP)) {
-            String val = extraParamMap.get(Constants.PHRASE_SLOP);
+        if (extraParamMap.containsKey(ElasticConstants.PHRASE_SLOP)) {
+            String val = extraParamMap.get(ElasticConstants.PHRASE_SLOP);
             queryStringQuery.phraseSlop(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZE_WILDCARD)) {
-            String val = extraParamMap.get(Constants.ANALYZE_WILDCARD);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZE_WILDCARD)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZE_WILDCARD);
             queryStringQuery.analyzeWildcard(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.QUOTE_FIELD_SUFFIX)) {
-            String val = extraParamMap.get(Constants.QUOTE_FIELD_SUFFIX);
+        if (extraParamMap.containsKey(ElasticConstants.QUOTE_FIELD_SUFFIX)) {
+            String val = extraParamMap.get(ElasticConstants.QUOTE_FIELD_SUFFIX);
             queryStringQuery.quoteFieldSuffix(val);
         }
 
-        if (extraParamMap.containsKey(Constants.USE_DIS_MAX)) {
-            String val = extraParamMap.get(Constants.USE_DIS_MAX);
+        if (extraParamMap.containsKey(ElasticConstants.USE_DIS_MAX)) {
+            String val = extraParamMap.get(ElasticConstants.USE_DIS_MAX);
             queryStringQuery.useDisMax(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.TIE_BREAKER)) {
-            String val = extraParamMap.get(Constants.TIE_BREAKER);
+        if (extraParamMap.containsKey(ElasticConstants.TIE_BREAKER)) {
+            String val = extraParamMap.get(ElasticConstants.TIE_BREAKER);
             queryStringQuery.tieBreaker(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.TIME_ZONE)) {
-            String val = extraParamMap.get(Constants.TIME_ZONE);
+        if (extraParamMap.containsKey(ElasticConstants.TIME_ZONE)) {
+            String val = extraParamMap.get(ElasticConstants.TIME_ZONE);
             queryStringQuery.timeZone(val);
         }
 
-        if (extraParamMap.containsKey(Constants.ESCAPE)) {
-            String val = extraParamMap.get(Constants.ESCAPE);
+        if (extraParamMap.containsKey(ElasticConstants.ESCAPE)) {
+            String val = extraParamMap.get(ElasticConstants.ESCAPE);
             queryStringQuery.escape(Boolean.parseBoolean(val));
         }
-        if (extraParamMap.containsKey(Constants.DEFAULT_OPERATOR)) {
-            String val = extraParamMap.get(Constants.DEFAULT_OPERATOR);
+        if (extraParamMap.containsKey(ElasticConstants.DEFAULT_OPERATOR)) {
+            String val = extraParamMap.get(ElasticConstants.DEFAULT_OPERATOR);
 
-            if (Constants.AND.equalsIgnoreCase(val)) {
+            if (ElasticConstants.AND.equalsIgnoreCase(val)) {
                 queryStringQuery.defaultOperator(Operator.AND);
             }
-            if (Constants.OR.equalsIgnoreCase(val)) {
+            if (ElasticConstants.OR.equalsIgnoreCase(val)) {
                 queryStringQuery.defaultOperator(Operator.OR);
             }
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZINESS)) {
-            String val = extraParamMap.get(Constants.FUZZINESS).toLowerCase();
+        if (extraParamMap.containsKey(ElasticConstants.FUZZINESS)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZINESS).toLowerCase();
 
             switch (val){
                 case "0":

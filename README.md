@@ -10,6 +10,7 @@
 2019-3-6：修复原版Nested类型的nested path识别错误的问题<br/>
 2019-3-7：删除了大部分无用的代码，添加了geo_distance聚类方法<br/>
 2019-3-25: 聚类使用递归实现添加多层嵌套聚类方式([>]表示嵌套聚类[,]表示同级聚类),具体用法见test目录<br/>
+2019-3-26: 添加scroll id深度分页
 
 版本
 ---------------------
@@ -122,6 +123,8 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES TopHits
 - [x] ES Nested (elasticsearch-query-toolkit中nested表达方式不合理，已修正)
 - [x] ES GeoDistance
+- [x] 支持嵌套深层聚类
+- [x] ES Scroll Id
 
 #### 未来将要添加的功能
 - [ ] ES Highlighter

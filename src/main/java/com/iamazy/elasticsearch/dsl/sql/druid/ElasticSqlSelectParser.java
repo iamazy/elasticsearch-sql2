@@ -18,18 +18,21 @@ import com.alibaba.druid.util.JdbcConstants;
  **/
 public class ElasticSqlSelectParser extends SQLSelectParser {
 
-    public ElasticSqlSelectParser(SQLExprParser exprParser){
+    ElasticSqlSelectParser(SQLExprParser exprParser){
         super(exprParser);
     }
 
-    public ElasticSqlSelectQueryBlock.Limit parseLimit(){
+    private ElasticSqlSelectQueryBlock.Limit parseLimit(){
         return ((ElasticSqlExprParser)this.exprParser).parseLimit0();
     }
 
-    public ElasticSqlSelectQueryBlock.Routing parseRoutingBy(){
+    private ElasticSqlSelectQueryBlock.Routing parseRoutingBy(){
         return ((ElasticSqlExprParser)this.exprParser).parseRourtingBy();
     }
 
+    private ElasticSqlSelectQueryBlock.Scroll parseScroll(){
+        return ((ElasticSqlExprParser)this.exprParser).parseScroll();
+    }
 
 
     @Override
@@ -57,6 +60,8 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
             queryBlock.setDistionOption(SQLSetQuantifier.ALL);
             lexer.nextToken();
         }
+
+        //代码顺序不能改变
         parseSelectList(queryBlock);
         parseFrom(queryBlock);
         parseMatchQuery(queryBlock);
@@ -64,12 +69,17 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
         parseGroupBy(queryBlock);
         queryBlock.setOrderBy(this.exprParser.parseOrderBy());
 
+
         if(lexer.token()==Token.INDEX&&"ROUTING".equalsIgnoreCase(lexer.stringVal())){
             queryBlock.setRouting(parseRoutingBy());
+        }
+        if(lexer.token()==Token.CURSOR&&"SCROLL".equalsIgnoreCase(lexer.stringVal())){
+            queryBlock.setScroll(parseScroll());
         }
         if(lexer.token()==Token.LIMIT){
             queryBlock.setLimit(parseLimit());
         }
+
         return queryRest(queryBlock);
     }
 

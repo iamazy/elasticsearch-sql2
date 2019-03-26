@@ -1,6 +1,9 @@
 package com.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.expr.SQLAllColumnExpr;
+import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
+import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.statement.SQLDeleteStatement;
 import com.alibaba.druid.sql.parser.Lexer;
 import com.alibaba.druid.sql.parser.SQLExprParser;
@@ -17,18 +20,42 @@ import java.util.List;
  **/
 public class ElasticSqlExprParser extends SQLExprParser {
 
-    public ElasticSqlExprParser(Lexer lexer){
+    public ElasticSqlExprParser(Lexer lexer) {
         super(lexer);
     }
 
-    public ElasticSqlExprParser(String sql){
+    public ElasticSqlExprParser(String sql) {
         this(new ElasticSqlLexer(sql));
         this.lexer.nextToken();
     }
 
     @Override
     public SQLExpr expr() {
-        return super.expr();
+        if (this.lexer.token() == Token.STAR) {
+            this.lexer.nextToken();
+            SQLExpr expr = new SQLAllColumnExpr();
+            if (this.lexer.token() == Token.DOT) {
+                this.lexer.nextToken();
+                this.accept(Token.STAR);
+                return new SQLPropertyExpr(expr, "*");
+            } else {
+                return expr;
+            }
+        } else {
+            SQLExpr expr = this.primary();
+            Token token = this.lexer.token();
+            if (token == Token.COMMA) {
+                return expr;
+            } else if (token == Token.EQ) {
+                expr = this.relationalRest(expr);
+                expr = this.andRest(expr);
+                expr = this.xorRest(expr);
+                expr = this.orRest(expr);
+                return expr;
+            } else {
+                return this.exprRest(expr);
+            }
+        }
     }
 
     @Override
@@ -36,24 +63,39 @@ public class ElasticSqlExprParser extends SQLExprParser {
         return new ElasticSqlSelectParser(this);
     }
 
-    public SQLDeleteStatement createDeleteStatement(String sql){
+    public SQLDeleteStatement createDeleteStatement(String sql) {
         return new SQLDeleteStatement(sql);
     }
 
-    public ElasticSqlSelectQueryBlock.Limit parseLimit0(){
-        if(lexer.token()== Token.LIMIT){
+    ElasticSqlSelectQueryBlock.Scroll parseScroll() {
+        if (lexer.token() == Token.CURSOR && "scroll".equalsIgnoreCase(lexer.stringVal())) {
             lexer.nextToken();
-            ElasticSqlSelectQueryBlock.Limit limit=new ElasticSqlSelectQueryBlock.Limit();
-            SQLExpr temp=this.expr();
-            if(lexer.token()==Token.COMMA){
+            ElasticSqlSelectQueryBlock.Scroll scroll = new ElasticSqlSelectQueryBlock.Scroll();
+            accept(Token.BY);
+            scroll.setExpire(this.expr());
+            if (this.lexer.token() == Token.COMMA) {
+                this.lexer.nextToken();
+                scroll.setScrollId(this.expr());
+            }
+            return scroll;
+        }
+        return null;
+    }
+
+    ElasticSqlSelectQueryBlock.Limit parseLimit0() {
+        if (lexer.token() == Token.LIMIT) {
+            lexer.nextToken();
+            ElasticSqlSelectQueryBlock.Limit limit = new ElasticSqlSelectQueryBlock.Limit();
+            SQLExpr temp = this.expr();
+            if (lexer.token() == Token.COMMA) {
                 limit.setOffset(temp);
                 lexer.nextToken();
                 limit.setRowCount(this.expr());
-            }else if(identifierEquals("OFFSET")){
+            } else if (identifierEquals("OFFSET")) {
                 limit.setRowCount(temp);
                 lexer.nextToken();
                 limit.setOffset(this.expr());
-            }else{
+            } else {
                 limit.setRowCount(temp);
             }
             return limit;
@@ -61,13 +103,13 @@ public class ElasticSqlExprParser extends SQLExprParser {
         return null;
     }
 
-    public ElasticSqlSelectQueryBlock.Routing parseRourtingBy(){
-        if(lexer.token()==Token.INDEX&&"routing".equalsIgnoreCase(lexer.stringVal())){
+    ElasticSqlSelectQueryBlock.Routing parseRourtingBy() {
+        if (lexer.token() == Token.INDEX && "routing".equalsIgnoreCase(lexer.stringVal())) {
             lexer.nextToken();
             accept(Token.BY);
-            List<SQLExpr> routingValues= Lists.newLinkedList();
+            List<SQLExpr> routingValues = Lists.newLinkedList();
             routingValues.add(this.expr());
-            while (lexer.token()==Token.COMMA){
+            while (lexer.token() == Token.COMMA) {
                 lexer.nextToken();
                 routingValues.add(this.expr());
             }

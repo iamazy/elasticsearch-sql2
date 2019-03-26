@@ -16,6 +16,7 @@ public interface ParseActionListener {
     void onAtomicMethodQueryConditionParse(ElasticSqlQueryField paramName, Object[] params);
     void onRoutingValuesParse(List<String> routingValues);
     void onLimitSizeParse(int from, int size);
+    void onScrollParse(String expire,String scrollId);
 }
 
 

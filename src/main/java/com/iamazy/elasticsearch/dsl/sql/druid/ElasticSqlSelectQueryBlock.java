@@ -16,9 +16,19 @@ import java.util.List;
  **/
 
 public class ElasticSqlSelectQueryBlock extends SQLSelectQueryBlock implements SQLObject {
+
+    private Scroll scroll;
     private Limit limit;
     private Routing routing;
     private SQLExpr matchQuery;
+
+    public Scroll getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(Scroll scroll) {
+        this.scroll = scroll;
+    }
 
     public Limit getLimit0() {
         return limit;
@@ -62,6 +72,40 @@ public class ElasticSqlSelectQueryBlock extends SQLSelectQueryBlock implements S
 
         public List<SQLExpr> getRoutingValues(){
             return routingValues;
+        }
+    }
+
+
+    public static class Scroll extends SQLObjectImpl{
+
+        private SQLExpr expire;
+        private SQLExpr scrollId;
+
+        public SQLExpr getExpire() {
+            return expire;
+        }
+
+        public SQLExpr getScrollId() {
+            return scrollId;
+        }
+
+        public void setExpire(SQLExpr expire) {
+            if(expire!=null){
+                expire.setParent(this);
+            }
+            this.expire = expire;
+        }
+
+        public void setScrollId(SQLExpr scrollId) {
+            if(scrollId!=null){
+                scrollId.setParent(this);
+            }
+            this.scrollId = scrollId;
+        }
+
+        @Override
+        protected void accept0(SQLASTVisitor sqlastVisitor) {
+            throw new UnsupportedOperationException("accept0(SQLASTVisitor visitor)");
         }
     }
 

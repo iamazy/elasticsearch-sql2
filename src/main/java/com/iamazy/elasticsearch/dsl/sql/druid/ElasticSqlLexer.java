@@ -56,6 +56,9 @@ public class ElasticSqlLexer extends Lexer {
         map.put("INNER", Token.INNER);
         map.put("JOIN", Token.JOIN);
 
+        map.put("SCROLL",Token.CURSOR);
+
+
 
         //delete
         map.put("TOP",Token.TOP);

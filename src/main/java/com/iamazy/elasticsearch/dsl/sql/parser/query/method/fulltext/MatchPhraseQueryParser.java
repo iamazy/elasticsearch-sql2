@@ -6,7 +6,7 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.*;
@@ -79,33 +79,33 @@ public class MatchPhraseQueryParser extends AbstractFieldSpecificMethodQueryPars
         if (MapUtils.isEmpty(extraParamMap)) {
             return;
         }
-        if (extraParamMap.containsKey(Constants.ANALYZER)) {
-            String val = extraParamMap.get(Constants.ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZER);
             queryBuilder.analyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             queryBuilder.boost(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.SLOP)) {
-            String val = extraParamMap.get(Constants.SLOP);
+        if (extraParamMap.containsKey(ElasticConstants.SLOP)) {
+            String val = extraParamMap.get(ElasticConstants.SLOP);
             queryBuilder.slop(Integer.valueOf(val));
         }
 
-        if(extraParamMap.containsKey(Constants.ZERO_TERMS_QUERY)){
-            String val=extraParamMap.get(Constants.ZERO_TERMS_QUERY).toLowerCase();
+        if(extraParamMap.containsKey(ElasticConstants.ZERO_TERMS_QUERY)){
+            String val=extraParamMap.get(ElasticConstants.ZERO_TERMS_QUERY).toLowerCase();
             switch (val){
-                case Constants.ALL:{
+                case ElasticConstants.ALL:{
                     queryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL);
                     break;
                 }
-                case Constants.NONE:{
+                case ElasticConstants.NONE:{
                     queryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.NONE);
                     break;
                 }
-                case Constants.NULL:{
+                case ElasticConstants.NULL:{
                     queryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.NULL);
                     break;
                 }

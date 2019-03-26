@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.commons.collections4.MapUtils;
@@ -80,28 +80,28 @@ public class RegexpQueryParser extends AbstractFieldSpecificMethodQueryParser {
         if (MapUtils.isEmpty(extraParamMap)) {
             return;
         }
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             regexpQuery.boost(Float.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.REWRITE)) {
-            String val = extraParamMap.get(Constants.REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.REWRITE);
             regexpQuery.rewrite(val);
         }
-        if (extraParamMap.containsKey(Constants.MAX_DETERMINIZED_STATES)) {
-            String val = extraParamMap.get(Constants.MAX_DETERMINIZED_STATES);
+        if (extraParamMap.containsKey(ElasticConstants.MAX_DETERMINIZED_STATES)) {
+            String val = extraParamMap.get(ElasticConstants.MAX_DETERMINIZED_STATES);
             regexpQuery.maxDeterminizedStates(Integer.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.FLAGS)) {
-            String[] flags = extraParamMap.get(Constants.FLAGS).split("\\|");
+        if (extraParamMap.containsKey(ElasticConstants.FLAGS)) {
+            String[] flags = extraParamMap.get(ElasticConstants.FLAGS).split("\\|");
             List<RegexpFlag> flagList = Lists.newLinkedList();
             for (String flag : flags) {
                 flagList.add(RegexpFlag.valueOf(flag.toUpperCase()));
             }
             regexpQuery.flags(flagList.toArray(new RegexpFlag[0]));
         }
-        if (extraParamMap.containsKey(Constants.FLAGS_VALUE)) {
-            String[] flags = extraParamMap.get(Constants.FLAGS_VALUE).split("\\|");
+        if (extraParamMap.containsKey(ElasticConstants.FLAGS_VALUE)) {
+            String[] flags = extraParamMap.get(ElasticConstants.FLAGS_VALUE).split("\\|");
             List<RegexpFlag> flagList = Lists.newLinkedList();
             for (String flag : flags) {
                 flagList.add(RegexpFlag.valueOf(flag.toUpperCase()));

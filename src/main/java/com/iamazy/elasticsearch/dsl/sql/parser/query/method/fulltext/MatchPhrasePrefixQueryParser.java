@@ -6,7 +6,7 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.*;
@@ -93,18 +93,18 @@ public class MatchPhrasePrefixQueryParser extends AbstractFieldSpecificMethodQue
             return;
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZER)) {
-            String val = extraParamMap.get(Constants.ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZER);
             matchQuery.analyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             matchQuery.boost(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.MAX_EXPANSIONS)) {
-            String val = extraParamMap.get(Constants.MAX_EXPANSIONS);
+        if (extraParamMap.containsKey(ElasticConstants.MAX_EXPANSIONS)) {
+            String val = extraParamMap.get(ElasticConstants.MAX_EXPANSIONS);
             matchQuery.maxExpansions(Integer.valueOf(val));
         }
     }

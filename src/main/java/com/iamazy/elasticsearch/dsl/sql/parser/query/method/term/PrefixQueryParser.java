@@ -4,7 +4,7 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import org.apache.commons.collections4.MapUtils;
@@ -79,12 +79,12 @@ public class PrefixQueryParser extends AbstractFieldSpecificMethodQueryParser {
         if (MapUtils.isEmpty(extraParamMap)) {
             return;
         }
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             prefixQuery.boost(Float.valueOf(val));
         }
-        if (extraParamMap.containsKey(Constants.REWRITE)) {
-            String val = extraParamMap.get(Constants.REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.REWRITE);
             prefixQuery.rewrite(val);
         }
     }

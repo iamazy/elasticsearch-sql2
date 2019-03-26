@@ -3,7 +3,7 @@ package com.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.utils.Constants;
+import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.ParameterizedMethodQueryParser;
 import org.apache.commons.collections4.MapUtils;
@@ -69,92 +69,92 @@ public class MultiMatchQueryParser extends ParameterizedMethodQueryParser {
         if (MapUtils.isEmpty(extraParamMap)) {
             return;
         }
-        if (extraParamMap.containsKey(Constants.TYPE)) {
-            String val = extraParamMap.get(Constants.TYPE);
-            if (Constants.BOOLEAN.equalsIgnoreCase(val)) {
+        if (extraParamMap.containsKey(ElasticConstants.TYPE)) {
+            String val = extraParamMap.get(ElasticConstants.TYPE);
+            if (ElasticConstants.BOOLEAN.equalsIgnoreCase(val)) {
                 multiMatchQuery.type(MatchQuery.Type.BOOLEAN);
             }
-            if (Constants.PHRASE.equalsIgnoreCase(val)) {
+            if (ElasticConstants.PHRASE.equalsIgnoreCase(val)) {
                 multiMatchQuery.type(MatchQuery.Type.PHRASE);
             }
-            if (Constants.PHRASE_PREFIX.equalsIgnoreCase(val)) {
+            if (ElasticConstants.PHRASE_PREFIX.equalsIgnoreCase(val)) {
                 multiMatchQuery.type(MatchQuery.Type.PHRASE_PREFIX);
             }
         }
 
-        if (extraParamMap.containsKey(Constants.OPERATOR)) {
-            String val = extraParamMap.get(Constants.OPERATOR);
-            if (Constants.AND.equalsIgnoreCase(val)) {
+        if (extraParamMap.containsKey(ElasticConstants.OPERATOR)) {
+            String val = extraParamMap.get(ElasticConstants.OPERATOR);
+            if (ElasticConstants.AND.equalsIgnoreCase(val)) {
                 multiMatchQuery.operator(Operator.AND);
             }
-            if (Constants.OR.equalsIgnoreCase(val)) {
+            if (ElasticConstants.OR.equalsIgnoreCase(val)) {
                 multiMatchQuery.operator(Operator.OR);
             }
         }
 
-        if (extraParamMap.containsKey(Constants.MINIMUM_SHOULD_MATCH)) {
-            String val = extraParamMap.get(Constants.MINIMUM_SHOULD_MATCH);
+        if (extraParamMap.containsKey(ElasticConstants.MINIMUM_SHOULD_MATCH)) {
+            String val = extraParamMap.get(ElasticConstants.MINIMUM_SHOULD_MATCH);
             multiMatchQuery.minimumShouldMatch(val);
         }
 
-        if (extraParamMap.containsKey(Constants.ANALYZER)) {
-            String val = extraParamMap.get(Constants.ANALYZER);
+        if (extraParamMap.containsKey(ElasticConstants.ANALYZER)) {
+            String val = extraParamMap.get(ElasticConstants.ANALYZER);
             multiMatchQuery.analyzer(val);
         }
 
-        if (extraParamMap.containsKey(Constants.BOOST)) {
-            String val = extraParamMap.get(Constants.BOOST);
+        if (extraParamMap.containsKey(ElasticConstants.BOOST)) {
+            String val = extraParamMap.get(ElasticConstants.BOOST);
             multiMatchQuery.boost(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.SLOP)) {
-            String val = extraParamMap.get(Constants.SLOP);
+        if (extraParamMap.containsKey(ElasticConstants.SLOP)) {
+            String val = extraParamMap.get(ElasticConstants.SLOP);
             multiMatchQuery.slop(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.PREFIX_LENGTH)) {
-            String val = extraParamMap.get(Constants.PREFIX_LENGTH);
+        if (extraParamMap.containsKey(ElasticConstants.PREFIX_LENGTH)) {
+            String val = extraParamMap.get(ElasticConstants.PREFIX_LENGTH);
             multiMatchQuery.prefixLength(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.MAX_EXPANSIONS)) {
-            String val = extraParamMap.get(Constants.MAX_EXPANSIONS);
+        if (extraParamMap.containsKey(ElasticConstants.MAX_EXPANSIONS)) {
+            String val = extraParamMap.get(ElasticConstants.MAX_EXPANSIONS);
 
             multiMatchQuery.maxExpansions(Integer.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZY_REWRITE)) {
-            String val = extraParamMap.get(Constants.FUZZY_REWRITE);
+        if (extraParamMap.containsKey(ElasticConstants.FUZZY_REWRITE)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZY_REWRITE);
             multiMatchQuery.fuzzyRewrite(val);
         }
 
-        if (extraParamMap.containsKey(Constants.USE_DIS_MAX)) {
-            String val = extraParamMap.get(Constants.USE_DIS_MAX);
+        if (extraParamMap.containsKey(ElasticConstants.USE_DIS_MAX)) {
+            String val = extraParamMap.get(ElasticConstants.USE_DIS_MAX);
             multiMatchQuery.useDisMax(Boolean.parseBoolean(val));
         }
 
-        if (extraParamMap.containsKey(Constants.TIE_BREAKER)) {
-            String val = extraParamMap.get(Constants.TIE_BREAKER);
+        if (extraParamMap.containsKey(ElasticConstants.TIE_BREAKER)) {
+            String val = extraParamMap.get(ElasticConstants.TIE_BREAKER);
             multiMatchQuery.tieBreaker(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.ZERO_TERMS_QUERY)) {
-            String val = extraParamMap.get(Constants.ZERO_TERMS_QUERY);
-            if (Constants.NONE.equalsIgnoreCase(val)) {
+        if (extraParamMap.containsKey(ElasticConstants.ZERO_TERMS_QUERY)) {
+            String val = extraParamMap.get(ElasticConstants.ZERO_TERMS_QUERY);
+            if (ElasticConstants.NONE.equalsIgnoreCase(val)) {
                 multiMatchQuery.zeroTermsQuery(MatchQuery.ZeroTermsQuery.NONE);
             }
-            if (Constants.ALL.equalsIgnoreCase(val)) {
+            if (ElasticConstants.ALL.equalsIgnoreCase(val)) {
                 multiMatchQuery.zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL);
             }
         }
 
-        if (extraParamMap.containsKey(Constants.CUTOFF_FREQUENCY)) {
-            String val = extraParamMap.get(Constants.CUTOFF_FREQUENCY);
+        if (extraParamMap.containsKey(ElasticConstants.CUTOFF_FREQUENCY)) {
+            String val = extraParamMap.get(ElasticConstants.CUTOFF_FREQUENCY);
             multiMatchQuery.cutoffFrequency(Float.valueOf(val));
         }
 
-        if (extraParamMap.containsKey(Constants.FUZZINESS)) {
-            String val = extraParamMap.get(Constants.FUZZINESS).toLowerCase();
+        if (extraParamMap.containsKey(ElasticConstants.FUZZINESS)) {
+            String val = extraParamMap.get(ElasticConstants.FUZZINESS).toLowerCase();
 
             switch (val){
                 case "0":

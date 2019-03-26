@@ -35,4 +35,9 @@ public class ParseActionListenerAdapter implements ParseActionListener {
     public void onLimitSizeParse(int from, int size) {
 
     }
+
+    @Override
+    public void onScrollParse(String expire, String scrollId) {
+
+    }
 }

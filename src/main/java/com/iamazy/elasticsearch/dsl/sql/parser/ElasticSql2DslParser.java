@@ -87,7 +87,7 @@ public class ElasticSql2DslParser {
     }
 
     private void check(ElasticSqlExprParser sqlExprParser, SQLExpr sqlQueryExpr, Object[] sqlArgs) {
-        if (sqlExprParser.getLexer().token() != Token.EOF && sqlExprParser.getLexer().token() != Token.SEMI) {
+        if (sqlExprParser.getLexer().token() != Token.EOF) {
             throw new ElasticSql2DslException("[syntax error] Sql last token is not EOF");
         }
 
@@ -121,6 +121,8 @@ public class ElasticSql2DslParser {
                 new GroupByAggregationParser(),
                 //解析SQL查询指定的字段
                 new QuerySelectFieldListParser(parseActionListener),
+                //解析Scroll By字段
+                new QueryScrollParser(parseActionListener),
                 //解析SQL的分页条数
                 new QueryLimitSizeParser(parseActionListener)
         );
