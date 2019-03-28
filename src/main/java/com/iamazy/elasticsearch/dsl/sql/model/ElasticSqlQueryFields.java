@@ -2,6 +2,8 @@ package com.iamazy.elasticsearch.dsl.sql.model;
 
 import com.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 
+import java.util.ArrayList;
+
 /**
  * @author iamazy
  * @date 2019/2/19
@@ -27,9 +29,8 @@ public class ElasticSqlQueryFields {
         return new ElasticSqlQueryField(null,innerDocFieldName,innerDocQueryFieldFullName,QueryFieldType.InnerDocField);
     }
 
-    public static ElasticSqlQueryField newNestedDocQueryField(String nestedDocContextPath,String simpleQueryFieldName){
-        String nestedDocQueryFieldFullName=String.format("%s.%s",nestedDocContextPath,simpleQueryFieldName);
-        return new ElasticSqlQueryField(nestedDocContextPath,simpleQueryFieldName,nestedDocQueryFieldFullName,QueryFieldType.NestedDocField);
+    public static ElasticSqlQueryField newNestedDocQueryField(ArrayList<String> nestedDocContextPath, String simpleQueryFieldName){
+        return new ElasticSqlQueryField(nestedDocContextPath,simpleQueryFieldName,simpleQueryFieldName,QueryFieldType.NestedDocField);
     }
 }
 

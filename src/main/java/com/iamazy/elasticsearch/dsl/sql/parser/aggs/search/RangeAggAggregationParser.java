@@ -68,7 +68,13 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
             return createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments);
         }
         else if(queryField.getQueryFieldType()==QueryFieldType.NestedDocField){
-            return AggregationBuilders.nested(queryField.getQueryFieldFullName()+"_range",queryField.getNestedDocContextPath()).subAggregation(createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments));
+            if(queryField.getNestedDocContextPath().size()==1) {
+                return AggregationBuilders.nested(queryField.getQueryFieldFullName() + "_range", queryField.getNestedDocContextPath().get(0)).subAggregation(createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments));
+            }else if(queryField.getNestedDocContextPath().size()==2){
+                return AggregationBuilders.nested(queryField.getNestedDocContextPath().get(0)+"_nested", queryField.getNestedDocContextPath().get(0)).subAggregation(AggregationBuilders.nested(queryField.getNestedDocContextPath().get(1)+"_nested",queryField.getNestedDocContextPath().get(1)).subAggregation(createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments)));
+            }else{
+                throw new ElasticSql2DslException("[syntax error] can not support sql for 3 more nested aggregation");
+            }
         }
         else{
             throw new ElasticSql2DslException(String.format("[syntax error] can not support range aggregation for field type[%s]", queryField.getQueryFieldType()));

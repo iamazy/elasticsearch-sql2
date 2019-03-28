@@ -23,8 +23,6 @@ import java.util.List;
  * has_child('collection_plan', principal > 1000)
  * <p>
  * has_child('collection_plan', principal > 1000, 1, 4)
- *
- * @author chennan
  */
 public class HasChildQueryParser implements MethodQueryParser {
 

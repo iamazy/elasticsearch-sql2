@@ -41,7 +41,7 @@ public class DeleteTest {
 
     @Test
     public void nested2(){
-        String sql="SELECT * FROM product.apple WHERE ($buyers$name.buyerName = 'usa' or minPrice > 100)  and $buyers$name.productPrice < 200";
+        String sql="SELECT * FROM product.apple WHERE (buyers$name.buyerName = 'usa' or minPrice > 100)  and buyers$name.productPrice < 200";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));

@@ -60,12 +60,23 @@ public class TermsAggAggregationParser extends AbstractGroupByMethodAggregationP
             }
             return createTermsBuilder(queryField.getQueryFieldFullName());
         } else if (queryField.getQueryFieldType() == QueryFieldType.NestedDocField) {
-            AggregationBuilder aggregationBuilder = AggregationBuilders.nested(queryField.getQueryFieldFullName() + "_nested", queryField.getNestedDocContextPath());
             if (shardSizeExpr != null) {
                 Number termBuckets = (Number) ElasticSqlArgConverter.convertSqlArg(shardSizeExpr, args);
-                return aggregationBuilder.subAggregation(createTermsBuilder(queryField.getQueryFieldFullName(), termBuckets.intValue()));
+                if(queryField.getNestedDocContextPath().size()==1){
+                    return AggregationBuilders.nested(queryField.getNestedDocContextPath().get(0) + "_nested", queryField.getNestedDocContextPath().get(0)).subAggregation(createTermsBuilder(queryField.getQueryFieldFullName(), termBuckets.intValue()));
+                }
+                else if(queryField.getNestedDocContextPath().size()==2){
+                    return AggregationBuilders.nested(queryField.getNestedDocContextPath().get(0) + "_nested", queryField.getNestedDocContextPath().get(0)).subAggregation(AggregationBuilders.nested(queryField.getNestedDocContextPath().get(1)+"_nested",queryField.getNestedDocContextPath().get(1)).subAggregation(createTermsBuilder(queryField.getQueryFieldFullName(), termBuckets.intValue())));
+                }
+
             }
-            return aggregationBuilder.subAggregation(createTermsBuilder(queryField.getQueryFieldFullName()));
+            if(queryField.getNestedDocContextPath().size()==1){
+                return AggregationBuilders.nested(queryField.getNestedDocContextPath().get(0) + "_nested", queryField.getNestedDocContextPath().get(0)).subAggregation(createTermsBuilder(queryField.getQueryFieldFullName()));
+            }
+            else if(queryField.getNestedDocContextPath().size()==2){
+                return AggregationBuilders.nested(queryField.getNestedDocContextPath().get(0) + "_nested", queryField.getNestedDocContextPath().get(0)).subAggregation(AggregationBuilders.nested(queryField.getNestedDocContextPath().get(1)+"_nested",queryField.getNestedDocContextPath().get(1)).subAggregation(createTermsBuilder(queryField.getQueryFieldFullName())));
+            }
+            throw new ElasticSql2DslException("[syntax error] can not support terms aggregation for 3 more nested aggregation");
         } else {
             throw new ElasticSql2DslException(String.format("[syntax error] can not support terms aggregation for field type[%s]", queryField.getQueryFieldType()));
         }

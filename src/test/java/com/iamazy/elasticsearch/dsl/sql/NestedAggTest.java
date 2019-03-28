@@ -14,7 +14,7 @@ public class NestedAggTest {
 
     @Test
     public void nested() {
-        String sql = "select * from device_info where portInfo$deviceInfo.deviceCategory=10 group by terms(portInfo$deviceInfo.deviceCategory,100)>(cardinality(portInfo.deviceInfo.deviceType)>terms(deviceInfo.deviceBrand,100),terms(port,90)),topHits(1)";
+        String sql = "select * from device_info where qq.bb$ccc.deviceInfo$$.deviceCategory=10 group by terms(portInfo$deviceInfo.deviceCategory,100)>(cardinality(portInfo.deviceInfo.deviceType)>terms(deviceInfo.deviceBrand,100),terms(port,90)),topHits(1)";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
 
