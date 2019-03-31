@@ -20,8 +20,6 @@ import java.util.Map;
  * nested sort(nestedField, sortMode, missingValue, defaultValue, filterExpression)
  * <p>
  * order by nested_sort($repaymentRecords.principal, 'min', 0, repaymentRecords.status='DONE') asc
- *
- * @author chennan
  */
 public class NestedSortMethodParser extends AbstractMethodSortParser {
 
@@ -77,10 +75,19 @@ public class NestedSortMethodParser extends AbstractMethodSortParser {
                 filter = boolExpressionParser.parseBoolQueryExpr(filterExpr, queryAs, sqlArgs);
             }
 
-            return SortBuilders.fieldSort(nestedFieldName)
-                    .missing(defaultSortVal).sortMode(SortMode.fromString(sortMode))
-                    .setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath()).setFilter(hasFilterExpr ? filter : null))
-                    .order(order);
+            if(sortField.getNestedDocContextPath().size()==1) {
+                return SortBuilders.fieldSort(nestedFieldName)
+                        .missing(defaultSortVal).sortMode(SortMode.fromString(sortMode))
+                        .setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(0)).setFilter(hasFilterExpr ? filter : null))
+                        .order(order);
+            }else if(sortField.getNestedDocContextPath().size()==2){
+                return SortBuilders.fieldSort(nestedFieldName)
+                        .missing(defaultSortVal).sortMode(SortMode.fromString(sortMode))
+                        .setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(0)).setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(1)).setFilter(hasFilterExpr ? filter : null)))
+                        .order(order);
+            }else{
+                throw new ElasticSql2DslException("[syntax error] can not support sql for 3 more nested sort aggregation");
+            }
         });
     }
 }

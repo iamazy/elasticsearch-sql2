@@ -60,12 +60,7 @@ public class TermsAggAggregationParser extends AbstractGroupByMethodAggregationP
             }
             return createTermsBuilder(queryField.getQueryFieldFullName());
         } else if (queryField.getQueryFieldType() == QueryFieldType.NestedDocField) {
-            AggregationBuilder aggregationBuilder = AggregationBuilders.nested(queryField.getQueryFieldFullName() + "_nested", queryField.getNestedDocContextPath());
-            if (shardSizeExpr != null) {
-                Number termBuckets = (Number) ElasticSqlArgConverter.convertSqlArg(shardSizeExpr, args);
-                return aggregationBuilder.subAggregation(createTermsBuilder(queryField.getQueryFieldFullName(), termBuckets.intValue()));
-            }
-            return aggregationBuilder.subAggregation(createTermsBuilder(queryField.getQueryFieldFullName()));
+            throw new ElasticSql2DslException("[syntax error] can not support aggregation defined by dollar[$]");
         } else {
             throw new ElasticSql2DslException(String.format("[syntax error] can not support terms aggregation for field type[%s]", queryField.getQueryFieldType()));
         }

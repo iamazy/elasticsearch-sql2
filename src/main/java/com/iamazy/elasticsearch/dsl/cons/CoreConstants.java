@@ -13,6 +13,6 @@ public interface CoreConstants {
 
     String COMMA = ",";
     String COLON = ":";
-    String DOLLAR = "\\$";
-    String DOT="\\.";
+    String DOLLAR = "$";
+    String DOT=".";
 }

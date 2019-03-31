@@ -11,6 +11,7 @@ import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
+import com.iamazy.elasticsearch.dsl.sql.parser.aggs.join.NestedAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.geo.GeoDistanceAggregationParser;
@@ -43,7 +44,8 @@ public class GroupByAggregationParser implements QueryParser {
                 new TermsAggAggregationParser(),
                 new TopHitsAggregationParser(),
                 new RangeAggAggregationParser(),
-                new GeoDistanceAggregationParser()
+                new GeoDistanceAggregationParser(),
+                new NestedAggregationParser()
         );
     }
 

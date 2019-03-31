@@ -31,7 +31,11 @@ public class ParseSortBuilderHelper {
 
         if (sortField.getQueryFieldType() == QueryFieldType.NestedDocField) {
             FieldSortBuilder originalSort = sortBuilder.buildSort(sortField.getQueryFieldFullName());
-            originalSort.setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath()));
+            if(sortField.getNestedDocContextPath().size()==1) {
+                originalSort.setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(0)));
+            }else if(sortField.getNestedDocContextPath().size()==2){
+                originalSort.setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(0)).setNestedSort(new NestedSortBuilder(sortField.getNestedDocContextPath().get(1))));
+            }
             rtnSortBuilder = originalSort;
         }
 

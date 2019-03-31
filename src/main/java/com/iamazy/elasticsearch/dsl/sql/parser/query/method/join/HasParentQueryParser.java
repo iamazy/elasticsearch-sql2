@@ -20,7 +20,6 @@ import java.util.List;
  * <p>
  * has_parent('investment', principal > 100 and status='SUCCESS')
  *
- * @author chennan
  */
 public class HasParentQueryParser implements MethodQueryParser {
 

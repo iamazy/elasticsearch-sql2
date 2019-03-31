@@ -70,14 +70,14 @@ public class ElasticSqlParseResult {
     }
 
     public SearchResponse toResponse(RestHighLevelClient restHighLevelClient, RequestOptions requestOptions) throws IOException {
-        if(StringUtils.isNotBlank(scrollExpire)&&StringUtils.isBlank(scrollId)){
+        if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isBlank(scrollId)) {
             return restHighLevelClient.search(toRequest(), requestOptions);
-        }else if(StringUtils.isNotBlank(scrollExpire)&&StringUtils.isNotBlank(scrollId)){
-            SearchScrollRequest scrollRequest=new SearchScrollRequest(scrollId);
+        } else if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isNotBlank(scrollId)) {
+            SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
             scrollRequest.scroll(toRequest().scroll());
             return restHighLevelClient.scroll(scrollRequest, requestOptions);
-        }else if (StringUtils.isBlank(scrollExpire)){
-            return restHighLevelClient.search(toRequest(),requestOptions);
+        } else if (StringUtils.isBlank(scrollExpire)) {
+            return restHighLevelClient.search(toRequest(), requestOptions);
         }
         throw new ElasticSql2DslException("[syntax error] response error,please check your sql");
     }
@@ -91,21 +91,21 @@ public class ElasticSqlParseResult {
             searchRequest.types(type);
         }
 
-        if(StringUtils.isBlank(scrollExpire)) {
-            if (from < 0) {
-                log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
-                //这里不会修改from的值
-                searchSourceBuilder.from(0);
-            } else {
-                searchSourceBuilder.from(from);
-            }
-            if (size < 0) {
-                log.debug("[size] is gte zero, assign 15 to [size(int)] as default value!!!");
-                searchSourceBuilder.size(15);
-            } else {
-                searchSourceBuilder.size(size);
-            }
+
+        if (from < 0) {
+            log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
+            //这里不会修改from的值
+            searchSourceBuilder.from(0);
+        } else {
+            searchSourceBuilder.from(from);
         }
+        if (size < 0) {
+            log.debug("[size] is gte zero, assign 15 to [size(int)] as default value!!!");
+            searchSourceBuilder.size(15);
+        } else {
+            searchSourceBuilder.size(size);
+        }
+
 
         if (whereCondition != null && whereCondition.hasClauses()) {
             if (matchCondition != null && matchCondition.hasClauses()) {

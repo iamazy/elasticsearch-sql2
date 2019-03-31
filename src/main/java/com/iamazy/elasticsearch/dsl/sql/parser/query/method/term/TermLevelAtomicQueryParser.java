@@ -29,12 +29,7 @@ public class TermLevelAtomicQueryParser {
     }
 
     public Boolean isTermLevelAtomQuery(MethodInvocation invocation) {
-        return methodQueryParsers.stream().anyMatch(new Predicate<MethodQueryParser>() {
-            @Override
-            public boolean test(MethodQueryParser methodQueryParser) {
-                return methodQueryParser.isMatchMethodInvocation(invocation);
-            }
-        });
+        return methodQueryParsers.stream().anyMatch(methodQueryParser -> methodQueryParser.isMatchMethodInvocation(invocation));
     }
 
     public AtomicQuery parseTermLevelAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs, SqlArgs sqlArgs) {

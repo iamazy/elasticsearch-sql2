@@ -26,6 +26,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoolExpressionParser {
@@ -146,7 +147,7 @@ public class BoolExpressionParser {
 
     private BoolQueryBuilder mergeAtomQuery(List<AtomicQuery> atomQueryList, SqlBoolOperator operator) {
         BoolQueryBuilder subBoolQuery = QueryBuilders.boolQuery();
-        ListMultimap<String, QueryBuilder> listMultiMap = ArrayListMultimap.create();
+        ListMultimap<ArrayList<String>, QueryBuilder> listMultiMap = ArrayListMultimap.create();
 
         for (AtomicQuery atomQuery : atomQueryList) {
             if (Boolean.FALSE == atomQuery.isNestedQuery()) {
@@ -158,20 +159,27 @@ public class BoolExpressionParser {
                 }
             }
             else {
-                String nestedDocPrefix = atomQuery.getNestedQueryPath();
-                listMultiMap.put(nestedDocPrefix, atomQuery.getQueryBuilder());
+                listMultiMap.put(atomQuery.getNestedQueryPath(), atomQuery.getQueryBuilder());
             }
         }
 
-        for (String nestedDocPrefix : listMultiMap.keySet()) {
+        for (ArrayList<String> nestedDocPrefix : listMultiMap.keySet()) {
             List<QueryBuilder> nestedQueryList = listMultiMap.get(nestedDocPrefix);
 
             if (nestedQueryList.size() == 1) {
                 if (operator == SqlBoolOperator.AND) {
-                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix, nestedQueryList.get(0), ScoreMode.None));
+                    if(nestedDocPrefix.size()==1) {
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.None));
+                    }else if(nestedDocPrefix.size()==2){
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.None), ScoreMode.None));
+                    }
                 }
                 if (operator == SqlBoolOperator.OR) {
-                    subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix, nestedQueryList.get(0), ScoreMode.None));
+                    if(nestedDocPrefix.size()==1) {
+                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.None));
+                    }else if(nestedDocPrefix.size()==2){
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(0),nestedQueryList.get(0),ScoreMode.None), ScoreMode.None));
+                    }
                 }
                 continue;
             }
@@ -187,10 +195,18 @@ public class BoolExpressionParser {
             }
 
             if (operator == SqlBoolOperator.AND) {
-                subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix, boolNestedQuery, ScoreMode.None));
+                if(nestedDocPrefix.size()==1) {
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.None));
+                }else if(nestedDocPrefix.size()==2){
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.None), ScoreMode.None));
+                }
             }
             if (operator == SqlBoolOperator.OR) {
-                subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix, boolNestedQuery, ScoreMode.None));
+                if(nestedDocPrefix.size()==1) {
+                    subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.None));
+                }else if(nestedDocPrefix.size()==2){
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.None), ScoreMode.None));
+                }
             }
 
         }

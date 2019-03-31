@@ -68,7 +68,7 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
             return createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments);
         }
         else if(queryField.getQueryFieldType()==QueryFieldType.NestedDocField){
-            return AggregationBuilders.nested(queryField.getQueryFieldFullName()+"_range",queryField.getNestedDocContextPath()).subAggregation(createRangeBuilder(queryField.getQueryFieldFullName(), rangeSegments));
+            throw new ElasticSql2DslException("[syntax error] can not support aggregation defined by dollar[$]");
         }
         else{
             throw new ElasticSql2DslException(String.format("[syntax error] can not support range aggregation for field type[%s]", queryField.getQueryFieldType()));

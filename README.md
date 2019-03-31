@@ -11,7 +11,8 @@ CHANGELOG
 2019-3-6：修复原版Nested类型的nested path识别错误的问题<br/>
 2019-3-7：删除了大部分无用的代码，添加了geo_distance聚类方法<br/>
 2019-3-25: 聚类使用递归实现添加多层嵌套聚类方式([>]表示嵌套聚类[,]表示同级聚类),具体用法见test目录<br/>
-2019-3-26: 添加scroll id深度分页
+2019-3-26: 添加scroll id深度分页<br/>
+2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
@@ -128,6 +129,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES GeoDistance
 - [x] 支持嵌套深层聚类
 - [x] ES Scroll Id
+- [x] ES 支持双层嵌套查询（nested(nested)）现在以及以后也不会支持三层以上的嵌套查询
 
 #### 未来将要添加的功能
 - [ ] ES Highlighter
@@ -342,16 +344,18 @@ limit 1100 设置的是DeleteByQueryRequest的Size，只是在DSL中没有显示
 
 ### 5. Nested
  为了表征**nested path**这个属性,采用 **$** 符号指明 <br/>
-nested path必须以 **$** 在**为nested类型的属性之前**结尾（非常重要）中间是否是以 **$** 连接的不重要
+nested path必须以 **$** 在**为nested类型的属性之前**结尾（非常重要）<br/>
+双层嵌套类型使用双[$]符号->$$ <br/>
+🐖：一个嵌套表达式最多包含3个$符号
 
 <font color="red"><b>重要:</b></font>以`product`的`apple`为例，`apple`为`nested`类型，则查询时的**nested path**应该为`product.apple`
 以下两种写法均**正确**
 ```
-$product$apple.name
 product$apple.name
 ```
 下面这几种写法**错误**
 ```
+$product$apple.name
 product.apple$name
 $product.apple$name
 $product$apple$name

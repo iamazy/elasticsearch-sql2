@@ -63,12 +63,7 @@ public class CardinalityAggregationParser extends AbstractGroupByMethodAggregati
             }
             return createCardinalityBuilder(queryField.getQueryFieldFullName());
         } else if (queryField.getQueryFieldType() == QueryFieldType.NestedDocField) {
-            if (precisionThreshold != null) {
-                Number threshold = (Number) ElasticSqlArgConverter.convertSqlArg(precisionThreshold, args);
-                return AggregationBuilders.nested(queryField.getQueryFieldFullName() + "_cardinality", queryField.getNestedDocContextPath()).subAggregation(createCardinalityBuilder(queryField.getQueryFieldFullName(), threshold.longValue()));
-            }
-            return AggregationBuilders.nested(queryField.getQueryFieldFullName() + "_cardinality", queryField.getNestedDocContextPath()).subAggregation(createCardinalityBuilder(queryField.getQueryFieldFullName()));
-
+            throw new ElasticSql2DslException("[syntax error] can not support aggregation defined by dollar[$]");
         } else {
             throw new ElasticSql2DslException(String.format("[syntax error] can not support cardinality aggregation for field type[%s]", queryField.getQueryFieldType()));
         }
