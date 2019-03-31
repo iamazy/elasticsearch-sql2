@@ -40,6 +40,7 @@ public class QueryFieldParser {
             boolean checkSyntax=!expr.contains(NESTED_DOC_IDF)
                     ||StringUtils.countMatches(expr,NESTED_DOC_IDF)==1
                     ||(StringUtils.countMatches(expr,NESTED_DOC_IDF)==2 &&expr.indexOf(NESTED_DOC_IDF)!=expr.lastIndexOf(NESTED_DOC_IDF));
+
             if(!checkSyntax){
                 throw new ElasticSql2DslException("[syntax error] nested doc query can not support this syntax");
             }
