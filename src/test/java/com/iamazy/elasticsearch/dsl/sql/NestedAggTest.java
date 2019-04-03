@@ -12,12 +12,21 @@ import org.junit.Test;
 public class NestedAggTest {
 
 
-
     @Test
-    public void nestedAgg(){
-        String nested="select * from port_info where aaa$ipInfo$vulVerifyList.vulType=20 group by nested(info)>(nested(info.device)>terms(info.port)) limit 0,0";
+    public void nested2Agg(){
+        String nested="select * from product where $product$apple.type='AirPod' group by nested(product)>(nested(product.apple)>(terms(product.apple.type, 20),terms(product.apple.name, 'apple'))) limit 0,0";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(nested);
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
+    }
+
+    @Test
+    public void nested3(){
+        String sql="select * from regions group by terms(country)>terms(province)";
+        ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
+        System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
+
+
     }
 }

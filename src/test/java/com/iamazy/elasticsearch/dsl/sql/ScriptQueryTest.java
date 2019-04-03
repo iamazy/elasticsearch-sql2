@@ -17,15 +17,10 @@ public class ScriptQueryTest {
 
     @Test
     public void scriptTest(){
-        String sql="select * from device_search where script_query('if (ctx._source.user == \"kimchy\") {ctx._source.likes++;}','name:iamazy,age:23,gender:male')";
+        String sql="select * from search where script_query('if (ctx._source.user == \"kimchy\") {ctx._source.likes++;}','name:iamazy,age:23,gender:male')";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
     }
 
-    @Test
-    public void scriptQuery(){
-        QueryBuilder queryBuilder= QueryBuilders.scriptQuery(new Script("params['_source']['markProcess'].size()==3"));
-        System.out.println("fdsfds");
-    }
 }
