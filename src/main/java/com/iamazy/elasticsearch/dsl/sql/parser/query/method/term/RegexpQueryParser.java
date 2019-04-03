@@ -4,7 +4,6 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
@@ -23,8 +22,8 @@ public class RegexpQueryParser extends AbstractFieldSpecificMethodQueryParser {
 
     private static List<String> REGEXP_QUERY_METHOD = ImmutableList.of("regexp", "regexp_query", "regexpQuery");
 
-    public RegexpQueryParser(ParseActionListener parseActionListener) {
-        super(parseActionListener);
+    RegexpQueryParser() {
+
     }
 
     @Override

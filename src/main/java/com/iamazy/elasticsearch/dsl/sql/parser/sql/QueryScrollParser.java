@@ -5,7 +5,6 @@ import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
 import com.alibaba.druid.sql.ast.expr.SQLQueryExpr;
 import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 
 
@@ -16,11 +15,7 @@ import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
  **/
 public class QueryScrollParser implements QueryParser  {
 
-    private ParseActionListener parseActionListener;
-
-    public QueryScrollParser(ParseActionListener parseActionListener) {
-        this.parseActionListener = parseActionListener;
-    }
+    public QueryScrollParser() { }
 
     @Override
     public void parse(ElasticDslContext dslContext) {
@@ -33,9 +28,7 @@ public class QueryScrollParser implements QueryParser  {
                 if(queryBlock.getScroll().getScrollId()!=null) {
                     String scrollId = parseScroll(queryBlock.getScroll().getScrollId());
                     dslContext.getParseResult().setScrollId(scrollId);
-                    parseActionListener.onScrollParse(expire, scrollId);
                 }
-                parseActionListener.onScrollParse(expire,null);
             }
         }
     }

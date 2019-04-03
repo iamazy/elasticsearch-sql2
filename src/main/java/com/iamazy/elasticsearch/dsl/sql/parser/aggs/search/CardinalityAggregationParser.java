@@ -8,7 +8,6 @@ import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
@@ -34,7 +33,7 @@ public class CardinalityAggregationParser extends AbstractGroupByMethodAggregati
         if (invocation.getParameterCount() == 2) {
             precisionThreshold = invocation.getParameter(1);
         }
-        AggregationBuilder cardinalityBuilder = parseCardinalityAggregation(invocation.getQueryAs(), invocation.getSqlArgs(), cardinality, precisionThreshold);
+        AggregationBuilder cardinalityBuilder = parseCardinalityAggregation(invocation.getQueryAs(), cardinality, precisionThreshold);
         return new AggregationQuery(cardinalityBuilder);
     }
 
@@ -53,12 +52,12 @@ public class CardinalityAggregationParser extends AbstractGroupByMethodAggregati
     }
 
 
-    private AggregationBuilder parseCardinalityAggregation(String queryAs, SqlArgs args, SQLExpr cardinalityFieldExpr, SQLExpr precisionThreshold) {
+    private AggregationBuilder parseCardinalityAggregation(String queryAs, SQLExpr cardinalityFieldExpr, SQLExpr precisionThreshold) {
         QueryFieldParser queryFieldParser = new QueryFieldParser();
         ElasticSqlQueryField queryField = queryFieldParser.parseConditionQueryField(cardinalityFieldExpr, queryAs);
         if (queryField.getQueryFieldType() == QueryFieldType.RootDocField || queryField.getQueryFieldType() == QueryFieldType.InnerDocField) {
             if (precisionThreshold != null) {
-                Number threshold = (Number) ElasticSqlArgConverter.convertSqlArg(precisionThreshold, args);
+                Number threshold = (Number) ElasticSqlArgConverter.convertSqlArg(precisionThreshold);
                 return createCardinalityBuilder(queryField.getQueryFieldFullName(), threshold.longValue());
             }
             return createCardinalityBuilder(queryField.getQueryFieldFullName());

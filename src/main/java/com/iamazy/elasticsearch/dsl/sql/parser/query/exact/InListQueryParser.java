@@ -4,9 +4,7 @@ import com.alibaba.druid.sql.ast.expr.SQLInListExpr;
 import com.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -16,16 +14,13 @@ import org.elasticsearch.index.query.QueryBuilders;
  */
 public class InListQueryParser extends AbstractExactQueryParser {
 
-    public InListQueryParser(ParseActionListener parseActionListener) {
-        super(parseActionListener);
-    }
 
-    public AtomicQuery parseInListQuery(SQLInListExpr inListQueryExpr, String queryAs, SqlArgs sqlArgs) {
+    public AtomicQuery parseInListQuery(SQLInListExpr inListQueryExpr, String queryAs) {
         if (CollectionUtils.isEmpty(inListQueryExpr.getTargetList())) {
             throw new ElasticSql2DslException("[syntax error] In list expr target list cannot be blank");
         }
 
-        Object[] targetInList = ElasticSqlArgConverter.convertSqlArgs(inListQueryExpr.getTargetList(), sqlArgs);
+        Object[] targetInList = ElasticSqlArgConverter.convertSqlArgs(inListQueryExpr.getTargetList());
         SqlConditionOperator operator = inListQueryExpr.isNot() ? SqlConditionOperator.NotIn : SqlConditionOperator.In;
 
         return parseCondition(inListQueryExpr.getExpr(), operator, targetInList, queryAs, (queryFieldName, operator1, rightParamValues) -> {

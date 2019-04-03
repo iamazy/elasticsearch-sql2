@@ -8,10 +8,7 @@ import com.google.common.collect.Lists;
 import com.iamazy.elasticsearch.dsl.sql.enums.SqlBoolOperator;
 import com.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListenerAdapter;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext.FullTextQueryParser;
@@ -40,24 +37,21 @@ public class BoolExpressionParser {
 
     private final JoinQueryParser joinAtomQueryParser;
 
-    public BoolExpressionParser() {
-        this(new ParseActionListenerAdapter());
-    }
 
-    public BoolExpressionParser(ParseActionListener parseActionListener) {
-        termLevelAtomicQueryParser = new TermLevelAtomicQueryParser(parseActionListener);
-        fullTextAtomQueryParser = new FullTextQueryParser(parseActionListener);
-        binaryQueryParser = new BinaryQueryParser(parseActionListener);
-        inListQueryParser = new InListQueryParser(parseActionListener);
-        betweenAndQueryParser = new BetweenAndQueryParser(parseActionListener);
+    public BoolExpressionParser() {
+        termLevelAtomicQueryParser = new TermLevelAtomicQueryParser();
+        fullTextAtomQueryParser = new FullTextQueryParser();
+        binaryQueryParser = new BinaryQueryParser();
+        inListQueryParser = new InListQueryParser();
+        betweenAndQueryParser = new BetweenAndQueryParser();
 
         scriptQueryParser = new ScriptQueryParser();
         joinAtomQueryParser = new JoinQueryParser();
     }
 
 
-    public BoolQueryBuilder parseBoolQueryExpr(SQLExpr conditionExpr, String queryAs, SqlArgs sqlArgs) {
-        SqlCondition sqlCondition = recursiveParseBoolQueryExpr(conditionExpr, queryAs, sqlArgs);
+    public BoolQueryBuilder parseBoolQueryExpr(SQLExpr conditionExpr, String queryAs) {
+        SqlCondition sqlCondition = recursiveParseBoolQueryExpr(conditionExpr, queryAs);
         SqlBoolOperator operator = sqlCondition.getOperator();
 
         if (SqlConditionType.Atom == sqlCondition.getConditionType()) {
@@ -66,7 +60,7 @@ public class BoolExpressionParser {
         return mergeAtomQuery(sqlCondition.getQueryList(), operator);
     }
 
-    private SqlCondition recursiveParseBoolQueryExpr(SQLExpr conditionExpr, String queryAs, SqlArgs sqlArgs) {
+    private SqlCondition recursiveParseBoolQueryExpr(SQLExpr conditionExpr, String queryAs) {
         if (conditionExpr instanceof SQLBinaryOpExpr) {
             SQLBinaryOpExpr binOpExpr = (SQLBinaryOpExpr) conditionExpr;
             SQLBinaryOperator binOperator = binOpExpr.getOperator();
@@ -74,8 +68,8 @@ public class BoolExpressionParser {
             if (SQLBinaryOperator.BooleanAnd == binOperator || SQLBinaryOperator.BooleanOr == binOperator) {
                 SqlBoolOperator operator = SQLBinaryOperator.BooleanAnd == binOperator ? SqlBoolOperator.AND : SqlBoolOperator.OR;
 
-                SqlCondition leftCondition = recursiveParseBoolQueryExpr(binOpExpr.getLeft(), queryAs, sqlArgs);
-                SqlCondition rightCondition = recursiveParseBoolQueryExpr(binOpExpr.getRight(), queryAs, sqlArgs);
+                SqlCondition leftCondition = recursiveParseBoolQueryExpr(binOpExpr.getLeft(), queryAs);
+                SqlCondition rightCondition = recursiveParseBoolQueryExpr(binOpExpr.getRight(), queryAs);
 
                 List<AtomicQuery> mergedQueryList = Lists.newArrayList();
                 combineQueryBuilder(mergedQueryList, leftCondition, operator);
@@ -85,7 +79,7 @@ public class BoolExpressionParser {
             }
         }
         else if (conditionExpr instanceof SQLNotExpr) {
-            SqlCondition innerSQLCondition = recursiveParseBoolQueryExpr(((SQLNotExpr) conditionExpr).getExpr(), queryAs, sqlArgs);
+            SqlCondition innerSQLCondition = recursiveParseBoolQueryExpr(((SQLNotExpr) conditionExpr).getExpr(), queryAs);
 
             SqlBoolOperator operator = innerSQLCondition.getOperator();
             if (SqlConditionType.Atom == innerSQLCondition.getConditionType()) {
@@ -97,39 +91,39 @@ public class BoolExpressionParser {
 
             return new SqlCondition(new AtomicQuery(boolQuery), SqlConditionType.Atom);
         }
-        return new SqlCondition(parseAtomQueryCondition(conditionExpr, queryAs, sqlArgs), SqlConditionType.Atom);
+        return new SqlCondition(parseAtomQueryCondition(conditionExpr, queryAs), SqlConditionType.Atom);
     }
 
-    private AtomicQuery parseAtomQueryCondition(SQLExpr sqlConditionExpr, String queryAs, SqlArgs sqlArgs) {
+    private AtomicQuery parseAtomQueryCondition(SQLExpr sqlConditionExpr, String queryAs) {
         if (sqlConditionExpr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr methodQueryExpr = (SQLMethodInvokeExpr) sqlConditionExpr;
 
-            MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
+            MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs);
 
             if (scriptQueryParser.isMatchMethodInvocation(methodInvocation)) {
                 return scriptQueryParser.parseMethodQuery(methodInvocation);
             }
 
             if (fullTextAtomQueryParser.isFulltextAtomQuery(methodInvocation)) {
-                return fullTextAtomQueryParser.parseFullTextAtomQuery(methodQueryExpr, queryAs, sqlArgs);
+                return fullTextAtomQueryParser.parseFullTextAtomQuery(methodQueryExpr, queryAs);
             }
 
             if (termLevelAtomicQueryParser.isTermLevelAtomQuery(methodInvocation)) {
-                return termLevelAtomicQueryParser.parseTermLevelAtomQuery(methodQueryExpr, queryAs, sqlArgs);
+                return termLevelAtomicQueryParser.parseTermLevelAtomQuery(methodQueryExpr, queryAs);
             }
 
             if (joinAtomQueryParser.isJoinAtomQuery(methodInvocation)) {
-                return joinAtomQueryParser.parseJoinAtomQuery(methodQueryExpr, queryAs, sqlArgs);
+                return joinAtomQueryParser.parseJoinAtomQuery(methodQueryExpr, queryAs);
             }
         }
         else if (sqlConditionExpr instanceof SQLBinaryOpExpr) {
-            return binaryQueryParser.parseBinaryQuery((SQLBinaryOpExpr) sqlConditionExpr, queryAs, sqlArgs);
+            return binaryQueryParser.parseBinaryQuery((SQLBinaryOpExpr) sqlConditionExpr, queryAs);
         }
         else if (sqlConditionExpr instanceof SQLInListExpr) {
-            return inListQueryParser.parseInListQuery((SQLInListExpr) sqlConditionExpr, queryAs, sqlArgs);
+            return inListQueryParser.parseInListQuery((SQLInListExpr) sqlConditionExpr, queryAs);
         }
         else if (sqlConditionExpr instanceof SQLBetweenExpr) {
-            return betweenAndQueryParser.parseBetweenAndQuery((SQLBetweenExpr) sqlConditionExpr, queryAs, sqlArgs);
+            return betweenAndQueryParser.parseBetweenAndQuery((SQLBetweenExpr) sqlConditionExpr, queryAs);
         }
 
         throw new ElasticSql2DslException(String.format("[syntax error] Can not support query condition type[%s]", sqlConditionExpr.toString()));
@@ -169,16 +163,16 @@ public class BoolExpressionParser {
             if (nestedQueryList.size() == 1) {
                 if (operator == SqlBoolOperator.AND) {
                     if(nestedDocPrefix.size()==1) {
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.None));
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
                     }else if(nestedDocPrefix.size()==2){
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.None), ScoreMode.None));
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
                     }
                 }
                 if (operator == SqlBoolOperator.OR) {
                     if(nestedDocPrefix.size()==1) {
-                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.None));
+                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
                     }else if(nestedDocPrefix.size()==2){
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(0),nestedQueryList.get(0),ScoreMode.None), ScoreMode.None));
+                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(0),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
                     }
                 }
                 continue;
@@ -196,16 +190,16 @@ public class BoolExpressionParser {
 
             if (operator == SqlBoolOperator.AND) {
                 if(nestedDocPrefix.size()==1) {
-                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.None));
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.Avg));
                 }else if(nestedDocPrefix.size()==2){
-                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.None), ScoreMode.None));
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.Avg), ScoreMode.Avg));
                 }
             }
             if (operator == SqlBoolOperator.OR) {
                 if(nestedDocPrefix.size()==1) {
-                    subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.None));
+                    subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.Avg));
                 }else if(nestedDocPrefix.size()==2){
-                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.None), ScoreMode.None));
+                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.Avg), ScoreMode.Avg));
                 }
             }
 

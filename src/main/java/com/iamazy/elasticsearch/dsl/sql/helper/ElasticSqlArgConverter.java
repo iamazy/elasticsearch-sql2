@@ -15,26 +15,26 @@ import java.util.List;
 public class ElasticSqlArgConverter {
     private ElasticSqlArgConverter(){}
 
-    public static Object[] convertSqlArgs(List<SQLExpr> exprList, SqlArgs sqlArgs) {
+    public static Object[] convertSqlArgs(List<SQLExpr> exprList) {
         Object[] values = new Object[exprList.size()];
         for (int idx = 0; idx < exprList.size(); idx++) {
-            values[idx] = convertSqlArg(exprList.get(idx), sqlArgs, true);
+            values[idx] = convertSqlArg(exprList.get(idx), true);
         }
         return values;
     }
 
-    public static Object convertSqlArg(SQLExpr expr, SqlArgs sqlArgs) {
-        return convertSqlArg(expr, sqlArgs, true);
+    public static Object convertSqlArg(SQLExpr expr) {
+        return convertSqlArg(expr, true);
     }
 
-    public static Object convertSqlArg(SQLExpr expr, SqlArgs sqlArgs, boolean recognizeDateArg) {
+    public static Object convertSqlArg(SQLExpr expr, boolean recognizeDateArg) {
         if (expr instanceof SQLVariantRefExpr) {
             SQLVariantRefExpr varRefExpr = (SQLVariantRefExpr) expr;
             //parse date
-            if (recognizeDateArg && ElasticSqlDateParseHelper.isDateArgObjectValue(sqlArgs.get(varRefExpr.getIndex()))) {
-                return ElasticSqlDateParseHelper.formatDefaultEsDateObjectValue(sqlArgs.get(varRefExpr.getIndex()));
-            }
-            return sqlArgs.get(varRefExpr.getIndex());
+//            if (recognizeDateArg && ElasticSqlDateParseHelper.isDateArgObjectValue(sqlArgs.get(varRefExpr.getIndex()))) {
+//                return ElasticSqlDateParseHelper.formatDefaultEsDateObjectValue(sqlArgs.get(varRefExpr.getIndex()));
+//            }
+//            return sqlArgs.get(varRefExpr.getIndex());
         }
 
         if (expr instanceof SQLIntegerExpr) {
@@ -57,8 +57,8 @@ public class ElasticSqlArgConverter {
             SQLMethodInvokeExpr methodExpr = (SQLMethodInvokeExpr) expr;
             if (ElasticSqlDateParseHelper.isDateMethod(methodExpr)) {
                 ElasticSqlMethodInvokeHelper.checkDateMethod(methodExpr);
-                String patternArg = (String) ElasticSqlArgConverter.convertSqlArg(methodExpr.getParameters().get(0), sqlArgs, false);
-                String timeValArg = (String) ElasticSqlArgConverter.convertSqlArg(methodExpr.getParameters().get(1), sqlArgs, false);
+                String patternArg = (String) ElasticSqlArgConverter.convertSqlArg(methodExpr.getParameters().get(0), false);
+                String timeValArg = (String) ElasticSqlArgConverter.convertSqlArg(methodExpr.getParameters().get(1), false);
                 return ElasticSqlDateParseHelper.formatDefaultEsDate(patternArg, timeValArg);
             }
             return methodExpr;

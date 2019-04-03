@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.BoolExpressionParser;
@@ -54,9 +53,8 @@ public class HasChildQueryParser implements MethodQueryParser {
 
         BoolExpressionParser boolExpressionParser = new BoolExpressionParser();
         String queryAs = invocation.getQueryAs();
-        SqlArgs sqlArgs = invocation.getSqlArgs();
 
-        BoolQueryBuilder filterBuilder = boolExpressionParser.parseBoolQueryExpr(filter, queryAs, sqlArgs);
+        BoolQueryBuilder filterBuilder = boolExpressionParser.parseBoolQueryExpr(filter, queryAs);
         HasChildQueryBuilder hasChildQueryBuilder = JoinQueryBuilders.hasChildQuery(childType, filterBuilder, ScoreMode.None);
 
         if (invocation.getParameterCount() == 4) {

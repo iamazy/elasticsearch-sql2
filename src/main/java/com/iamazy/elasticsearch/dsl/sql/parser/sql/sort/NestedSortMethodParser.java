@@ -5,7 +5,6 @@ import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.BoolExpressionParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
@@ -70,9 +69,8 @@ public class NestedSortMethodParser extends AbstractMethodSortParser {
                 BoolExpressionParser boolExpressionParser = new BoolExpressionParser();
 
                 String queryAs = invocation.getQueryAs();
-                SqlArgs sqlArgs = invocation.getSqlArgs();
 
-                filter = boolExpressionParser.parseBoolQueryExpr(filterExpr, queryAs, sqlArgs);
+                filter = boolExpressionParser.parseBoolQueryExpr(filterExpr, queryAs);
             }
 
             if(sortField.getNestedDocContextPath().size()==1) {

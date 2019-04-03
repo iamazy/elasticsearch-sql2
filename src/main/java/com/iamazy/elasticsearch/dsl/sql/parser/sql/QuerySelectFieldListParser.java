@@ -9,7 +9,6 @@ import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
 import com.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,11 +20,6 @@ import java.util.List;
 
 public class QuerySelectFieldListParser implements QueryParser {
 
-    private ParseActionListener parseActionListener;
-
-    public QuerySelectFieldListParser(ParseActionListener parseActionListener) {
-        this.parseActionListener = parseActionListener;
-    }
 
     @Override
     public void parse(ElasticDslContext dslContext) {
@@ -56,8 +50,6 @@ public class QuerySelectFieldListParser implements QueryParser {
 
             if (sqlSelectField.getQueryFieldType() == QueryFieldType.SqlSelectField) {
                 selectFields.add(sqlSelectField.getQueryFieldFullName());
-
-                parseActionListener.onSelectFieldParse(sqlSelectField);
             }
         }
 

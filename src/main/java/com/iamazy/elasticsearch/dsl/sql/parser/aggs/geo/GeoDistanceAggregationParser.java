@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import com.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
@@ -16,7 +17,6 @@ import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
-import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -55,15 +55,15 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
         }
     }
 
-    private List<RangeSegment> parseRangeSegments(SQLMethodInvokeExpr rangeMethodExpr, SqlArgs args) {
+    private List<RangeSegment> parseRangeSegments(SQLMethodInvokeExpr rangeMethodExpr) {
         List<RangeSegment> rangeSegmentList = Lists.newArrayList();
         for (int pIdx = 2; pIdx < rangeMethodExpr.getParameters().size(); pIdx++) {
             SQLMethodInvokeExpr segMethodExpr = (SQLMethodInvokeExpr) rangeMethodExpr.getParameters().get(pIdx);
 
             checkRangeItemAggMethod(segMethodExpr);
 
-            Object from = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(0), args, false);
-            Object to = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(1), args, false);
+            Object from = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(0), false);
+            Object to = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(1), false);
             boolean isSatisfy=(from instanceof Number||from.equals(START))&&((to instanceof Number)||to.equals(START));
             if(isSatisfy) {
                 if(!(from.equals(START)&&to.equals(START))) {
@@ -74,9 +74,9 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
         return rangeSegmentList;
     }
 
-    private RangeSegment parseOriginMethod(SQLMethodInvokeExpr methodInvokeExpr, SqlArgs args) {
-        Object from = ElasticSqlArgConverter.convertSqlArg(methodInvokeExpr.getParameters().get(0), args, false);
-        Object to = ElasticSqlArgConverter.convertSqlArg(methodInvokeExpr.getParameters().get(1), args, false);
+    private RangeSegment parseOriginMethod(SQLMethodInvokeExpr methodInvokeExpr) {
+        Object from = ElasticSqlArgConverter.convertSqlArg(methodInvokeExpr.getParameters().get(0), false);
+        Object to = ElasticSqlArgConverter.convertSqlArg(methodInvokeExpr.getParameters().get(1), false);
         return new RangeSegment(from,to,RangeSegment.SegmentType.Geo);
     }
 
@@ -126,8 +126,8 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
     private AggregationBuilder createGeoDistanceBuilder(String queryField,RangeSegment origin, List<RangeSegment> rangeSegments){
         GeoPoint originPoint=new GeoPoint((Double)origin.getFrom(),(Double) origin.getTo());
         GeoDistanceAggregationBuilder geoDistanceAggregationBuilder;
-        if(queryField.contains(ElasticConstants.POUND)){
-            String[] fieldUnit=queryField.split(ElasticConstants.POUND);
+        if(queryField.contains(CoreConstants.POUND)){
+            String[] fieldUnit=queryField.split(CoreConstants.POUND);
             String field=fieldUnit[0];
             String unit=fieldUnit[1];
             DistanceUnit distanceUnit=parseDistanceUnit(unit);
@@ -157,8 +157,8 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
     public AggregationQuery parseAggregationMethod(MethodInvocation invocation) throws ElasticSql2DslException {
         SQLMethodInvokeExpr originMethod = (SQLMethodInvokeExpr) invocation.getMethodInvokeExpr().getParameters().get(1);
         checkOriginMethod(originMethod);
-        RangeSegment origin=parseOriginMethod(originMethod,invocation.getSqlArgs());
-        List<RangeSegment> rangeSegments = parseRangeSegments(invocation.getMethodInvokeExpr(), invocation.getSqlArgs());
+        RangeSegment origin=parseOriginMethod(originMethod);
+        List<RangeSegment> rangeSegments = parseRangeSegments(invocation.getMethodInvokeExpr());
         SQLExpr fieldExpr = invocation.getMethodInvokeExpr().getParameters().get(0);
         return new AggregationQuery(parseGeoDistanceAggregation(invocation.getQueryAs(),fieldExpr,origin,rangeSegments));
     }

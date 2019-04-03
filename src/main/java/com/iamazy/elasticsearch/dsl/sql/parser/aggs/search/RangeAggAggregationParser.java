@@ -11,7 +11,6 @@ import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
 import com.iamazy.elasticsearch.dsl.sql.model.RangeSegment;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
@@ -42,7 +41,7 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
 
     @Override
     public AggregationQuery parseAggregationMethod(MethodInvocation invocation) throws ElasticSql2DslException {
-        List<RangeSegment> rangeSegments = parseRangeSegments(invocation.getMethodInvokeExpr(), invocation.getSqlArgs());
+        List<RangeSegment> rangeSegments = parseRangeSegments(invocation.getMethodInvokeExpr());
         SQLExpr rangeFieldExpr = invocation.getMethodInvokeExpr().getParameters().get(0);
 
         return new AggregationQuery(parseRangeAggregation(invocation.getQueryAs(), rangeFieldExpr, rangeSegments));
@@ -77,15 +76,15 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
 
     }
 
-    private List<RangeSegment> parseRangeSegments(SQLMethodInvokeExpr rangeMethodExpr, SqlArgs args) {
+    private List<RangeSegment> parseRangeSegments(SQLMethodInvokeExpr rangeMethodExpr) {
         List<RangeSegment> rangeSegmentList = Lists.newArrayList();
         for (int pIdx = 1; pIdx < rangeMethodExpr.getParameters().size(); pIdx++) {
             SQLMethodInvokeExpr segMethodExpr = (SQLMethodInvokeExpr) rangeMethodExpr.getParameters().get(pIdx);
 
             ElasticSqlMethodInvokeHelper.checkRangeItemAggMethod(segMethodExpr);
 
-            Object from = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(0), args, true);
-            Object to = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(1), args, true);
+            Object from = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(0), true);
+            Object to = ElasticSqlArgConverter.convertSqlArg(segMethodExpr.getParameters().get(1), true);
 
             rangeSegmentList.add(new RangeSegment(from, to,
                     from instanceof Number ? RangeSegment.SegmentType.Numeric : RangeSegment.SegmentType.Date));

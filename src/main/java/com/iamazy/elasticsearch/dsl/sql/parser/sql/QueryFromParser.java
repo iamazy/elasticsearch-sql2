@@ -8,17 +8,10 @@ import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
 import com.google.common.collect.Lists;
 import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 
 
 public class QueryFromParser implements QueryParser {
-
-    private ParseActionListener parseActionListener;
-
-    public QueryFromParser(ParseActionListener parseActionListener) {
-        this.parseActionListener = parseActionListener;
-    }
 
     @Override
     public void parse(ElasticDslContext dslContext) {

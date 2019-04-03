@@ -4,16 +4,12 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLQueryExpr;
 import com.alibaba.druid.sql.ast.statement.SQLDeleteStatement;
 import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 
 
 public class QueryWhereConditionParser extends BoolExpressionParser implements QueryParser{
 
-    public QueryWhereConditionParser(ParseActionListener parseActionListener) {
-        super(parseActionListener);
-    }
 
     @Override
     public void parse(ElasticDslContext dslContext) {
@@ -22,7 +18,7 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
             SQLDeleteStatement sqlDeleteStatement = (SQLDeleteStatement) dslContext.getSqlObject();
             String queryAs=dslContext.getParseResult().getQueryAs();
             SQLExpr sqlExpr=sqlDeleteStatement.getWhere();
-            BoolQueryBuilder matchQuery=parseBoolQueryExpr(sqlExpr,queryAs,dslContext.getSqlArgs());
+            BoolQueryBuilder matchQuery=parseBoolQueryExpr(sqlExpr,queryAs);
             dslContext.getParseResult().setMatchCondition(matchQuery);
         }
         if(dslContext.getSqlObject() instanceof SQLQueryExpr) {
@@ -31,7 +27,7 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
             if (queryBlock.getWhere() != null) {
                 String queryAs = dslContext.getParseResult().getQueryAs();
 
-                BoolQueryBuilder whereQuery = parseBoolQueryExpr(queryBlock.getWhere(), queryAs, dslContext.getSqlArgs());
+                BoolQueryBuilder whereQuery = parseBoolQueryExpr(queryBlock.getWhere(), queryAs);
 
                 dslContext.getParseResult().setWhereCondition(whereQuery);
             }

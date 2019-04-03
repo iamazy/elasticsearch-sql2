@@ -3,7 +3,6 @@ package com.iamazy.elasticsearch.dsl.sql.parser.query.method.term;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
@@ -22,10 +21,6 @@ import java.util.Map;
 public class PrefixQueryParser extends AbstractFieldSpecificMethodQueryParser {
 
     private static List<String> PREFIX_QUERY_METHOD = ImmutableList.of("prefix", "prefix_query", "prefixQuery");
-
-    public PrefixQueryParser(ParseActionListener parseActionListener) {
-        super(parseActionListener);
-    }
 
     @Override
     public List<String> defineMethodNames() {

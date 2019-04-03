@@ -3,9 +3,7 @@ package com.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
 
@@ -15,11 +13,11 @@ public class FullTextQueryParser {
 
     private final List<MethodQueryParser> methodQueryParsers;
 
-    public FullTextQueryParser(ParseActionListener parseActionListener) {
+    public FullTextQueryParser() {
         methodQueryParsers = ImmutableList.of(
-                new MatchPhraseQueryParser(parseActionListener),
-                new MatchPhrasePrefixQueryParser(parseActionListener),
-                new MatchQueryParser(parseActionListener),
+                new MatchPhraseQueryParser(),
+                new MatchPhrasePrefixQueryParser(),
+                new MatchQueryParser(),
                 new MultiMatchQueryParser(),
                 new QueryStringQueryParser(),
                 new SimpleQueryStringQueryParser(),
@@ -31,8 +29,8 @@ public class FullTextQueryParser {
         return methodQueryParsers.stream().anyMatch(methodQueryParser -> methodQueryParser.isMatchMethodInvocation(invocation));
     }
 
-    public AtomicQuery parseFullTextAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs, SqlArgs sqlArgs) {
-        MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
+    public AtomicQuery parseFullTextAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs) {
+        MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs);
         MethodQueryParser matchAtomQueryParser = getQueryParser(methodInvocation);
         return matchAtomQueryParser.parseMethodQuery(methodInvocation);
     }

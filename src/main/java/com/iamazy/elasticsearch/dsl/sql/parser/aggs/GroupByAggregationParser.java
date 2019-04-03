@@ -10,7 +10,6 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.join.NestedAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryParser;
@@ -59,34 +58,34 @@ public class GroupByAggregationParser implements QueryParser {
             String queryAs = dslContext.getParseResult().getQueryAs();
             List<AggregationBuilder> aggregationList = Lists.newArrayList();
             for (SQLExpr groupByItem : sqlGroupBy.getItems()) {
-                aggregationList.add((AggregationBuilder) recursiveParseGroupByItemExpr(groupByItem, queryAs, dslContext.getSqlArgs()));
+                aggregationList.add((AggregationBuilder) recursiveParseGroupByItemExpr(groupByItem, queryAs));
             }
             dslContext.getParseResult().setGroupBy(aggregationList);
         }
 
     }
 
-    private Object recursiveParseGroupByItemExpr(SQLExpr sqlExpr, String queryAs, SqlArgs sqlArgs) {
+    private Object recursiveParseGroupByItemExpr(SQLExpr sqlExpr, String queryAs) {
         if (sqlExpr instanceof SQLBinaryOpExpr) {
             SQLBinaryOpExpr binOpExpr = (SQLBinaryOpExpr) sqlExpr;
             SQLBinaryOperator binOperator = binOpExpr.getOperator();
             if (SQLBinaryOperator.GreaterThan == binOperator) {
                 SQLExpr left = binOpExpr.getLeft();
                 SQLExpr right = binOpExpr.getRight();
-                Object leftObject = recursiveParseGroupByItemExpr(left, null, null);
-                Object rightObject = recursiveParseGroupByItemExpr(right, null, null);
+                Object leftObject = recursiveParseGroupByItemExpr(left, null);
+                Object rightObject = recursiveParseGroupByItemExpr(right, null);
                 AggregationBuilder leftAggBuilder, rightAggBuilder = null;
                 List<AggregationBuilder> rightAggBuilders = null;
                 if (leftObject instanceof AggregationBuilder) {
-                    leftAggBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(left, null, null);
+                    leftAggBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(left, null);
                 } else {
                     throw new ElasticSql2DslException("[syntax error] left group by item only support an agg method call");
                 }
 
                 if (rightObject instanceof AggregationBuilder) {
-                    rightAggBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(right, null, null);
+                    rightAggBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(right, null);
                 } else if (rightObject instanceof List) {
-                    rightAggBuilders = (List<AggregationBuilder>) recursiveParseGroupByItemExpr(right, null, null);
+                    rightAggBuilders = (List<AggregationBuilder>) recursiveParseGroupByItemExpr(right, null);
                 }
 
                 if (rightAggBuilder != null) {
@@ -104,17 +103,17 @@ public class GroupByAggregationParser implements QueryParser {
             }
         } else if (sqlExpr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr aggMethodExpr = (SQLMethodInvokeExpr) sqlExpr;
-            MethodInvocation invocation = new MethodInvocation(aggMethodExpr, queryAs, sqlArgs);
+            MethodInvocation invocation = new MethodInvocation(aggMethodExpr, queryAs);
             AbstractGroupByMethodAggregationParser abstractGroupByMethodAggregationParser = getGroupByQueryParser(invocation);
             AggregationQuery aggregationQuery = abstractGroupByMethodAggregationParser.parseAggregationMethod(invocation);
             return aggregationQuery.getAggregationBuilder();
         } else if (sqlExpr instanceof SQLListExpr) {
             SQLListExpr sqlListExpr = (SQLListExpr) sqlExpr;
-            Object[] objects = ElasticSqlArgConverter.convertSqlArgs(sqlListExpr.getItems(), sqlArgs);
+            Object[] objects = ElasticSqlArgConverter.convertSqlArgs(sqlListExpr.getItems());
             List<AggregationBuilder> aggList = new ArrayList<>(0);
             for (Object object : objects) {
                 SQLExpr expr = (SQLExpr) object;
-                AggregationBuilder aggregationBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(expr, queryAs, sqlArgs);
+                AggregationBuilder aggregationBuilder = (AggregationBuilder) recursiveParseGroupByItemExpr(expr, queryAs);
                 aggList.add(aggregationBuilder);
             }
             return aggList;

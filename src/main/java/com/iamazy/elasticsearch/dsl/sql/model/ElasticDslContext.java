@@ -14,19 +14,14 @@ import lombok.Getter;
 public class ElasticDslContext {
 
     private SQLObject sqlObject;
-    private SqlArgs sqlArgs;
     private ElasticSqlParseResult parseResult;
 
-    public ElasticDslContext(SQLObject sqlObject, SqlArgs sqlArgs){
-        this.sqlArgs=sqlArgs;
+    public ElasticDslContext(SQLObject sqlObject){
+
         this.sqlObject =sqlObject;
         parseResult=new ElasticSqlParseResult();
     }
 
-    public ElasticDslContext(SQLQueryExpr sqlQueryExpr){
-        this.sqlObject =sqlQueryExpr;
-        parseResult=new ElasticSqlParseResult();
-    }
 
     @Override
     public String toString() {

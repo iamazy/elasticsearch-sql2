@@ -4,7 +4,6 @@ import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
 
@@ -25,8 +24,8 @@ public class JoinQueryParser {
         return joinQueryParsers.stream().anyMatch(methodQueryParser -> methodQueryParser.isMatchMethodInvocation(invocation));
     }
 
-    public AtomicQuery parseJoinAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs, SqlArgs sqlArgs) {
-        MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs, sqlArgs);
+    public AtomicQuery parseJoinAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs) {
+        MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs);
         MethodQueryParser joinAtomQueryParser = getQueryParser(methodInvocation);
         return joinAtomQueryParser.parseMethodQuery(methodInvocation);
     }

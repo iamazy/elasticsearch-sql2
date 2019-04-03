@@ -1,7 +1,6 @@
 package com.iamazy.elasticsearch.dsl.sql.parser.query.method;
 
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
@@ -13,11 +12,8 @@ import java.util.Map;
 
 public abstract class AbstractFieldSpecificMethodQueryParser extends ParameterizedMethodQueryParser implements FieldSpecificMethodExpression {
 
-    protected ParseActionListener parseActionListener;
 
-    public AbstractFieldSpecificMethodQueryParser(ParseActionListener parseActionListener) {
-        this.parseActionListener = parseActionListener;
-    }
+    public AbstractFieldSpecificMethodQueryParser() { }
 
     protected abstract QueryBuilder buildQuery(MethodInvocation invocation, String fieldName, Map<String, String> extraParams);
 
@@ -47,8 +43,6 @@ public abstract class AbstractFieldSpecificMethodQueryParser extends Parameteriz
             throw new ElasticSql2DslException(
                     String.format("[syntax error] query field can not support type[%s]", queryField.getQueryFieldType()));
         }
-
-        parseActionListener.onAtomicMethodQueryConditionParse(queryField, invocation.getSqlArgs().getArgs());
 
         return atomicQuery;
     }

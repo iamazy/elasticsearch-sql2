@@ -18,12 +18,12 @@ import java.util.List;
  * @descrition
  **/
 public class ElasticSqlMethodInvokeHelper {
-    public static final List<String> DATE_METHOD = ImmutableList.of("date", "to_date", "toDate");
+    static final List<String> DATE_METHOD = ImmutableList.of("date", "to_date", "toDate");
 
 
-    public static final List<String> AGG_RANGE_METHOD = ImmutableList.of("range", "range_agg");
-    public static final List<String> AGG_DATE_HISTOGRAM_METHOD = ImmutableList.of("histogram", "histogram_agg");
-    public static final List<String> AGG_RANGE_SEGMENT_METHOD = ImmutableList.of("segment", "segment_agg");
+    private static final List<String> AGG_RANGE_METHOD = ImmutableList.of("range", "range_agg");
+    private static final List<String> AGG_DATE_HISTOGRAM_METHOD = ImmutableList.of("histogram", "histogram_agg");
+    private static final List<String> AGG_RANGE_SEGMENT_METHOD = ImmutableList.of("segment", "segment_agg");
 
     public static final String AGG_MIN_METHOD = "min";
     public static final String AGG_MAX_METHOD = "max";

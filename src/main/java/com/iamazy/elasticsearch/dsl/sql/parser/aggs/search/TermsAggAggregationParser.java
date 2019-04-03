@@ -36,7 +36,7 @@ public class TermsAggAggregationParser extends AbstractGroupByMethodAggregationP
         if (invocation.getParameterCount() == 2) {
             shardSizeExpr = invocation.getParameters().get(1);
         }
-        AggregationBuilder termsBuilder = parseTermsAggregation(invocation.getQueryAs(), invocation.getSqlArgs(), termsFieldExpr, shardSizeExpr);
+        AggregationBuilder termsBuilder = parseTermsAggregation(invocation.getQueryAs(), termsFieldExpr, shardSizeExpr);
         return new AggregationQuery(termsBuilder);
     }
 
@@ -50,12 +50,12 @@ public class TermsAggAggregationParser extends AbstractGroupByMethodAggregationP
         return ElasticSqlMethodInvokeHelper.isMethodOf(defineMethodNames(), invocation.getMethodName());
     }
 
-    private AggregationBuilder parseTermsAggregation(String queryAs, SqlArgs args, SQLExpr termsFieldExpr, SQLExpr shardSizeExpr) {
+    private AggregationBuilder parseTermsAggregation(String queryAs, SQLExpr termsFieldExpr, SQLExpr shardSizeExpr) {
         QueryFieldParser queryFieldParser = new QueryFieldParser();
         ElasticSqlQueryField queryField = queryFieldParser.parseConditionQueryField(termsFieldExpr, queryAs);
         if (queryField.getQueryFieldType() == QueryFieldType.RootDocField || queryField.getQueryFieldType() == QueryFieldType.InnerDocField) {
             if (shardSizeExpr != null) {
-                Number termBuckets = (Number) ElasticSqlArgConverter.convertSqlArg(shardSizeExpr, args);
+                Number termBuckets = (Number) ElasticSqlArgConverter.convertSqlArg(shardSizeExpr);
                 return createTermsBuilder(queryField.getQueryFieldFullName(), termBuckets.intValue());
             }
             return createTermsBuilder(queryField.getQueryFieldFullName());

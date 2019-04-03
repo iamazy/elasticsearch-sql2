@@ -3,7 +3,6 @@ package com.iamazy.elasticsearch.dsl.sql.parser.query.method;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,24 +15,19 @@ public class MethodInvocation {
     @Getter
     private final SQLMethodInvokeExpr methodInvokeExpr;
     private final String queryAs;
-    private final SqlArgs sqlArgs;
 
-    public MethodInvocation(SQLMethodInvokeExpr methodInvokeExpr, String queryAs, SqlArgs sqlArgs) {
+    public MethodInvocation(SQLMethodInvokeExpr methodInvokeExpr, String queryAs) {
         if (methodInvokeExpr == null) {
             throw new IllegalArgumentException("method invoke expression can not be null");
         }
         this.methodInvokeExpr = methodInvokeExpr;
         this.queryAs = queryAs;
-        this.sqlArgs = sqlArgs;
     }
 
     public String getQueryAs() {
         return queryAs;
     }
 
-    public SqlArgs getSqlArgs() {
-        return sqlArgs;
-    }
 
     public String getMethodName() {
         return methodInvokeExpr.getMethodName();
@@ -57,12 +51,12 @@ public class MethodInvocation {
 
     public Object getParameterAsObject(int index) {
         SQLExpr paramExpr = methodInvokeExpr.getParameters().get(index);
-        return ElasticSqlArgConverter.convertSqlArg(paramExpr, sqlArgs, false);
+        return ElasticSqlArgConverter.convertSqlArg(paramExpr, false);
     }
 
     public String getParameterAsFormatDate(int index) {
         SQLExpr paramExpr = methodInvokeExpr.getParameters().get(index);
-        return ElasticSqlArgConverter.convertSqlArg(paramExpr, sqlArgs, true).toString();
+        return ElasticSqlArgConverter.convertSqlArg(paramExpr, true).toString();
     }
 
     public String getParameterAsString(int index) {

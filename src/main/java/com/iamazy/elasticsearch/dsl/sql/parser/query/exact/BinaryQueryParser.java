@@ -6,7 +6,6 @@ import com.alibaba.druid.sql.ast.expr.SQLNullExpr;
 import com.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import org.elasticsearch.index.query.ExistsQueryBuilder;
@@ -16,19 +15,13 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 public class BinaryQueryParser extends AbstractExactQueryParser {
 
-    public BinaryQueryParser(ParseActionListener parseActionListener) {
-        super(parseActionListener);
-    }
-
-    public AtomicQuery parseBinaryQuery(SQLBinaryOpExpr binQueryExpr, String queryAs, SqlArgs sqlArgs) {
+    public AtomicQuery parseBinaryQuery(SQLBinaryOpExpr binQueryExpr, String queryAs) {
         SQLBinaryOperator binaryOperator = binQueryExpr.getOperator();
 
         //EQ NEQ
         if (SQLBinaryOperator.Equality == binaryOperator || SQLBinaryOperator.LessThanOrGreater == binaryOperator || SQLBinaryOperator.NotEqual == binaryOperator) {
-            Object targetVal = ElasticSqlArgConverter.convertSqlArg(binQueryExpr.getRight(), sqlArgs);
-
+            Object targetVal = ElasticSqlArgConverter.convertSqlArg(binQueryExpr.getRight());
             SqlConditionOperator operator = SQLBinaryOperator.Equality == binaryOperator ? SqlConditionOperator.Equality : SqlConditionOperator.NotEqual;
-
             return parseCondition(binQueryExpr.getLeft(), operator, new Object[]{targetVal}, queryAs, (queryFieldName, operator1, rightParamValues) -> {
                 QueryBuilder eqQuery = QueryBuilders.termQuery(queryFieldName, rightParamValues[0]);
                 if (SqlConditionOperator.Equality == operator1) {
@@ -44,7 +37,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         if (SQLBinaryOperator.GreaterThan == binaryOperator || SQLBinaryOperator.GreaterThanOrEqual == binaryOperator
                 || SQLBinaryOperator.LessThan == binaryOperator || SQLBinaryOperator.LessThanOrEqual == binaryOperator) {
 
-            SqlConditionOperator operator = null;
+            SqlConditionOperator operator;
             if (SQLBinaryOperator.GreaterThan == binaryOperator) {
                 operator = SqlConditionOperator.GreaterThan;
             }
@@ -54,11 +47,11 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             else if (SQLBinaryOperator.LessThan == binaryOperator) {
                 operator = SqlConditionOperator.LessThan;
             }
-            else if (SQLBinaryOperator.LessThanOrEqual == binaryOperator) {
+            else {
                 operator = SqlConditionOperator.LessThanOrEqual;
             }
 
-            Object targetVal = ElasticSqlArgConverter.convertSqlArg(binQueryExpr.getRight(), sqlArgs);
+            Object targetVal = ElasticSqlArgConverter.convertSqlArg(binQueryExpr.getRight());
             return parseCondition(binQueryExpr.getLeft(), operator, new Object[]{targetVal}, queryAs, (queryFieldName, operator12, rightParamValues) -> {
                 QueryBuilder rangeQuery = null;
                 if (SqlConditionOperator.GreaterThan == operator12) {

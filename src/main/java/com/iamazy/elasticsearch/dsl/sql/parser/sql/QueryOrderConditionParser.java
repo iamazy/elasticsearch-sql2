@@ -10,10 +10,8 @@ import com.google.common.collect.Lists;
 
 import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.sort.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,12 +23,10 @@ import java.util.List;
 
 public class QueryOrderConditionParser implements QueryParser {
 
-    private ParseActionListener parseActionListener;
 
     private List<MethodSortParser> methodSortParsers;
 
-    public QueryOrderConditionParser(ParseActionListener parseActionListener) {
-        this.parseActionListener = parseActionListener;
+    public QueryOrderConditionParser() {
 
         methodSortParsers = ImmutableList.of(
                 new NvlMethodSortParser(),
@@ -47,10 +43,9 @@ public class QueryOrderConditionParser implements QueryParser {
             List<SortBuilder> orderByList = Lists.newLinkedList();
 
             String queryAs = dslContext.getParseResult().getQueryAs();
-            SqlArgs sqlArgs = dslContext.getSqlArgs();
 
             for (SQLSelectOrderByItem orderByItem : sqlOrderBy.getItems()) {
-                SortBuilder orderBy = parseOrderCondition(orderByItem, queryAs, sqlArgs);
+                SortBuilder orderBy = parseOrderCondition(orderByItem, queryAs);
                 if (orderBy != null) {
                     orderByList.add(orderBy);
                 }
@@ -59,7 +54,7 @@ public class QueryOrderConditionParser implements QueryParser {
         }
     }
 
-    private SortBuilder parseOrderCondition(SQLSelectOrderByItem orderByItem, String queryAs, SqlArgs sqlArgs) {
+    private SortBuilder parseOrderCondition(SQLSelectOrderByItem orderByItem, String queryAs) {
 
         SortOrder order = orderByItem.getType() == SQLOrderingSpecification.ASC ? SortOrder.ASC : SortOrder.DESC;
 
@@ -70,7 +65,7 @@ public class QueryOrderConditionParser implements QueryParser {
         }
 
         if (ParseSortBuilderHelper.isMethodInvokeExpr(orderByItem.getExpr())) {
-            MethodInvocation sortMethodInvocation = new MethodInvocation((SQLMethodInvokeExpr) orderByItem.getExpr(), queryAs, sqlArgs);
+            MethodInvocation sortMethodInvocation = new MethodInvocation((SQLMethodInvokeExpr) orderByItem.getExpr(), queryAs);
             for (MethodSortParser methodSortParser : methodSortParsers) {
                 if (methodSortParser.isMatchMethodInvocation(sortMethodInvocation)) {
                     return methodSortParser.parseMethodSortBuilder(sortMethodInvocation, order);

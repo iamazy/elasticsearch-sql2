@@ -3,7 +3,6 @@ package com.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.google.common.collect.ImmutableList;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.listener.ParseActionListener;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.AbstractFieldSpecificMethodQueryParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.cons.ElasticConstants;
@@ -22,9 +21,6 @@ import java.util.Map;
  **/
 public class MatchPhraseQueryParser extends AbstractFieldSpecificMethodQueryParser {
 
-    MatchPhraseQueryParser(ParseActionListener parseActionListener){
-        super(parseActionListener);
-    }
 
     private static final List<String> MATCH_PHRASE_METHOD = ImmutableList.of("match_phrase", "match_phrase_query", "matchPhraseQuery");
 

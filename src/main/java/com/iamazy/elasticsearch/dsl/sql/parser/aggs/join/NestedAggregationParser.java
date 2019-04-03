@@ -7,7 +7,6 @@ import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import com.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
@@ -26,7 +25,7 @@ public class NestedAggregationParser extends AbstractGroupByMethodAggregationPar
     @Override
     public AggregationQuery parseAggregationMethod(MethodInvocation invocation) throws ElasticSql2DslException {
         SQLExpr nested=invocation.getFirstParameter();
-        AggregationBuilder nestedBuilder=parseNestedAggregation(invocation.getQueryAs(),invocation.getSqlArgs(),nested);
+        AggregationBuilder nestedBuilder=parseNestedAggregation(invocation.getQueryAs(),nested);
         return new AggregationQuery(nestedBuilder);
     }
 
@@ -45,7 +44,7 @@ public class NestedAggregationParser extends AbstractGroupByMethodAggregationPar
     }
 
 
-    private AggregationBuilder parseNestedAggregation(String queryAs, SqlArgs args, SQLExpr nestedExpr){
+    private AggregationBuilder parseNestedAggregation(String queryAs, SQLExpr nestedExpr){
         QueryFieldParser queryFieldParser=new QueryFieldParser();
         ElasticSqlQueryField elasticSqlQueryField = queryFieldParser.parseConditionQueryField(nestedExpr, queryAs);
         if(elasticSqlQueryField.getQueryFieldType()== QueryFieldType.RootDocField||elasticSqlQueryField.getQueryFieldType()==QueryFieldType.InnerDocField){
