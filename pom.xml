@@ -8,11 +8,11 @@
         <version>2.1.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.iamazy.elasticsearch.dsl</groupId>
+    <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
     <version>0.0.4-SNAPSHOT</version>
     <name>elasticsearch-sql</name>
-    <description>Demo project for Spring Boot</description>
+    <description>elasticsearch sql</description>
 
     <properties>
         <java.version>1.8</java.version>
