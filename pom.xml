@@ -8,7 +8,7 @@
         <version>2.1.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.iamazy.elasticsearch.dsl</groupId>
+    <groupId>org.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
     <version>0.0.4-SNAPSHOT</version>
     <name>elasticsearch-sql</name>
