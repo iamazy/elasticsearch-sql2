@@ -3,7 +3,6 @@ package com.iamazy.elasticsearch.dsl.sql.helper;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.*;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 
 import java.util.List;
 

@@ -8,7 +8,6 @@ import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import com.iamazy.elasticsearch.dsl.sql.model.AggregationQuery;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticSqlQueryField;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByAggregationParser;
 import com.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;

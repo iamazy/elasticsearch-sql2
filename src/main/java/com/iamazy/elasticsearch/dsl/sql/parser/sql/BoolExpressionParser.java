@@ -172,7 +172,7 @@ public class BoolExpressionParser {
                     if(nestedDocPrefix.size()==1) {
                         subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
                     }else if(nestedDocPrefix.size()==2){
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(0),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
+                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
                     }
                 }
                 continue;
@@ -199,7 +199,7 @@ public class BoolExpressionParser {
                 if(nestedDocPrefix.size()==1) {
                     subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), boolNestedQuery, ScoreMode.Avg));
                 }else if(nestedDocPrefix.size()==2){
-                    subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.Avg), ScoreMode.Avg));
+                    subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),boolNestedQuery,ScoreMode.Avg), ScoreMode.Avg));
                 }
             }
 

@@ -8,7 +8,6 @@ import com.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlSelectQueryBlock;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 
 
 public class QueryLimitSizeParser implements QueryParser {

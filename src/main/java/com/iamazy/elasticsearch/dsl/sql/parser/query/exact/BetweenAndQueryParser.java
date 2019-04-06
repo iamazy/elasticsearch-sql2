@@ -5,7 +5,6 @@ import com.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import com.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import com.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import com.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import com.iamazy.elasticsearch.dsl.sql.model.SqlArgs;
 import org.elasticsearch.index.query.QueryBuilders;
 
 
