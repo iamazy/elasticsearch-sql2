@@ -10,11 +10,12 @@
     </parent>
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>${elasticsearch.version}</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
 
     <properties>
+        <elasticsearch.version>6.7.0</elasticsearch.version>
         <java.version>1.8</java.version>
     </properties>
 
@@ -30,17 +31,17 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.6.2</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.6.2</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-client</artifactId>
-            <version>6.6.2</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
@@ -106,6 +107,57 @@
         </dependency>
     </dependencies>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>
+            scm:git:https://github.com/iamazy/elasticsearch-sql.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/iamazy/elasticsearch-sql.git
+        </developerConnection>
+        <url>https://github.com/iamazy/elasticsearch-sql</url>
+        <tag>${elasticsearch.version}</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>iamazy</name>
+            <email>1448588084@qq.com</email>
+            <organization>https://github.com/iamazy/</organization>
+            <organizationUrl>https://github.com/iamazy/</organizationUrl>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>disable-javadoc-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -124,7 +176,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!-- 配置该插件将源码放入仓库 -->
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -136,6 +187,54 @@
                         <phase>compile</phase>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <defaultAuthor>iamazy</defaultAuthor>
+                    <tags>
+                        <tag>
+                            <name>date</name>
+                            <placement>a</placement>
+                            <head>date:</head>
+                        </tag>
+                        <tag>
+                            <name>description</name>
+                            <placement>a</placement>
+                            <head>description:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>${javadoc.opts}</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>ossrh</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>

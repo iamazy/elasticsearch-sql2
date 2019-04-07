@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/2/19
- * @descrition
  **/
 public class ElasticSqlLexer extends Lexer {
     public final static Keywords DEFAULT_ELASTIC_SQL_KEYWORDS;

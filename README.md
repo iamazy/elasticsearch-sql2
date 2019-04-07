@@ -1,6 +1,15 @@
  基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
 
+依赖 [elasticsearch-sql地址](https://search.maven.org/artifact/io.github.iamazy.elasticsearch.dsl/elasticsearch-sql/6.6.2/jar)
+--------------------
+```xml
+<dependency>
+  <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
+  <artifactId>elasticsearch-sql</artifactId>
+  <version>6.6.2</version>
+</dependency>
+```
 说明
 --------------------
 目前使用文档无法及时更新出来，但是test目录中基本有所有的测试用例，可以结合生成的dsl和调试信息理解
@@ -22,6 +31,7 @@ CHANGELOG
 |----|-----|
 |master|6.6.0|
 |master|6.6.2|
+|master|6.7.0|
 
 感谢
 --------------------------

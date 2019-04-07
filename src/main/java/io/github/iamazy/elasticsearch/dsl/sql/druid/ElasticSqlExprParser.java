@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/2/19
- * @descrition
  **/
 public class ElasticSqlExprParser extends SQLExprParser {
 

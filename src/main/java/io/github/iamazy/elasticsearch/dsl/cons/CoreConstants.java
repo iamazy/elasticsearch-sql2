@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @author iamazy
  * @date 2019/3/25
- * @descrition
  **/
 public interface CoreConstants {
 

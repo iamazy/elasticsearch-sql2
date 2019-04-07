@@ -14,7 +14,6 @@ import com.alibaba.druid.util.JdbcConstants;
 /**
  * @author iamazy
  * @date 2019/2/19
- * @descrition
  **/
 public class ElasticSqlSelectParser extends SQLSelectParser {
 
