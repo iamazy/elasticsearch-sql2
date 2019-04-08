@@ -35,8 +35,7 @@ public class FullTextQueryParser {
     public AtomicQuery parseFullTextAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs) {
         MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs);
         MethodQueryParser matchAtomQueryParser = getQueryParser(methodInvocation);
-        AtomicQuery atomicQuery=matchAtomQueryParser.parseMethodQuery(methodInvocation);
-        return atomicQuery;
+        return matchAtomQueryParser.parseMethodQuery(methodInvocation);
     }
 
     private MethodQueryParser getQueryParser(MethodInvocation invocation) {

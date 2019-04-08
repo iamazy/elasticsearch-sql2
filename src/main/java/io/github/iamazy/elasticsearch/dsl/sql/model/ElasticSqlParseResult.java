@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.model;
 
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import io.github.iamazy.elasticsearch.dsl.elastic.HighlightBuilders;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import lombok.Data;
 
@@ -112,12 +113,7 @@ public class ElasticSqlParseResult {
         }
 
         if(CollectionUtils.isNotEmpty(highlighter)) {
-            HighlightBuilder highlightBuilder = new HighlightBuilder().requireFieldMatch(false);
-            for (String field : highlighter) {
-                highlightBuilder.field(field, 500,0);
-            }
-            highlightBuilder.preTags("<span style=\"color:red\">");
-            highlightBuilder.postTags("</span>");
+            HighlightBuilder highlightBuilder = HighlightBuilders.highlighter(highlighter);
             searchSourceBuilder.highlighter(highlightBuilder);
         }
 

@@ -15,6 +15,5 @@ public interface CoreConstants {
     String DOLLAR = "$";
     String DOT=".";
     String POUND="#";
-
     String DEFAULT_ES_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 }

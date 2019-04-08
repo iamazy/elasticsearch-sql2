@@ -83,14 +83,23 @@ public class QueryFieldParser {
             if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 1) {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(1), true);
-                } else {
+                }
+                else if(strRefNodeName.startsWith("h#"+NESTED_DOC_IDF)){
+                    String[] item=strRefNodeName.split("\\$");
+                    referenceNode = new QueryFieldReferenceNode(item[0]+item[1], true);
+                }
+                else {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
             } else if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 2 && strRefNodeName.indexOf(NESTED_DOC_IDF)!=strRefNodeName.lastIndexOf(NESTED_DOC_IDF)) {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(1).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
-                } else {
-                    referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
+                }
+                else if(strRefNodeName.startsWith("h#"+NESTED_DOC_IDF)){
+                    referenceNode = new QueryFieldReferenceNode("h#"+strRefNodeName.substring(4).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
+                }
+                else {
+                    referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
             } else {
                 throw new ElasticSql2DslException("[syntax error] nested doc query can not support this syntax");
@@ -131,10 +140,12 @@ public class QueryFieldParser {
             queryFieldPrefixBuilder.append(referenceNode.getReferenceNodeName());
 
             if (referenceNode.isNestedDocReference()) {
-                if (CollectionUtils.isEmpty(longestNestedDocContextPrefix)||StringUtils.isBlank(longestNestedDocContextPrefix.get(0))) {
-                    longestNestedDocContextPrefix.add(queryFieldPrefixBuilder.toString());
-                } else {
-                    longestNestedDocContextPrefix.add(queryFieldPrefixBuilder.toString());
+
+                String prefix=queryFieldPrefixBuilder.toString();
+                if(prefix.startsWith("h#")){
+                    longestNestedDocContextPrefix.add(prefix.substring(2));
+                }else{
+                    longestNestedDocContextPrefix.add(prefix);
                 }
             }
 

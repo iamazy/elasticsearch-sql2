@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.expr.*;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
+import io.github.iamazy.elasticsearch.dsl.elastic.HighlightBuilders;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlBoolOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
@@ -22,8 +23,10 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.InnerHitBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,10 +148,10 @@ public class BoolExpressionParser {
 
     private BoolQueryBuilder mergeAtomicQuery(List<AtomicQuery> atomQueryList, SqlBoolOperator operator) {
         BoolQueryBuilder subBoolQuery = QueryBuilders.boolQuery();
-        ListMultimap<ArrayList<String>, QueryBuilder> listMultiMap = ArrayListMultimap.create();
+        ListMultimap<AtomicQuery, QueryBuilder> listMultiMap = ArrayListMultimap.create();
 
         for (AtomicQuery atomQuery : atomQueryList) {
-            if(StringUtils.isNotBlank(atomQuery.getHighlighter())){
+            if(StringUtils.isNotBlank(atomQuery.getHighlighter())&&!atomQuery.isNestedQuery()){
                 highlighter.add(atomQuery.getHighlighter());
             }
             if (Boolean.FALSE == atomQuery.isNestedQuery()) {
@@ -160,26 +163,51 @@ public class BoolExpressionParser {
                 }
             }
             else {
-                listMultiMap.put(atomQuery.getNestedQueryPath(), atomQuery.getQueryBuilder());
+                listMultiMap.put(atomQuery, atomQuery.getQueryBuilder());
             }
         }
 
-        for (ArrayList<String> nestedDocPrefix : listMultiMap.keySet()) {
-            List<QueryBuilder> nestedQueryList = listMultiMap.get(nestedDocPrefix);
-
+        for (AtomicQuery atomicQuery : listMultiMap.keySet()) {
+            List<QueryBuilder> nestedQueryList = listMultiMap.get(atomicQuery);
+            ArrayList<String> nestedDocPrefix=atomicQuery.getNestedQueryPath();
             if (nestedQueryList.size() == 1) {
                 if (operator == SqlBoolOperator.AND) {
                     if(nestedDocPrefix.size()==1) {
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
+                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                            subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder));
+                        }else {
+                            subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
+                        }
                     }else if(nestedDocPrefix.size()==2){
-                        subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
+                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                            subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder), ScoreMode.Avg));
+
+                        }else {
+                            subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg), ScoreMode.Avg));
+                        }
                     }
                 }
                 if (operator == SqlBoolOperator.OR) {
                     if(nestedDocPrefix.size()==1) {
-                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
+                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                            subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder));
+                        }else {
+                            subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
+                        }
                     }else if(nestedDocPrefix.size()==2){
-                        subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1),nestedQueryList.get(0),ScoreMode.Avg), ScoreMode.Avg));
+                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                            subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder), ScoreMode.Avg));
+                        }else {
+                            subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg), ScoreMode.Avg));
+                        }
                     }
                 }
                 continue;

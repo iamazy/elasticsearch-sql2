@@ -49,6 +49,22 @@ public class SqlParserSelectFieldTest {
 
 
     @Test
+    public void testHighlighter(){
+        String sql="select * from fruit where h#macInfo.mac='0xsdfs' limit 0,0";
+        ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+    }
+
+    @Test
+    public void testHighlighter2(){
+        String sql="select * from device_info where match_phrase(deviceLocation.zhProvince,'首尔') or match_phrase(h#$aaa$ipInfo.mac,'0x10192j')  order by lastModified desc limit 0,10";
+        ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+    }
+
+    @Test
     public void test2(){
         String sql="select * from fruit where query_string('苹果')";
         sql=String.format(sql,"device_search");

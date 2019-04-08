@@ -14,7 +14,7 @@ public class NestedAggTest {
 
     @Test
     public void nested2Agg(){
-        String nested="select * from product where $product$apple.type='AirPod' group by nested(product)>(nested(product.apple)>(terms(product.apple.type, 20),terms(product.apple.name, 'apple'))) limit 0,0";
+        String nested="select * from product where $product$apple.type='AirPod' group by nested(product)>(nested(product.apple)>(terms(product.apple.type, 20),terms(product.apple.name,2))) limit 0,0";
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(nested);
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
