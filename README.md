@@ -21,7 +21,7 @@ CHANGELOG
 2019-3-7：删除了大部分无用的代码，添加了geo_distance聚类方法<br/>
 2019-3-25: 聚类使用递归实现添加多层嵌套聚类方式([>]表示嵌套聚类[,]表示同级聚类),具体用法见test目录<br/>
 2019-3-26: 添加scroll id深度分页<br/>
-2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）
+2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）<br/>
 2019-4-8: 添加高亮显示
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
