@@ -20,6 +20,7 @@ public class QueryMatchConditionParser extends BoolExpressionParser implements Q
                 String queryAs = dslContext.getParseResult().getQueryAs();
                 BoolQueryBuilder matchQuery = parseBoolQueryExpr(queryBlock.getMatchQuery(), queryAs);
                 dslContext.getParseResult().setMatchCondition(matchQuery);
+                dslContext.getParseResult().getHighlighter().addAll(this.getHighlighter());
             }
         }
     }

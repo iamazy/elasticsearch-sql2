@@ -18,6 +18,8 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.script.ScriptQ
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.term.TermLevelAtomicQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -37,14 +39,16 @@ public class BoolExpressionParser {
 
     private final JoinQueryParser joinAtomQueryParser;
 
+    @Getter
+    private List<String> highlighter;
 
     public BoolExpressionParser() {
+        highlighter=new ArrayList<>(0);
         termLevelAtomicQueryParser = new TermLevelAtomicQueryParser();
         fullTextAtomQueryParser = new FullTextQueryParser();
         binaryQueryParser = new BinaryQueryParser();
         inListQueryParser = new InListQueryParser();
         betweenAndQueryParser = new BetweenAndQueryParser();
-
         scriptQueryParser = new ScriptQueryParser();
         joinAtomQueryParser = new JoinQueryParser();
     }
@@ -57,7 +61,7 @@ public class BoolExpressionParser {
         if (SqlConditionType.Atom == sqlCondition.getConditionType()) {
             operator = SqlBoolOperator.AND;
         }
-        return mergeAtomQuery(sqlCondition.getQueryList(), operator);
+        return mergeAtomicQuery(sqlCondition.getQueryList(), operator);
     }
 
     private SqlCondition recursiveParseBoolQueryExpr(SQLExpr conditionExpr, String queryAs) {
@@ -86,7 +90,7 @@ public class BoolExpressionParser {
                 operator = SqlBoolOperator.AND;
             }
 
-            BoolQueryBuilder boolQuery = mergeAtomQuery(innerSQLCondition.getQueryList(), operator);
+            BoolQueryBuilder boolQuery = mergeAtomicQuery(innerSQLCondition.getQueryList(), operator);
             boolQuery = QueryBuilders.boolQuery().mustNot(boolQuery);
 
             return new SqlCondition(new AtomicQuery(boolQuery), SqlConditionType.Atom);
@@ -134,16 +138,19 @@ public class BoolExpressionParser {
             combiner.addAll(sqlCondition.getQueryList());
         }
         else {
-            BoolQueryBuilder boolQuery = mergeAtomQuery(sqlCondition.getQueryList(), sqlCondition.getOperator());
+            BoolQueryBuilder boolQuery = mergeAtomicQuery(sqlCondition.getQueryList(), sqlCondition.getOperator());
             combiner.add(new AtomicQuery(boolQuery));
         }
     }
 
-    private BoolQueryBuilder mergeAtomQuery(List<AtomicQuery> atomQueryList, SqlBoolOperator operator) {
+    private BoolQueryBuilder mergeAtomicQuery(List<AtomicQuery> atomQueryList, SqlBoolOperator operator) {
         BoolQueryBuilder subBoolQuery = QueryBuilders.boolQuery();
         ListMultimap<ArrayList<String>, QueryBuilder> listMultiMap = ArrayListMultimap.create();
 
         for (AtomicQuery atomQuery : atomQueryList) {
+            if(StringUtils.isNotBlank(atomQuery.getHighlighter())){
+                highlighter.add(atomQuery.getHighlighter());
+            }
             if (Boolean.FALSE == atomQuery.isNestedQuery()) {
                 if (operator == SqlBoolOperator.AND) {
                     subBoolQuery.must(atomQuery.getQueryBuilder());

@@ -1,11 +1,14 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext;
 
+import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLMethodInvokeExpr;
 import com.google.common.collect.ImmutableList;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -32,7 +35,8 @@ public class FullTextQueryParser {
     public AtomicQuery parseFullTextAtomQuery(SQLMethodInvokeExpr methodQueryExpr, String queryAs) {
         MethodInvocation methodInvocation = new MethodInvocation(methodQueryExpr, queryAs);
         MethodQueryParser matchAtomQueryParser = getQueryParser(methodInvocation);
-        return matchAtomQueryParser.parseMethodQuery(methodInvocation);
+        AtomicQuery atomicQuery=matchAtomQueryParser.parseMethodQuery(methodInvocation);
+        return atomicQuery;
     }
 
     private MethodQueryParser getQueryParser(MethodInvocation invocation) {

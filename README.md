@@ -22,6 +22,7 @@ CHANGELOG
 2019-3-25: 聚类使用递归实现添加多层嵌套聚类方式([>]表示嵌套聚类[,]表示同级聚类),具体用法见test目录<br/>
 2019-3-26: 添加scroll id深度分页<br/>
 2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）
+2019-4-8: 添加高亮显示
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
@@ -32,6 +33,7 @@ CHANGELOG
 |master|6.6.0|
 |master|6.6.2|
 |master|6.7.0|
+|master|6.7.1|
 
 感谢
 --------------------------
@@ -140,9 +142,10 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] 支持嵌套深层聚类
 - [x] ES Scroll Id
 - [x] ES 支持双层嵌套查询（nested(nested)）现在以及以后也不会支持三层以上的嵌套查询
+- [x] ES Highlighter
 
 #### 未来将要添加的功能
-- [ ] ES Highlighter
+- [x] ES Highlighter (已添加)
 - [ ] elasticsearch-sql[NLPChina]组件中我未添加的功能!!!
 
 <font size="10">☀️</font>未来的想法是将功能完善的跟NLPChina团队一样多嘻嘻

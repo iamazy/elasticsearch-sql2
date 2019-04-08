@@ -1,15 +1,17 @@
 package io.github.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
-import com.alibaba.druid.sql.ast.expr.SQLAllColumnExpr;
-import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
+import com.alibaba.druid.sql.ast.expr.*;
 import com.alibaba.druid.sql.ast.statement.SQLDeleteStatement;
-import com.alibaba.druid.sql.parser.Lexer;
-import com.alibaba.druid.sql.parser.SQLExprParser;
-import com.alibaba.druid.sql.parser.SQLSelectParser;
-import com.alibaba.druid.sql.parser.Token;
+import com.alibaba.druid.sql.ast.statement.SQLSelectQuery;
+import com.alibaba.druid.sql.parser.*;
+import com.alibaba.druid.util.FnvHash;
+import com.alibaba.druid.util.JdbcConstants;
 import com.google.common.collect.Lists;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**

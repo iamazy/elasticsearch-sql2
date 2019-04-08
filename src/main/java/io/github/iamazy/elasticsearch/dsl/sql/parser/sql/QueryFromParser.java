@@ -25,7 +25,6 @@ public class QueryFromParser implements QueryParser {
         if (dslContext.getSqlObject() instanceof SQLQueryExpr) {
             ElasticSqlSelectQueryBlock queryBlock = (ElasticSqlSelectQueryBlock) ((SQLQueryExpr) dslContext.getSqlObject()).getSubQuery().getQuery();
             if (queryBlock.getFrom() instanceof SQLExprTableSource) {
-
                 tableSource = (SQLExprTableSource) queryBlock.getFrom();
                 extractFrom(tableSource,dslContext);
             }

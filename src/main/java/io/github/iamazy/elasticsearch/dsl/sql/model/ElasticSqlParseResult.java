@@ -19,6 +19,7 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 
 
@@ -43,6 +44,10 @@ public class ElasticSqlParseResult {
     private List<String> indices;
     private String type = "_doc";
     private String queryAs;
+    /**
+     * 需要高亮显示的字段
+     */
+    private List<String> highlighter=new ArrayList<>(0);
     private List<String> routingBy;
     private List<String> queryFieldList;
     private transient BoolQueryBuilder whereCondition;
@@ -106,6 +111,15 @@ public class ElasticSqlParseResult {
             searchSourceBuilder.size(size);
         }
 
+        if(CollectionUtils.isNotEmpty(highlighter)) {
+            HighlightBuilder highlightBuilder = new HighlightBuilder().requireFieldMatch(false);
+            for (String field : highlighter) {
+                highlightBuilder.field(field, 500,0);
+            }
+            highlightBuilder.preTags("<span style=\"color:red\">");
+            highlightBuilder.postTags("</span>");
+            searchSourceBuilder.highlighter(highlightBuilder);
+        }
 
         if (whereCondition != null && whereCondition.hasClauses()) {
             if (matchCondition != null && matchCondition.hasClauses()) {

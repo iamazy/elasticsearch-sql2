@@ -2,14 +2,16 @@ package io.github.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLSetQuantifier;
+import com.alibaba.druid.sql.ast.expr.*;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.db2.ast.stmt.DB2SelectQueryBlock;
-import com.alibaba.druid.sql.parser.ParserException;
-import com.alibaba.druid.sql.parser.SQLExprParser;
-import com.alibaba.druid.sql.parser.SQLSelectParser;
-import com.alibaba.druid.sql.parser.Token;
+import com.alibaba.druid.sql.parser.*;
 import com.alibaba.druid.util.FnvHash;
 import com.alibaba.druid.util.JdbcConstants;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * @author iamazy
@@ -17,45 +19,43 @@ import com.alibaba.druid.util.JdbcConstants;
  **/
 public class ElasticSqlSelectParser extends SQLSelectParser {
 
-    ElasticSqlSelectParser(SQLExprParser exprParser){
+    ElasticSqlSelectParser(SQLExprParser exprParser) {
         super(exprParser);
     }
 
-    private ElasticSqlSelectQueryBlock.Limit parseLimit(){
-        return ((ElasticSqlExprParser)this.exprParser).parseLimit0();
+    private ElasticSqlSelectQueryBlock.Limit parseLimit() {
+        return ((ElasticSqlExprParser) this.exprParser).parseLimit0();
     }
 
-    private ElasticSqlSelectQueryBlock.Routing parseRoutingBy(){
-        return ((ElasticSqlExprParser)this.exprParser).parseRourtingBy();
+    private ElasticSqlSelectQueryBlock.Routing parseRoutingBy() {
+        return ((ElasticSqlExprParser) this.exprParser).parseRourtingBy();
     }
 
-    private ElasticSqlSelectQueryBlock.Scroll parseScroll(){
-        return ((ElasticSqlExprParser)this.exprParser).parseScroll();
+    private ElasticSqlSelectQueryBlock.Scroll parseScroll() {
+        return ((ElasticSqlExprParser) this.exprParser).parseScroll();
     }
 
 
     @Override
     public SQLSelectQuery query() {
-        if(lexer.token()== Token.LPAREN){
+        if (lexer.token() == Token.LPAREN) {
             lexer.nextToken();
-            SQLSelectQuery select=query();
+            SQLSelectQuery select = query();
             accept(Token.RPAREN);
             return queryRest(select);
         }
         accept(Token.SELECT);
-        if(lexer.token()==Token.COMMENT){
+        if (lexer.token() == Token.COMMENT) {
             lexer.nextToken();
         }
-        ElasticSqlSelectQueryBlock queryBlock=new ElasticSqlSelectQueryBlock();
-        if(lexer.token()==Token.DISTINCT){
+        ElasticSqlSelectQueryBlock queryBlock = new ElasticSqlSelectQueryBlock();
+        if (lexer.token() == Token.DISTINCT) {
             queryBlock.setDistionOption(SQLSetQuantifier.DISTINCT);
             lexer.nextToken();
-        }
-        else if(lexer.token()==Token.UNIQUE){
+        } else if (lexer.token() == Token.UNIQUE) {
             queryBlock.setDistionOption(SQLSetQuantifier.UNIQUE);
             lexer.nextToken();
-        }
-        else if(lexer.token()==Token.ALL){
+        } else if (lexer.token() == Token.ALL) {
             queryBlock.setDistionOption(SQLSetQuantifier.ALL);
             lexer.nextToken();
         }
@@ -69,13 +69,13 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
         queryBlock.setOrderBy(this.exprParser.parseOrderBy());
 
 
-        if(lexer.token()==Token.INDEX&&"ROUTING".equalsIgnoreCase(lexer.stringVal())){
+        if (lexer.token() == Token.INDEX && "ROUTING".equalsIgnoreCase(lexer.stringVal())) {
             queryBlock.setRouting(parseRoutingBy());
         }
-        if(lexer.token()==Token.CURSOR&&"SCROLL".equalsIgnoreCase(lexer.stringVal())){
+        if (lexer.token() == Token.CURSOR && "SCROLL".equalsIgnoreCase(lexer.stringVal())) {
             queryBlock.setScroll(parseScroll());
         }
-        if(lexer.token()==Token.LIMIT){
+        if (lexer.token() == Token.LIMIT) {
             queryBlock.setLimit(parseLimit());
         }
 
@@ -100,13 +100,13 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
                 groupBy.setWithCube(true);
             }
 
-            for (;;) {
+            for (; ; ) {
                 SQLExpr item = parseGroupByItem();
 
                 item.setParent(groupBy);
                 groupBy.addItem(item);
 
-                if (lexer.token() != Token.COMMA&&lexer.token()!=Token.GT) {
+                if (lexer.token() != Token.COMMA && lexer.token() != Token.GT) {
                     break;
                 }
 
@@ -129,7 +129,7 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
                 if (lexer.identifierEquals(FnvHash.Constants.CUBE)) {
                     lexer.nextToken();
                     groupBy.setWithCube(true);
-                } else if(lexer.identifierEquals(FnvHash.Constants.ROLLUP)) {
+                } else if (lexer.identifierEquals(FnvHash.Constants.ROLLUP)) {
                     lexer.nextToken();
                     groupBy.setWithRollUp(true);
                 } else if (lexer.identifierEquals(FnvHash.Constants.RS)
@@ -164,13 +164,13 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
                 lexer.nextToken();
                 accept(Token.BY);
 
-                for (;;) {
+                for (; ; ) {
                     SQLExpr item = parseGroupByItem();
 
                     item.setParent(groupBy);
                     groupBy.addItem(item);
 
-                    if (lexer.token()!= Token.COMMA&&lexer.token()!=Token.GT) {
+                    if (lexer.token() != Token.COMMA && lexer.token() != Token.GT) {
                         break;
                     }
 
@@ -185,7 +185,7 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
                 groupBy.setWithRollUp(true);
             }
 
-            if(JdbcConstants.MYSQL.equals(getDbType())
+            if (JdbcConstants.MYSQL.equals(getDbType())
                     && lexer.token() == Token.DESC) {
                 lexer.nextToken(); // skip
             }
@@ -196,22 +196,22 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
 
     @Override
     public SQLTableSource parseTableSource() {
-        if(lexer.token()!=Token.IDENTIFIER){
+        if (lexer.token() != Token.IDENTIFIER) {
             throw new ParserException("[syntax error] from table source is not a identifier");
         }
-        SQLExprTableSource tableSource=new SQLExprTableSource();
+        SQLExprTableSource tableSource = new SQLExprTableSource();
         parseTableSourceQueryTableExpr(tableSource);
-        SQLTableSource tableSrc=parseTableSourceRest(tableSource);
-        if(lexer.hasComment()&&lexer.isKeepComments()){
+        SQLTableSource tableSrc = parseTableSourceRest(tableSource);
+        if (lexer.hasComment() && lexer.isKeepComments()) {
             tableSrc.addAfterComment(lexer.readAndResetComments());
         }
         return tableSrc;
     }
 
-    private void parseMatchQuery(ElasticSqlSelectQueryBlock queryBlock){
-        if(lexer.token()==Token.INDEX&&"QUERY".equalsIgnoreCase(lexer.stringVal())){
+    private void parseMatchQuery(ElasticSqlSelectQueryBlock queryBlock) {
+        if (lexer.token() == Token.INDEX && "QUERY".equalsIgnoreCase(lexer.stringVal())) {
             lexer.nextToken();
-            SQLExpr matchQuery=expr();
+            SQLExpr matchQuery = expr();
             queryBlock.setMatchQuery(matchQuery);
         }
     }

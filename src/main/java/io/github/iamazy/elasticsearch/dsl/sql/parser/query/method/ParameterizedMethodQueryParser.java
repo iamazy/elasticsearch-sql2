@@ -1,11 +1,13 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.method;
 
 
-
+import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.expr.AbstractParameterizedMethodExpression;
 import io.github.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -35,6 +37,27 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
         checkMethodInvocation(invocation);
 
         Map<String, String> extraParamMap = generateParameterMap(invocation);
-        return parseMethodQueryWithExtraParams(invocation, extraParamMap);
+
+        boolean highlighter = false;
+        String field = null;
+        for (int i = 0; i < invocation.getParameterCount(); i++) {
+            SQLExpr expr = invocation.getParameter(i);
+            if (StringUtils.isNotBlank(expr.toString())) {
+                if ("h#".equalsIgnoreCase(expr.toString())) {
+                    throw new ElasticSql2DslException("[syntax error] the query field can not equals to 'h#'");
+                }
+                if (expr.toString().startsWith("h#")) {
+                    field = expr.toString().substring(2);
+                    invocation.getParameters().set(i, new SQLIdentifierExpr(field));
+                    highlighter = true;
+                }
+
+            }
+        }
+        AtomicQuery atomicQuery = parseMethodQueryWithExtraParams(invocation, extraParamMap);
+        if (highlighter && StringUtils.isNotBlank(field)) {
+            atomicQuery.setHighlighter(field);
+        }
+        return atomicQuery;
     }
 }

@@ -3,6 +3,7 @@ package io.github.iamazy.elasticsearch.dsl.sql.model;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class ElasticSqlQueryField {
      */
     private ArrayList<String> nestedDocContextPath;
     private String simpleQueryFieldName;
+    @Setter
     private String queryFieldFullName;
     private QueryFieldType queryFieldType;
 

@@ -26,10 +26,9 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
 
             if (queryBlock.getWhere() != null) {
                 String queryAs = dslContext.getParseResult().getQueryAs();
-
                 BoolQueryBuilder whereQuery = parseBoolQueryExpr(queryBlock.getWhere(), queryAs);
-
                 dslContext.getParseResult().setWhereCondition(whereQuery);
+                dslContext.getParseResult().getHighlighter().addAll(this.getHighlighter());
             }
         }
     }

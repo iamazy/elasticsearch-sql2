@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.sql.model;
 
 
 import lombok.Getter;
+import lombok.Setter;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
  **/
 @Getter
 public class AtomicQuery {
+
+    @Setter
+    private String highlighter;
 
     private QueryBuilder queryBuilder;
     private boolean isNestedQuery;
