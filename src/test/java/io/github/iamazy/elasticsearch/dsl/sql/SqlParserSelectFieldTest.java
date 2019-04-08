@@ -41,7 +41,7 @@ public class SqlParserSelectFieldTest {
      */
     @Test
     public void testParseFlatTermsAgg(){
-        String sql="select * from fruit where match(h#aaaaa,'fdsfdsfdsf') and fuzzy(h#bbb,'fdsfdf') and h#name is not null and color is not null group by terms(weight,5000),terms(category,100)  limit 0,0";
+        String sql="select * from fruit where match(h#$aaaaa.bb,'fdsfdsfdsf') and fuzzy(h#bbb,'fdsfdf') and h#name is not null and color is not null group by terms(weight,5000),terms(category,100)  limit 0,0";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

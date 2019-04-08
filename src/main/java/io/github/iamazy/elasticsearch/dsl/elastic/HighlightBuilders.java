@@ -16,11 +16,4 @@ public class HighlightBuilders {
         return highlightBuilder;
     }
 
-    public static HighlightBuilder highlighter(String highlighter) {
-        HighlightBuilder highlightBuilder = new HighlightBuilder().requireFieldMatch(false);
-        highlightBuilder.field(highlighter, 500, 0);
-        highlightBuilder.preTags("<span style=\"color:red\">");
-        highlightBuilder.postTags("</span>");
-        return highlightBuilder;
-    }
 }
