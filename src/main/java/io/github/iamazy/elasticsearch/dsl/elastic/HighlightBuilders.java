@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.elastic;
 
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+
 import java.util.List;
 
 public class HighlightBuilders {

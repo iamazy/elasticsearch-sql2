@@ -34,12 +34,16 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
     @Override
     protected AtomicQuery parseMethodQueryWithExtraParams(MethodInvocation invocation, Map<String, String> extraParamMap) throws ElasticSql2DslException {
         String text = invocation.getParameterAsString(0);
+        boolean highlighter=false;
+        if(text.startsWith("h#")){
+            text=text.substring(2);
+            highlighter=true;
+        }
         QueryStringQueryBuilder queryStringQuery = QueryBuilders.queryStringQuery(text);
 
         String queryFields ;
         if (invocation.getParameterCount() == 3) {
             queryFields = invocation.getParameterAsString(1);
-
             if (StringUtils.isNotBlank(queryFields)) {
                 String[] tArr = queryFields.split(COLON);
                 if (ElasticConstants.FIELDS.equalsIgnoreCase(tArr[0])) {
@@ -47,7 +51,6 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
                         queryStringQuery.field(fieldItem);
                     }
                 }
-
                 if (ElasticConstants.DEFAULT_FIELD.equalsIgnoreCase(tArr[0])) {
                     queryStringQuery.defaultField(tArr[1]);
                 }
@@ -55,7 +58,13 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
         }
 
         setExtraMatchQueryParam(queryStringQuery, extraParamMap);
-        return new AtomicQuery(queryStringQuery);
+        if(highlighter){
+            AtomicQuery atomicQuery=new AtomicQuery(queryStringQuery);
+            atomicQuery.setHighlighter("*");
+            return atomicQuery;
+        }else {
+            return new AtomicQuery(queryStringQuery);
+        }
     }
 
     @Override
