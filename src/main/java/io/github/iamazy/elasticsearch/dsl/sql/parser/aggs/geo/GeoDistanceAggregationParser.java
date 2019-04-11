@@ -130,9 +130,9 @@ public class GeoDistanceAggregationParser extends AbstractGroupByMethodAggregati
             String field=fieldUnit[0];
             String unit=fieldUnit[1];
             DistanceUnit distanceUnit=parseDistanceUnit(unit);
-            geoDistanceAggregationBuilder=AggregationBuilders.geoDistance(field+"_"+"geo_distance",originPoint).field(field).unit(distanceUnit);
+            geoDistanceAggregationBuilder=AggregationBuilders.geoDistance(field+"_geo_distance",originPoint).field(field).unit(distanceUnit);
         }else {
-            geoDistanceAggregationBuilder = AggregationBuilders.geoDistance(queryField + "_" + "geo_distance", originPoint).field(queryField);
+            geoDistanceAggregationBuilder = AggregationBuilders.geoDistance(queryField + "_geo_distance", originPoint).field(queryField);
         }
         for(RangeSegment rangeSegment:rangeSegments){
             if(rangeSegment.getFrom() instanceof Number&&rangeSegment.getTo() instanceof Number) {

@@ -15,11 +15,13 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.InListQueryPars
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext.FullTextQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.join.JoinQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.score.ScoreQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.script.ScriptQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.term.TermLevelAtomicQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import lombok.Getter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -29,7 +31,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BoolExpressionParser {
@@ -43,6 +44,8 @@ public class BoolExpressionParser {
 
     private final JoinQueryParser joinAtomQueryParser;
 
+    private final ScoreQueryParser scoreQueryParser;
+
     @Getter
     private List<String> highlighter;
 
@@ -55,6 +58,7 @@ public class BoolExpressionParser {
         betweenAndQueryParser = new BetweenAndQueryParser();
         scriptQueryParser = new ScriptQueryParser();
         joinAtomQueryParser = new JoinQueryParser();
+        scoreQueryParser=new ScoreQueryParser();
     }
 
 
@@ -123,6 +127,10 @@ public class BoolExpressionParser {
             if (joinAtomQueryParser.isJoinAtomQuery(methodInvocation)) {
                 return joinAtomQueryParser.parseJoinAtomQuery(methodQueryExpr, queryAs);
             }
+
+            if(scoreQueryParser.isScoreAtomQuery(methodInvocation)){
+                return scoreQueryParser.parseScoreAtomQuery(methodQueryExpr,queryAs);
+            }
         }
         else if (sqlConditionExpr instanceof SQLBinaryOpExpr) {
             return binaryQueryParser.parseBinaryQuery((SQLBinaryOpExpr) sqlConditionExpr, queryAs);
@@ -152,8 +160,8 @@ public class BoolExpressionParser {
         ListMultimap<AtomicQuery, QueryBuilder> listMultiMap = ArrayListMultimap.create();
 
         for (AtomicQuery atomQuery : atomQueryList) {
-            if(StringUtils.isNotBlank(atomQuery.getHighlighter())&&!atomQuery.isNestedQuery()){
-                highlighter.add(atomQuery.getHighlighter());
+            if(CollectionUtils.isNotEmpty(atomQuery.getHighlighter())&&!atomQuery.isNestedQuery()){
+                highlighter.addAll(atomQuery.getHighlighter());
             }
             if (Boolean.FALSE == atomQuery.isNestedQuery()) {
                 if (operator == SqlBoolOperator.AND) {
@@ -174,17 +182,17 @@ public class BoolExpressionParser {
             if (nestedQueryList.size() == 1) {
                 if (operator == SqlBoolOperator.AND) {
                     if(nestedDocPrefix.size()==1) {
-                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
-                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(Collections.singletonList(atomicQuery.getHighlighter()));
-                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                        if(CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getQueryBuilder().getName()+"_highlighter").setHighlightBuilder(highlightBuilder);
                             subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder));
                         }else {
                             subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
                         }
                     }else if(nestedDocPrefix.size()==2){
-                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
-                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(Collections.singletonList(atomicQuery.getHighlighter()));
-                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                        if(CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getQueryBuilder().getName()+"_highlighter").setHighlightBuilder(highlightBuilder);
                             subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder), ScoreMode.Avg));
 
                         }else {
@@ -194,17 +202,17 @@ public class BoolExpressionParser {
                 }
                 if (operator == SqlBoolOperator.OR) {
                     if(nestedDocPrefix.size()==1) {
-                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
-                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(Collections.singletonList(atomicQuery.getHighlighter()));
-                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                        if(CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getQueryBuilder().getName()+"_highlighter").setHighlightBuilder(highlightBuilder);
                             subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder));
                         }else {
                             subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), nestedQueryList.get(0), ScoreMode.Avg));
                         }
                     }else if(nestedDocPrefix.size()==2){
-                        if(StringUtils.isNotBlank(atomicQuery.getHighlighter())){
-                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(Collections.singletonList(atomicQuery.getHighlighter()));
-                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getHighlighter()+"_highlighter").setHighlightBuilder(highlightBuilder);
+                        if(CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())){
+                            HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
+                            InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getQueryBuilder().queryName()+"_highlighter").setHighlightBuilder(highlightBuilder);
                             subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder), ScoreMode.Avg));
                         }else {
                             subBoolQuery.should(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg), ScoreMode.Avg));

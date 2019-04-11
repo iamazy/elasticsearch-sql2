@@ -39,7 +39,7 @@ public class HasChildQueryParser implements MethodQueryParser {
 
     @Override
     public void checkMethodInvocation(MethodInvocation invocation) throws ElasticSql2DslException {
-        if (invocation.getParameterCount() != 2 || invocation.getParameterCount() != 4) {
+        if (invocation.getParameterCount() != 2 && invocation.getParameterCount() != 4) {
             throw new ElasticSql2DslException(
                     String.format("[syntax error] There's no %s args method named [%s].",
                             invocation.getParameterCount(), invocation.getMethodName()));

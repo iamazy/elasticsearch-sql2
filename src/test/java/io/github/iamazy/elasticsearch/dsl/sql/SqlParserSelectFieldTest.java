@@ -13,7 +13,7 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void testParseFromMethodSource(){
-        String sql="select * from fruit where match(name,'苹果','prefix_length:21') and term(weight,80)";
+        String sql="select * from fruit query match(h#name,'苹果','prefix_length:21,boost:2.0f') and term(weight,80)";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -50,7 +50,7 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void testHighlighter(){
-        String sql="select * from fruit where h#$macInfo.mac='0xsdfs' limit 0,0";
+        String sql="select * from fruit where h#$macInfo.name='0xsdfs' limit 0,0";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

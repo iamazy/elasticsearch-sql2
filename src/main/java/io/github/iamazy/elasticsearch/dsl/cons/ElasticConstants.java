@@ -52,4 +52,14 @@ public interface ElasticConstants {
     String FIELDS="fields";
     String DEFAULT_FIELD="default_field";
     String TRANSPOSITIONS="transpositions";
+
+    String SCORE_MODE="score_mode";
+    String MAX_BOOST="max_boost";
+    String MIN_SCORE="min_score";
+    String BOOST_MODE="boost_mode";
+
+    String FILED="field";
+    String FACTOR="factor";
+    String MODIFIER="modifier";
+    String MISSING="missing";
 }

@@ -84,19 +84,20 @@ public class QueryFieldParser {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(1), true);
                 }
-                else if(strRefNodeName.startsWith("h#"+NESTED_DOC_IDF)){
+                else if(strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER+NESTED_DOC_IDF)){
                     String[] item=strRefNodeName.split("\\$");
                     referenceNode = new QueryFieldReferenceNode(item[0]+item[1], true);
                 }
                 else {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
-            } else if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 2 && strRefNodeName.indexOf(NESTED_DOC_IDF)!=strRefNodeName.lastIndexOf(NESTED_DOC_IDF)) {
+            }
+            else if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 2 && strRefNodeName.indexOf(NESTED_DOC_IDF)!=strRefNodeName.lastIndexOf(NESTED_DOC_IDF)) {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
-                    referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(1).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
+                    referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(NESTED_DOC_IDF.length()).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
-                else if(strRefNodeName.startsWith("h#"+NESTED_DOC_IDF)){
-                    referenceNode = new QueryFieldReferenceNode("h#"+strRefNodeName.substring(4).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
+                else if(strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER+NESTED_DOC_IDF)){
+                    throw new ElasticSql2DslException("[syntax error] nested doc query can not support this syntax");
                 }
                 else {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
@@ -142,8 +143,8 @@ public class QueryFieldParser {
             if (referenceNode.isNestedDocReference()) {
 
                 String prefix=queryFieldPrefixBuilder.toString();
-                if(prefix.startsWith("h#")){
-                    longestNestedDocContextPrefix.add(prefix.substring(2));
+                if(prefix.startsWith(CoreConstants.HIGHLIGHTER)){
+                    longestNestedDocContextPrefix.add(prefix.substring(CoreConstants.HIGHLIGHTER.length()));
                 }else{
                     longestNestedDocContextPrefix.add(prefix);
                 }

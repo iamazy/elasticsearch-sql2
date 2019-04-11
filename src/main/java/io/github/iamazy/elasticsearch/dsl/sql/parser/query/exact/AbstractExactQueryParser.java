@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.QueryFieldType;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
@@ -17,14 +18,14 @@ public abstract class AbstractExactQueryParser {
 
         QueryFieldParser queryFieldParser = new QueryFieldParser();
         ElasticSqlQueryField queryField = queryFieldParser.parseConditionQueryField(queryFieldExpr, queryAs);
-        if("h#".equalsIgnoreCase(queryField.getQueryFieldFullName())){
+        if(CoreConstants.HIGHLIGHTER.equalsIgnoreCase(queryField.getQueryFieldFullName())){
             throw new ElasticSql2DslException("[syntax error] the query field can not equals to 'h#'");
         }
         AtomicQuery atomQuery = null;
         String field=null;
         boolean highlighter=false;
-        if(queryField.getQueryFieldFullName().startsWith("h#")){
-            field=queryField.getQueryFieldFullName().substring(2);
+        if(queryField.getQueryFieldFullName().startsWith(CoreConstants.HIGHLIGHTER)){
+            field=queryField.getQueryFieldFullName().substring(CoreConstants.HIGHLIGHTER.length());
             queryField.setQueryFieldFullName(field);
             highlighter=true;
         }
@@ -42,7 +43,7 @@ public abstract class AbstractExactQueryParser {
         }
 
         if(highlighter&& StringUtils.isNotBlank(field)) {
-            atomQuery.setHighlighter(field);
+            atomQuery.getHighlighter().add(field);
         }
 
         return atomQuery;

@@ -119,6 +119,7 @@ public class ElasticSqlParseResult {
 
         if (whereCondition != null && whereCondition.hasClauses()) {
             if (matchCondition != null && matchCondition.hasClauses()) {
+                //filter不进行打分
                 searchSourceBuilder.query(matchCondition.filter(whereCondition));
             } else {
                 searchSourceBuilder.query(QueryBuilders.boolQuery().filter(whereCondition));

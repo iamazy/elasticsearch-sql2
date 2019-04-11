@@ -45,11 +45,11 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
         for (int i = 0; i < invocation.getParameterCount(); i++) {
             SQLExpr expr = invocation.getParameter(i);
             if (StringUtils.isNotBlank(expr.toString())) {
-                if ("h#".equalsIgnoreCase(expr.toString())) {
+                if (CoreConstants.HIGHLIGHTER.equalsIgnoreCase(expr.toString())) {
                     throw new ElasticSql2DslException("[syntax error] the query field can not equals to 'h#'");
                 }
-                if (expr.toString().startsWith("h#")) {
-                    field = expr.toString().substring(2);
+                if (expr.toString().startsWith(CoreConstants.HIGHLIGHTER)) {
+                    field = expr.toString().substring(CoreConstants.HIGHLIGHTER.length());
                     if(field.contains(CoreConstants.DOT)) {
                         int lastDotIndex = field.lastIndexOf(CoreConstants.DOT);
                         invocation.getParameters().set(i, new SQLPropertyExpr(field.substring(0, lastDotIndex), field.substring(lastDotIndex + 1)));
@@ -65,12 +65,12 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
         if (highlighter && StringUtils.isNotBlank(field)) {
             if(atomicQuery.isNestedQuery()) {
                 if(field.startsWith(CoreConstants.DOLLAR)){
-                    field=field.substring(1);
+                    field=field.substring(CoreConstants.DOLLAR.length());
                 }
                 field=field.replace(CoreConstants.DOLLAR,CoreConstants.DOT);
-                atomicQuery.setHighlighter(field);
+                atomicQuery.getHighlighter().add(field);
             }else{
-                atomicQuery.setHighlighter(field);
+                atomicQuery.getHighlighter().add(field);
             }
         }
         return atomicQuery;

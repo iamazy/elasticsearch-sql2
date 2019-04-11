@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.fulltext;
 
 import com.google.common.collect.ImmutableList;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.ParameterizedMethodQueryParser;
@@ -35,8 +36,8 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
     protected AtomicQuery parseMethodQueryWithExtraParams(MethodInvocation invocation, Map<String, String> extraParamMap) throws ElasticSql2DslException {
         String text = invocation.getParameterAsString(0);
         boolean highlighter=false;
-        if(text.startsWith("h#")){
-            text=text.substring(2);
+        if(text.startsWith(CoreConstants.HIGHLIGHTER)){
+            text=text.substring(CoreConstants.HIGHLIGHTER.length());
             highlighter=true;
         }
         QueryStringQueryBuilder queryStringQuery = QueryBuilders.queryStringQuery(text);
@@ -60,7 +61,7 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
         setExtraMatchQueryParam(queryStringQuery, extraParamMap);
         if(highlighter){
             AtomicQuery atomicQuery=new AtomicQuery(queryStringQuery);
-            atomicQuery.setHighlighter("*");
+            atomicQuery.getHighlighter().add("*");
             return atomicQuery;
         }else {
             return new AtomicQuery(queryStringQuery);
