@@ -35,6 +35,7 @@ CHANGELOG
 |master|6.6.2|
 |master|6.7.0|
 |master|6.7.1|
+|master|6.7.1|
 
 感谢
 --------------------------

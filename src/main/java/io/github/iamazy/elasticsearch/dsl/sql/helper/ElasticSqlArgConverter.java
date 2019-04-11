@@ -27,14 +27,6 @@ public class ElasticSqlArgConverter {
     }
 
     public static Object convertSqlArg(SQLExpr expr, boolean recognizeDateArg) {
-        if (expr instanceof SQLVariantRefExpr) {
-            SQLVariantRefExpr varRefExpr = (SQLVariantRefExpr) expr;
-            //parse date
-//            if (recognizeDateArg && ElasticSqlDateParseHelper.isDateArgObjectValue(sqlArgs.get(varRefExpr.getIndex()))) {
-//                return ElasticSqlDateParseHelper.formatDefaultEsDateObjectValue(sqlArgs.get(varRefExpr.getIndex()));
-//            }
-//            return sqlArgs.get(varRefExpr.getIndex());
-        }
 
         if (expr instanceof SQLIntegerExpr) {
             return ((SQLIntegerExpr) expr).getNumber().longValue();

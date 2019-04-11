@@ -11,8 +11,8 @@ import java.util.Map;
  * @author iamazy
  * @date 2019/2/19
  **/
-public class ElasticSqlLexer extends Lexer {
-    public final static Keywords DEFAULT_ELASTIC_SQL_KEYWORDS;
+class ElasticSqlLexer extends Lexer {
+    private final static Keywords DEFAULT_ELASTIC_SQL_KEYWORDS;
 
     static {
         Map<String, Token> map= Maps.newHashMap();
@@ -68,12 +68,12 @@ public class ElasticSqlLexer extends Lexer {
         DEFAULT_ELASTIC_SQL_KEYWORDS=new Keywords(map);
     }
 
-    public ElasticSqlLexer(String input,boolean skipComment){
+    private ElasticSqlLexer(String input,boolean skipComment){
         super(input,skipComment);
         super.keywods=DEFAULT_ELASTIC_SQL_KEYWORDS;
     }
 
-    public ElasticSqlLexer(String input){
+    ElasticSqlLexer(String input){
         this(input,false);
     }
 }

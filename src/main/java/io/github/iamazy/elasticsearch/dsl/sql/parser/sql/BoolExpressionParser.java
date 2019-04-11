@@ -22,7 +22,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.InnerHitBuilder;
@@ -43,7 +42,6 @@ public class BoolExpressionParser {
     private final BetweenAndQueryParser betweenAndQueryParser;
 
     private final JoinQueryParser joinAtomQueryParser;
-
     private final ScoreQueryParser scoreQueryParser;
 
     @Getter
@@ -194,7 +192,6 @@ public class BoolExpressionParser {
                             HighlightBuilder highlightBuilder= HighlightBuilders.highlighter(atomicQuery.getHighlighter());
                             InnerHitBuilder innerHitBuilder=new InnerHitBuilder(atomicQuery.getQueryBuilder().getName()+"_highlighter").setHighlightBuilder(highlightBuilder);
                             subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg).innerHit(innerHitBuilder), ScoreMode.Avg));
-
                         }else {
                             subBoolQuery.must(QueryBuilders.nestedQuery(nestedDocPrefix.get(0), QueryBuilders.nestedQuery(nestedDocPrefix.get(1), nestedQueryList.get(0), ScoreMode.Avg), ScoreMode.Avg));
                         }
