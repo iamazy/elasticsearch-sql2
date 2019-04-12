@@ -27,14 +27,12 @@ public class ElasticSqlArgConverter {
     }
 
     public static Object convertSqlArg(SQLExpr expr, boolean recognizeDateArg) {
-
         if (expr instanceof SQLIntegerExpr) {
             return ((SQLIntegerExpr) expr).getNumber().longValue();
         }
         if (expr instanceof SQLNumberExpr) {
             return ((SQLNumberExpr) expr).getNumber().doubleValue();
         }
-
         if (expr instanceof SQLCharExpr) {
             Object textObject = ((SQLCharExpr) expr).getValue();
 
@@ -43,7 +41,6 @@ public class ElasticSqlArgConverter {
             }
             return textObject;
         }
-
         if (expr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr methodExpr = (SQLMethodInvokeExpr) expr;
             if (ElasticSqlDateParseHelper.isDateMethod(methodExpr)) {
@@ -54,41 +51,11 @@ public class ElasticSqlArgConverter {
             }
             return methodExpr;
         }
-
         if(expr instanceof SQLBinaryOpExpr){
             return expr;
         }
-
         throw new ElasticSql2DslException(
                 String.format("[syntax error] Arg type[%s] can not support.",
                         expr.toString()));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

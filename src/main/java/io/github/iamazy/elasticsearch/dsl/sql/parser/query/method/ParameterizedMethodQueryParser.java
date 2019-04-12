@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import io.github.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlExprParser;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.expr.AbstractParameterizedMethodExpression;
 import io.github.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlMethodInvokeHelper;
@@ -50,12 +51,9 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
                 }
                 if (expr.toString().startsWith(CoreConstants.HIGHLIGHTER)) {
                     field = expr.toString().substring(CoreConstants.HIGHLIGHTER.length());
-                    if(field.contains(CoreConstants.DOT)) {
-                        int lastDotIndex = field.lastIndexOf(CoreConstants.DOT);
-                        invocation.getParameters().set(i, new SQLPropertyExpr(field.substring(0, lastDotIndex), field.substring(lastDotIndex + 1)));
-                    }else{
-                        invocation.getParameters().set(i, new SQLIdentifierExpr(field));
-                    }
+                    ElasticSqlExprParser elasticSqlExprParser = new ElasticSqlExprParser(field);
+                    SQLExpr sqlExpr = elasticSqlExprParser.expr();
+                    invocation.getParameters().set(i, sqlExpr);
                     highlighter = true;
                 }
 
@@ -63,13 +61,13 @@ public abstract class ParameterizedMethodQueryParser extends AbstractParameteriz
         }
         AtomicQuery atomicQuery = parseMethodQueryWithExtraParams(invocation, extraParamMap);
         if (highlighter && StringUtils.isNotBlank(field)) {
-            if(atomicQuery.isNestedQuery()) {
-                if(field.startsWith(CoreConstants.DOLLAR)){
-                    field=field.substring(CoreConstants.DOLLAR.length());
+            if (atomicQuery.isNestedQuery()) {
+                if (field.startsWith(CoreConstants.DOLLAR)) {
+                    field = field.substring(CoreConstants.DOLLAR.length());
                 }
-                field=field.replace(CoreConstants.DOLLAR,CoreConstants.DOT);
+                field = field.replace(CoreConstants.DOLLAR, CoreConstants.DOT);
                 atomicQuery.getHighlighter().add(field);
-            }else{
+            } else {
                 atomicQuery.getHighlighter().add(field);
             }
         }

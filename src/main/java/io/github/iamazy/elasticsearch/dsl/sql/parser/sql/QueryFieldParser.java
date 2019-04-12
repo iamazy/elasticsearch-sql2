@@ -25,10 +25,8 @@ public class QueryFieldParser {
         List<QueryFieldReferenceNode> referencePathNodes = Lists.newLinkedList();
 
         if (queryFieldExpr instanceof SQLIdentifierExpr) {
-            String idfName = ((SQLIdentifierExpr) queryFieldExpr).getName();
-            QueryFieldReferenceNode referenceNode = buildReferenceNode(idfName);
+            QueryFieldReferenceNode referenceNode = buildReferenceNode(((SQLIdentifierExpr) queryFieldExpr).getName());
             referencePathNodes.add(referenceNode);
-
             return referencePathNodes;
         }
 
@@ -36,12 +34,12 @@ public class QueryFieldParser {
             List<String> queryFieldTextList = Lists.newLinkedList();
 
             SQLExpr tmpLoopExpr = queryFieldExpr;
-            String expr=tmpLoopExpr.toString();
-            boolean checkSyntax=!expr.contains(NESTED_DOC_IDF)
-                    ||StringUtils.countMatches(expr,NESTED_DOC_IDF)==1
-                    ||(StringUtils.countMatches(expr,NESTED_DOC_IDF)==2 &&expr.indexOf(NESTED_DOC_IDF)!=expr.lastIndexOf(NESTED_DOC_IDF));
+            String expr = tmpLoopExpr.toString();
+            boolean checkSyntax = !expr.contains(NESTED_DOC_IDF)
+                    || StringUtils.countMatches(expr, NESTED_DOC_IDF) == 1
+                    || (StringUtils.countMatches(expr, NESTED_DOC_IDF) == 2 && expr.indexOf(NESTED_DOC_IDF) != expr.lastIndexOf(NESTED_DOC_IDF));
 
-            if(!checkSyntax){
+            if (!checkSyntax) {
                 throw new ElasticSql2DslException("[syntax error] nested doc query can not support this syntax");
             }
 
@@ -56,15 +54,15 @@ public class QueryFieldParser {
 
             Collections.reverse(queryFieldTextList);
             for (String strRefNode : queryFieldTextList) {
-                if(StringUtils.countMatches(strRefNode,NESTED_DOC_IDF)==2&&strRefNode.indexOf(NESTED_DOC_IDF)!=strRefNode.lastIndexOf(NESTED_DOC_IDF)){
-                    Integer lastIndexOf=strRefNode.lastIndexOf(NESTED_DOC_IDF);
-                    String[] split = new String[]{strRefNode.substring(0, lastIndexOf),strRefNode.substring(lastIndexOf+1)};
-                    for(String item:split){
+                if (StringUtils.countMatches(strRefNode, NESTED_DOC_IDF) == 2 && strRefNode.indexOf(NESTED_DOC_IDF) != strRefNode.lastIndexOf(NESTED_DOC_IDF)) {
+                    Integer lastIndexOf = strRefNode.lastIndexOf(NESTED_DOC_IDF);
+                    String[] split = new String[]{strRefNode.substring(0, lastIndexOf), strRefNode.substring(lastIndexOf + 1)};
+                    for (String item : split) {
                         QueryFieldReferenceNode referenceNode = buildReferenceNode(item);
                         referenceNode.setNestedDocReference(true);
                         referencePathNodes.add(referenceNode);
                     }
-                }else {
+                } else {
                     QueryFieldReferenceNode referenceNode = buildReferenceNode(strRefNode);
                     referencePathNodes.add(referenceNode);
                 }
@@ -83,23 +81,18 @@ public class QueryFieldParser {
             if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 1) {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(1), true);
-                }
-                else if(strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER+NESTED_DOC_IDF)){
-                    String[] item=strRefNodeName.split("\\$");
-                    referenceNode = new QueryFieldReferenceNode(item[0]+item[1], true);
-                }
-                else {
+                } else if (strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER + NESTED_DOC_IDF)) {
+                    String[] item = strRefNodeName.split("\\$");
+                    referenceNode = new QueryFieldReferenceNode(item[0] + item[1], true);
+                } else {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
-            }
-            else if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 2 && strRefNodeName.indexOf(NESTED_DOC_IDF)!=strRefNodeName.lastIndexOf(NESTED_DOC_IDF)) {
+            } else if (StringUtils.countMatches(strRefNodeName, NESTED_DOC_IDF) == 2 && strRefNodeName.indexOf(NESTED_DOC_IDF) != strRefNodeName.lastIndexOf(NESTED_DOC_IDF)) {
                 if (strRefNodeName.startsWith(NESTED_DOC_IDF)) {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.substring(NESTED_DOC_IDF.length()).replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
-                }
-                else if(strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER+NESTED_DOC_IDF)){
+                } else if (strRefNodeName.startsWith(CoreConstants.HIGHLIGHTER + NESTED_DOC_IDF)) {
                     throw new ElasticSql2DslException("[syntax error] nested doc query can not support this syntax");
-                }
-                else {
+                } else {
                     referenceNode = new QueryFieldReferenceNode(strRefNodeName.replace(NESTED_DOC_IDF, CoreConstants.DOT), true);
                 }
             } else {
@@ -142,10 +135,10 @@ public class QueryFieldParser {
 
             if (referenceNode.isNestedDocReference()) {
 
-                String prefix=queryFieldPrefixBuilder.toString();
-                if(prefix.startsWith(CoreConstants.HIGHLIGHTER)){
+                String prefix = queryFieldPrefixBuilder.toString();
+                if (prefix.startsWith(CoreConstants.HIGHLIGHTER)) {
                     longestNestedDocContextPrefix.add(prefix.substring(CoreConstants.HIGHLIGHTER.length()));
-                }else{
+                } else {
                     longestNestedDocContextPrefix.add(prefix);
                 }
             }
@@ -163,10 +156,10 @@ public class QueryFieldParser {
         String queryFieldFullRefPath = queryFieldPrefixBuilder.toString();
 
         //nested doc field
-        if (longestNestedDocContextPrefix.size()!=0&&StringUtils.isNotBlank(longestNestedDocContextPrefix.get(0))) {
+        if (longestNestedDocContextPrefix.size() != 0 && StringUtils.isNotBlank(longestNestedDocContextPrefix.get(0))) {
             if (longestNestedDocContextPrefix.get(0).length() < queryFieldFullRefPath.length()) {
-                if (longestNestedDocContextPrefix.size()==2&&StringUtils.isNotBlank(longestNestedDocContextPrefix.get(1)) && longestNestedDocContextPrefix.get(1).length() < queryFieldFullRefPath.length()){
-                    return ElasticSqlQueryFields.newNestedDocQueryField(longestNestedDocContextPrefix,queryFieldFullRefPath);
+                if (longestNestedDocContextPrefix.size() == 2 && StringUtils.isNotBlank(longestNestedDocContextPrefix.get(1)) && longestNestedDocContextPrefix.get(1).length() < queryFieldFullRefPath.length()) {
+                    return ElasticSqlQueryFields.newNestedDocQueryField(longestNestedDocContextPrefix, queryFieldFullRefPath);
                 }
                 return ElasticSqlQueryFields.newNestedDocQueryField(longestNestedDocContextPrefix, queryFieldFullRefPath);
 
