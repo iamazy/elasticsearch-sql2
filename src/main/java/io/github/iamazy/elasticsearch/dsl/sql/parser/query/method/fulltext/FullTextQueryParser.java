@@ -21,8 +21,6 @@ public class FullTextQueryParser {
                 new MatchPhraseQueryParser(),
                 new MatchPhrasePrefixQueryParser(),
                 new MatchQueryParser(),
-                new TermQueryParser(),
-                new TermsQueryParser(),
                 new MultiMatchQueryParser(),
                 new QueryStringQueryParser(),
                 new SimpleQueryStringQueryParser(),
