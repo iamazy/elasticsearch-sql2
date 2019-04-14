@@ -6,8 +6,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodInvocation;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.MethodQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.term.TermQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.method.term.TermsQueryParser;
 
 
 import java.util.List;
