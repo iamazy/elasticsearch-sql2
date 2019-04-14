@@ -12,7 +12,7 @@ import java.util.Map;
  * @descrition
  **/
 @SuppressWarnings("unchecked")
-public class MapUtils {
+public class FlatMapUtils {
 
     public static Map<String, String> flat(Map<String,?> map, String parentKey) {
         String parent = parentKey;
@@ -42,6 +42,7 @@ public class MapUtils {
         }
         return dataInfo;
     }
+
 
     public static void flatPut(String key, Object value, Map<String, Object> map) {
         if (key.contains(CoreConstants.DOT)) {

@@ -197,6 +197,15 @@ public class FunctionScoreQueryParser extends AbstractParameterizedMethodExpress
             BoolQueryBuilder boolQueryBuilder=null;
             if(invocation.getFirstParameter() instanceof SQLBinaryOpExpr) {
                 boolQueryBuilder = boolExpressionParser.parseBoolQueryExpr(invocation.getFirstParameter(), invocation.getQueryAs());
+            }else if(invocation.getFirstParameter() instanceof SQLMethodInvokeExpr){
+                SQLMethodInvokeExpr methodInvokeExpr=(SQLMethodInvokeExpr) invocation.getFirstParameter();
+                if(!(FUNCTION_SCORE_METHOD.contains(methodInvokeExpr.getMethodName())
+                        ||RANDOM_SCORE_METHOD.contains(methodInvokeExpr.getMethodName())
+                        ||SCRIPT_SCORE_METHOD.contains(methodInvokeExpr.getMethodName())
+                        ||WEIGHT_METHODS.contains(methodInvokeExpr.getMethodName())
+                        ||FIELD_VALUE_FACTOR_METHOD.contains(methodInvokeExpr.getMethodName()))){
+                    boolQueryBuilder = boolExpressionParser.parseBoolQueryExpr(invocation.getFirstParameter(), invocation.getQueryAs());
+                }
             }
 
             for (SQLExpr expr : invocation.getParameters()) {

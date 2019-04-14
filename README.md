@@ -7,7 +7,7 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>6.7.1</version>
+  <version>6.7.1.3</version>
 </dependency>
 ```
 说明
@@ -35,7 +35,7 @@ CHANGELOG
 |master|6.6.2|
 |master|6.7.0|
 |master|6.7.1|
-|master|6.7.1|
+
 
 感谢
 --------------------------
