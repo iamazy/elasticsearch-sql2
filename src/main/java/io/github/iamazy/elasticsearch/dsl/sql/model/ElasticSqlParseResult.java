@@ -48,7 +48,7 @@ public class ElasticSqlParseResult {
     /**
      * 需要高亮显示的字段
      */
-    private List<String> highlighter=new ArrayList<>(0);
+    private Set<String> highlighter=new HashSet<>(0);
     private List<String> routingBy;
     private List<String> queryFieldList;
     private transient BoolQueryBuilder whereCondition;

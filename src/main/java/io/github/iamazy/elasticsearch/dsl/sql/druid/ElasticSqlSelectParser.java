@@ -2,16 +2,11 @@ package io.github.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLSetQuantifier;
-import com.alibaba.druid.sql.ast.expr.*;
 import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.db2.ast.stmt.DB2SelectQueryBlock;
 import com.alibaba.druid.sql.parser.*;
 import com.alibaba.druid.util.FnvHash;
 import com.alibaba.druid.util.JdbcConstants;
-import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 /**
  * @author iamazy
@@ -28,7 +23,7 @@ public class ElasticSqlSelectParser extends SQLSelectParser {
     }
 
     private ElasticSqlSelectQueryBlock.Routing parseRoutingBy() {
-        return ((ElasticSqlExprParser) this.exprParser).parseRourtingBy();
+        return ((ElasticSqlExprParser) this.exprParser).parseRoutingBy();
     }
 
     private ElasticSqlSelectQueryBlock.Scroll parseScroll() {

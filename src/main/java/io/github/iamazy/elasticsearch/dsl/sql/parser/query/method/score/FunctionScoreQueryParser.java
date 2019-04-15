@@ -193,7 +193,6 @@ public class FunctionScoreQueryParser extends AbstractParameterizedMethodExpress
             functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(boolQueryBuilder);
 
         } else if (invocation.getParameterCount() >= 2) {
-
             BoolQueryBuilder boolQueryBuilder=null;
             if(invocation.getFirstParameter() instanceof SQLBinaryOpExpr) {
                 boolQueryBuilder = boolExpressionParser.parseBoolQueryExpr(invocation.getFirstParameter(), invocation.getQueryAs());

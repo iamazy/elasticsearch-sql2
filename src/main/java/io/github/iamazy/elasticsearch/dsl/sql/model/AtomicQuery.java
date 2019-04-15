@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author iamazy
@@ -17,7 +19,7 @@ import java.util.List;
 public class AtomicQuery {
 
     @Setter
-    private List<String> highlighter=new ArrayList<>(0);
+    private Set<String> highlighter=new HashSet<>(0);
 
     private QueryBuilder queryBuilder;
     private boolean isNestedQuery;

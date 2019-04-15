@@ -30,7 +30,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BoolExpressionParser {
 
@@ -45,10 +47,10 @@ public class BoolExpressionParser {
     private final ScoreQueryParser scoreQueryParser;
 
     @Getter
-    private List<String> highlighter;
+    private Set<String> highlighter;
 
     public BoolExpressionParser() {
-        highlighter=new ArrayList<>(0);
+        highlighter=new HashSet<>(0);
         termLevelAtomicQueryParser = new TermLevelAtomicQueryParser();
         fullTextAtomQueryParser = new FullTextQueryParser();
         binaryQueryParser = new BinaryQueryParser();
