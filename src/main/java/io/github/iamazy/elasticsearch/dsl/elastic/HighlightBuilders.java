@@ -1,9 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.elastic;
 
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-
-
-import java.util.List;
 import java.util.Set;
 
 public class HighlightBuilders {

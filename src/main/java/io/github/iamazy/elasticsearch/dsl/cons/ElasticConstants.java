@@ -34,7 +34,7 @@ public interface ElasticConstants {
     String USE_DIS_MAX="use_dis_max";
     String TIE_BREAKER="tie_breaker";
     String QUOTE_ANALYZER="quote_analyzer";
-    String AUTO_GENERATE_PHRASE_QUERIES="auto_generate_phrase_queries";
+    String AUTO_GENERATE_SYNONYMS_PHRASE_QUERIES="auto_generate_synonyms_phrase_queries";
     String MAX_DETERMINIZED_STATES="max_determinized_states";
     String ALLOW_LEADING_WILDCARD="allow_leading_wildcard";
     String ENABLE_POSITION_INCREMENTS="enable_position_increments";

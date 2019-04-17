@@ -17,6 +17,9 @@ import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COLON;
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COMMA;
+
 public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
 
     private static List<String> QUERY_STRING_METHOD = ImmutableList.of("queryString", "query_string");
@@ -121,9 +124,9 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
             queryStringQuery.quoteAnalyzer(val);
         }
 
-        if (extraParamMap.containsKey(ElasticConstants.AUTO_GENERATE_PHRASE_QUERIES)) {
-            String val = extraParamMap.get(ElasticConstants.AUTO_GENERATE_PHRASE_QUERIES);
-            queryStringQuery.autoGeneratePhraseQueries(Boolean.parseBoolean(val));
+        if (extraParamMap.containsKey(ElasticConstants.AUTO_GENERATE_SYNONYMS_PHRASE_QUERIES)) {
+            String val = extraParamMap.get(ElasticConstants.AUTO_GENERATE_SYNONYMS_PHRASE_QUERIES);
+            queryStringQuery.autoGenerateSynonymsPhraseQuery(Boolean.parseBoolean(val));
         }
 
         if (extraParamMap.containsKey(ElasticConstants.MAX_DETERMINIZED_STATES)) {
@@ -182,10 +185,6 @@ public class QueryStringQueryParser extends ParameterizedMethodQueryParser {
             queryStringQuery.quoteFieldSuffix(val);
         }
 
-        if (extraParamMap.containsKey(ElasticConstants.USE_DIS_MAX)) {
-            String val = extraParamMap.get(ElasticConstants.USE_DIS_MAX);
-            queryStringQuery.useDisMax(Boolean.parseBoolean(val));
-        }
 
         if (extraParamMap.containsKey(ElasticConstants.TIE_BREAKER)) {
             String val = extraParamMap.get(ElasticConstants.TIE_BREAKER);

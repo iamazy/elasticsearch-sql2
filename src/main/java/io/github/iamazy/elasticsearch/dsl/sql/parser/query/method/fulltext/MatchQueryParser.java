@@ -127,7 +127,7 @@ public class MatchQueryParser extends AbstractFieldSpecificMethodQueryParser {
 
         if (extraParamMap.containsKey(ElasticConstants.LENIENT)) {
             String val = extraParamMap.get(ElasticConstants.LENIENT);
-            matchQuery.setLenient(Boolean.parseBoolean(val));
+            matchQuery.lenient(Boolean.parseBoolean(val));
         }
 
         if (extraParamMap.containsKey(ElasticConstants.ZERO_TERMS_QUERY)) {

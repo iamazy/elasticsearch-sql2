@@ -22,6 +22,7 @@ import org.elasticsearch.search.aggregations.bucket.range.DateRangeAggregationBu
 import org.elasticsearch.search.aggregations.bucket.range.RangeAggregationBuilder;
 import org.joda.time.DateTime;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -33,8 +34,8 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
 
     private static final List<String> AGG_RANGE_METHOD = ImmutableList.of("range", "range_agg");
 
-    private static DateTime getDateRangeVal(String date) {
-        return DateTime.parse(date);
+    private static ZonedDateTime getDateRangeVal(String date) {
+        return ZonedDateTime.parse(date);
     }
 
 
@@ -109,9 +110,8 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
 
             DateRangeAggregationBuilder dateRangeBuilder = AggregationBuilders.dateRange(GroupByAggregationParser.AGG_BUCKET_KEY_PREFIX + rangeFieldName+"_range").field(rangeFieldName);
             for (RangeSegment segment : rangeSegments) {
-
-                DateTime fromDate = getDateRangeVal(segment.getFrom().toString());
-                DateTime toDate = getDateRangeVal(segment.getTo().toString());
+                ZonedDateTime fromDate = getDateRangeVal(segment.getFrom().toString());
+                ZonedDateTime toDate = getDateRangeVal(segment.getTo().toString());
 
                 String key = String.format("[%s]-[%s]", formatDateRangeAggKey(fromDate), formatDateRangeAggKey(toDate));
                 dateRangeBuilder.addRange(key, fromDate, toDate);
@@ -121,7 +121,7 @@ public class RangeAggAggregationParser extends AbstractGroupByMethodAggregationP
         return rangeBuilder;
     }
 
-    private String formatDateRangeAggKey(DateTime date) {
+    private String formatDateRangeAggKey(ZonedDateTime date) {
         final String dateRangeKeyPattern = "yyyy-MM-dd HH:mm:ss";
         return new DateTime(date).toString(dateRangeKeyPattern);
     }

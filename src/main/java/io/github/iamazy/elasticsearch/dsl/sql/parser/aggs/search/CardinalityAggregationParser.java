@@ -13,7 +13,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.AbstractGroupByMethodA
 import io.github.iamazy.elasticsearch.dsl.sql.parser.sql.QueryFieldParser;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.metrics.cardinality.CardinalityAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.CardinalityAggregationBuilder;
 
 import java.util.List;
 

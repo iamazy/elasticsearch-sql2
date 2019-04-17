@@ -2,7 +2,6 @@ package io.github.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.*;
-import com.alibaba.druid.sql.ast.statement.SQLDeleteStatement;
 import com.alibaba.druid.sql.parser.*;
 import com.google.common.collect.Lists;
 import java.util.List;

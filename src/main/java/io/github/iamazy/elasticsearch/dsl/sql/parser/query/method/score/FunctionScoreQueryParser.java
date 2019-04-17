@@ -28,6 +28,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COLON;
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COMMA;
+
 /**
  * @author iamazy
  * @date 2019/4/10

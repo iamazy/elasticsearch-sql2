@@ -18,6 +18,8 @@ import org.elasticsearch.index.search.MatchQuery;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COMMA;
+
 public class MultiMatchQueryParser extends ParameterizedMethodQueryParser {
 
     private static final List<String> MULTI_MATCH_METHOD = ImmutableList.of("multiMatch", "multi_match", "multi_match_query", "multiMatchQuery");
@@ -126,11 +128,6 @@ public class MultiMatchQueryParser extends ParameterizedMethodQueryParser {
         if (extraParamMap.containsKey(ElasticConstants.FUZZY_REWRITE)) {
             String val = extraParamMap.get(ElasticConstants.FUZZY_REWRITE);
             multiMatchQuery.fuzzyRewrite(val);
-        }
-
-        if (extraParamMap.containsKey(ElasticConstants.USE_DIS_MAX)) {
-            String val = extraParamMap.get(ElasticConstants.USE_DIS_MAX);
-            multiMatchQuery.useDisMax(Boolean.parseBoolean(val));
         }
 
         if (extraParamMap.containsKey(ElasticConstants.TIE_BREAKER)) {

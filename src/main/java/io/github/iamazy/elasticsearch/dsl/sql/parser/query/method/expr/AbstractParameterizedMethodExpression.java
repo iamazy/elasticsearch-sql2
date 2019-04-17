@@ -10,14 +10,15 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Collections;
 import java.util.Map;
 
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COLON;
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COMMA;
+
 /**
  * @author iamazy
  */
 public abstract class AbstractParameterizedMethodExpression implements ParameterizedMethodExpression {
 
-    protected static final String COMMA = ",";
 
-    protected static final String COLON = ":";
 
     protected abstract String defineExtraParamString(MethodInvocation invocation);
 

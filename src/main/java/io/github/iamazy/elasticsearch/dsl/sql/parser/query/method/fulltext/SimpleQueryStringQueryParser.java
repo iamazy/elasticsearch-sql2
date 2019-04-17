@@ -17,6 +17,9 @@ import org.elasticsearch.index.query.SimpleQueryStringFlag;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COLON;
+import static io.github.iamazy.elasticsearch.dsl.cons.CoreConstants.COMMA;
+
 public class SimpleQueryStringQueryParser extends ParameterizedMethodQueryParser {
 
     private static List<String> SIMPLE_QUERY_STRING_METHOD = ImmutableList.of("simpleQueryString", "simple_query_string");
