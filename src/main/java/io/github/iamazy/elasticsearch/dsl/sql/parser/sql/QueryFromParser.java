@@ -51,7 +51,7 @@ public class QueryFromParser implements QueryParser {
 
             String index = ((SQLIdentifierExpr) idxExpr.getOwner()).getName();
             dslContext.getParseResult().setIndices(Lists.newArrayList(index));
-            dslContext.getParseResult().setType(idxExpr.getName());
+//            dslContext.getParseResult().setType(idxExpr.getName());
             return;
         }
 

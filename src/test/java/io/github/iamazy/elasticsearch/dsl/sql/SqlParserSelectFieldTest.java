@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.sql;
 
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ElasticSql2DslParser;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.junit.Test;
 
 /**
@@ -68,6 +69,14 @@ public class SqlParserSelectFieldTest {
     public void test2(){
         String sql="select * from fruit where query_string('h#苹果','fields:deviceInfo.device*,deviceLocation.address','analyzer:ik_smart,phrase_slop:1')";
         sql=String.format(sql,"device_search");
+        ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+    }
+
+    @Test
+    public void test3(){
+        String sql="select * from aa";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

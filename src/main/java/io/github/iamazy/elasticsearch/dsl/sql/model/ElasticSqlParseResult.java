@@ -43,7 +43,7 @@ public class ElasticSqlParseResult {
     private String scrollId;
 
     private List<String> indices;
-    private String type = "_doc";
+//    private String type = "_doc";
     private String queryAs;
     /**
      * 需要高亮显示的字段
@@ -60,9 +60,9 @@ public class ElasticSqlParseResult {
     public DeleteByQueryRequest toDelRequest() {
         DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
         deleteByQueryRequest.setQuery(searchSourceBuilder.query());
-        if (StringUtils.isNotBlank(type)) {
-            deleteByQueryRequest.types(type);
-        }
+//        if (StringUtils.isNotBlank(type)) {
+//            deleteByQueryRequest.types(type);
+//        }
         if (CollectionUtils.isNotEmpty(routingBy)) {
             deleteByQueryRequest.setRouting(routingBy.get(0));
         }
@@ -93,9 +93,9 @@ public class ElasticSqlParseResult {
         if (CollectionUtils.isNotEmpty(indices)) {
             searchRequest.indices(indices.toArray(new String[0]));
         }
-        if (StringUtils.isNotBlank(type)) {
-            searchRequest.types(type);
-        }
+//        if (StringUtils.isNotBlank(type)) {
+//            searchRequest.types(type);
+//        }
 
 
         if (from < 0) {
@@ -159,7 +159,7 @@ public class ElasticSqlParseResult {
         return searchRequest.source(searchSourceBuilder);
     }
 
-    String toDsl(SearchRequest searchRequest) {
+    public String toDsl(SearchRequest searchRequest) {
         return searchRequest.source().toString();
     }
 
@@ -176,7 +176,7 @@ public class ElasticSqlParseResult {
     public String toString() {
         String ptn = "index:%s,type:%s,query_as:%s,from:%s,size:%s,routing:%s,dsl:%s";
         return String.format(
-                ptn, indices, type, queryAs, from, size,
+                ptn, indices,/* type,*/ queryAs, from, size,
                 (routingBy != null ? routingBy.toString() : "[]"), toDsl(toRequest())
         );
     }
