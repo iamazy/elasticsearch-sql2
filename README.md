@@ -18,13 +18,18 @@
 
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
+| 6.x | 6.6.0 | | 6.6.0.1 |
+| 6.x | 6.6.1 | | 6.6.1.1 |
+| 6.x | 6.6.2 | | 6.6.2.1 |
+| 6.x | 6.7.0 | | 6.7.0.1 |
+| 6.x | 6.7.1 | | 6.7.1.1 |
 | 7.x | 7.0.0 | | 7.0.0.1 |
 
 #### 安装
 
-Elasticsearch 7.x
+Elasticsearch {6.x,7.x}
 ```
-./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/v7.0.0.1/elasticsearch-sql-plugin-7.0.0.1.zip
+./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{version}/elasticsearch-sql-plugin-{version}.zip
 ```
 
 说明
