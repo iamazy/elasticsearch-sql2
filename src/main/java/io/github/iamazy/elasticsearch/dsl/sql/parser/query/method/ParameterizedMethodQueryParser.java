@@ -2,8 +2,6 @@ package io.github.iamazy.elasticsearch.dsl.sql.parser.query.method;
 
 
 import com.alibaba.druid.sql.ast.SQLExpr;
-import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
-import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.druid.ElasticSqlExprParser;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
