@@ -13,12 +13,15 @@
 
 插件(isql)
 --------------------
+
 ####版本
+
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
 | 7.x | 7.0.0 | | 7.0.0.1 |
 
 ####安装
+
 Elasticsearch 7.x
 ```
 ./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/v7.0.0.1/elasticsearch-sql-plugin-7.0.0.1.zip
