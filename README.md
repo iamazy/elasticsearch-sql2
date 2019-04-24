@@ -7,9 +7,23 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>6.7.1.4</version>
+  <version>7.0.0.1</version>
 </dependency>
 ```
+
+插件(isql)
+--------------------
+版本
+
+elasticsearch version | latest version | remark | isql version
+:-: | :-: | :-: | :-: | :-:
+7.x | 7.0.0 | | 7.0.0.1 |
+
+Elasticsearch 7.x
+```
+./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/v7.0.0.1/elasticsearch-sql-plugin-7.0.0.1.zip
+```
+
 说明
 --------------------
 目前使用文档无法及时更新出来，但是test目录中基本有所有的测试用例，可以结合生成的dsl和调试信息理解
@@ -24,6 +38,7 @@ CHANGELOG
 2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）<br/>
 2019-4-8: 添加高亮显示<br/>
 2019-4-11: 添加Function Score<br/>
+2019-4-24: 将elasticsearch-sql添加为elasticsearch插件
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 

@@ -1,4 +1,4 @@
-package org.elasticsearch.plugin.iamazy.dsl;
+package io.github.iamazy.elasticsearch.dsl.plugin;
 
 import org.elasticsearch.cluster.metadata.IndexNameExpressionResolver;
 import org.elasticsearch.cluster.node.DiscoveryNodes;

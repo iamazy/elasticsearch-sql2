@@ -12,8 +12,8 @@
     <properties>
         <elasticsearch.version>7.0.0</elasticsearch.version>
         <java.version>1.8</java.version>
-        <elasticsearch.plugin.name>sql</elasticsearch.plugin.name>
-        <elasticsearch.plugin.classname>org.elasticsearch.plugin.iamazy.dsl.SqlPlugin</elasticsearch.plugin.classname>
+        <elasticsearch.plugin.name>isql</elasticsearch.plugin.name>
+        <elasticsearch.plugin.classname>io.github.iamazy.elasticsearch.dsl.plugin.SqlPlugin</elasticsearch.plugin.classname>
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
     </properties>
 
