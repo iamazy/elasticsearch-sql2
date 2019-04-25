@@ -29,7 +29,7 @@
 
 Elasticsearch {6.x,7.x}
 ```
-./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{version}/elasticsearch-sql-plugin-{version}.zip
+./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{isql-version}/elasticsearch-sql-plugin-{isql-version}.zip
 ```
 
 #### 使用
