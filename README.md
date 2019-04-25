@@ -134,7 +134,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 
 功能点
 ------------
-我本人是向[https://github.com/NLPchina/elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql)的开发团队看齐的，功能点会慢慢的一点一点的添加的
+我是向[https://github.com/NLPchina/elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql)的开发团队看齐的，功能点会慢慢的一点一点的添加的
 #### `elasticsearch-query-toolkit`已有的功能
 - [x] SQL Select  
 - [x] SQL Where  
