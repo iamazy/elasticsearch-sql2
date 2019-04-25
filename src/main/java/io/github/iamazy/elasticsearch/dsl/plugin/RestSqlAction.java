@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.plugin;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ElasticSql2DslParser;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.node.NodeClient;
 import org.elasticsearch.common.settings.Settings;
@@ -21,7 +20,6 @@ import java.io.IOException;
  * @date 2019/4/23
  * @descrition
  **/
-@Slf4j
 public class RestSqlAction extends BaseRestHandler {
 
     RestSqlAction(Settings settings, RestController restController){
