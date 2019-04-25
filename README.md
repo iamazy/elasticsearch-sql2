@@ -33,19 +33,21 @@ Elasticsearch {6.x,7.x}
 ```
 
 #### 使用
+
+##### 1. 使用sql语句直接查询elasticsearch里面的数据集
 ```
-1. 使用sql语句直接查询elasticsearch里面的数据集
 POST _isql
 {
     "sql":"select * from fruit"
 }
+```
 
-2. 将sql解析成elasticsearch的dsl
+##### 2. 将sql解析成elasticsearch的dsl
+```
 POST _isql/_explain
 {
     "sql":"select * from fruit"
 }
-
 ```
 
 说明
