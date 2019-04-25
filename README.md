@@ -32,6 +32,22 @@ Elasticsearch {6.x,7.x}
 ./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{version}/elasticsearch-sql-plugin-{version}.zip
 ```
 
+#### 使用
+```
+1. 使用sql语句直接查询elasticsearch里面的数据集
+POST _isql
+{
+    "sql":"select * from fruit"
+}
+
+2. 将sql解析成elasticsearch的dsl
+POST _isql/_explain
+{
+    "sql":"select * from fruit"
+}
+
+```
+
 说明
 --------------------
 目前使用文档无法及时更新出来，但是test目录中基本有所有的测试用例，可以结合生成的dsl和调试信息理解
