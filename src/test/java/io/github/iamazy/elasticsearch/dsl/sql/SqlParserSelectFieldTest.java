@@ -76,7 +76,7 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void test3(){
-        String sql="select * from aa";
+        String sql="select * from aa where bb not like '%dfs_fsdf%' and cc in (1,2,3,4)";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
