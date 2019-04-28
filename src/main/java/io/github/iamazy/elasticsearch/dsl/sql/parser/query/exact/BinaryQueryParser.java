@@ -1,15 +1,19 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact;
 
+import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;
 import com.alibaba.druid.sql.ast.expr.SQLBinaryOperator;
+import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
 import com.alibaba.druid.sql.ast.expr.SQLNullExpr;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.helper.ElasticSqlArgConverter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
+import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import org.elasticsearch.index.query.ExistsQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RegexpQueryBuilder;
 
 
 public class BinaryQueryParser extends AbstractExactQueryParser {
@@ -31,6 +35,8 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                 }
             });
         }
+
+
 
         //GT GTE LT LTE
         if (SQLBinaryOperator.GreaterThan == binaryOperator || SQLBinaryOperator.GreaterThanOrEqual == binaryOperator
@@ -82,6 +88,31 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                 }
                 return existsQuery;
             });
+        }
+
+        if(SQLBinaryOperator.Like == binaryOperator || SQLBinaryOperator.NotLike == binaryOperator){
+            if(binQueryExpr.getRight() instanceof SQLCharExpr) {
+                SQLCharExpr rightExpr = (SQLCharExpr) binQueryExpr.getRight();
+                SQLExpr leftExpr = binQueryExpr.getLeft();
+                SqlConditionOperator operator=SQLBinaryOperator.Like == binaryOperator?SqlConditionOperator.Like:SqlConditionOperator.NotLike;
+                return parseCondition(binQueryExpr.getLeft(),operator,null,queryAs,((queryFieldName, operator1, rightParamValues) -> {
+                    String rightText=rightExpr.getText();
+                    if(rightExpr.getText().contains("%")){
+                        rightText=rightText.replace("%","*");
+                    }
+                    if(rightExpr.getText().contains("_")){
+                        rightText=rightText.replace("_","?");
+                    }
+                    RegexpQueryBuilder regexpQueryBuilder = QueryBuilders.regexpQuery(leftExpr.toString(), rightText);
+                    if(operator1.equals(SqlConditionOperator.Like)) {
+                        return regexpQueryBuilder;
+                    }else{
+                        return QueryBuilders.boolQuery().mustNot(regexpQueryBuilder);
+                    }
+                }));
+            }else{
+                throw new ElasticSql2DslException("[syntax error] Like/NotLike expr right part should be a char expr");
+            }
         }
 
         throw new ElasticSql2DslException(String.format("[syntax error] Can not support binary query type[%s]", binQueryExpr.toString()));

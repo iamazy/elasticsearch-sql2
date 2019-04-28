@@ -65,6 +65,7 @@ CHANGELOG
 2019-4-8: 添加高亮显示<br/>
 2019-4-11: 添加Function Score<br/>
 2019-4-24: 将elasticsearch-sql添加为elasticsearch插件
+2019-4-28: 添加like not like 查询
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
@@ -189,9 +190,10 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES Highlighter
 - [x] ES Boosting
 - [x] ES Function Score
+- [x] SQL Like
 
 #### 未来将要添加的功能
-- [x] ES Highlighter (已添加)
+- [x] ES Highlighter
 - [ ] elasticsearch-sql[NLPChina]组件中我未添加的功能!!!
 
 <font size="10">☀️</font>未来的想法是将功能完善的跟NLPChina团队一样多嘻嘻
