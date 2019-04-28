@@ -7,7 +7,7 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>7.0.0.1</version>
+  <version>7.0.0.2</version>
 </dependency>
 ```
 
@@ -23,7 +23,7 @@
 | 6.x | 6.6.2 | | 6.6.2.1 |
 | 6.x | 6.7.0 | | 6.7.0.1 |
 | 6.x | 6.7.1 | | 6.7.1.1 |
-| 7.x | 7.0.0 | | 7.0.0.1 |
+| 7.x | 7.0.0 | | 7.0.0.2 |
 
 #### 安装
 
