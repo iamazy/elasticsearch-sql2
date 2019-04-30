@@ -64,8 +64,8 @@ CHANGELOG
 2019-3-28: 更新nested功能,支持双层嵌套类型（再多就要考虑数据结构是否合理了）<br/>
 2019-4-8: 添加高亮显示<br/>
 2019-4-11: 添加Function Score<br/>
-2019-4-24: 将elasticsearch-sql添加为elasticsearch插件
-2019-4-28: 添加like not like 查询
+2019-4-24: 将elasticsearch-sql添加为elasticsearch插件<br/>
+2019-4-28: 添加like not like 查询<br/>
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
