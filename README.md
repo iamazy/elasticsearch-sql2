@@ -7,13 +7,14 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>7.0.0.2</version>
+  <version>7.0.1.1</version>
 </dependency>
 ```
 
 插件(isql)
 --------------------
-
+#### 说明
+很奇怪插件在打包后,打包文件内多了很多奇奇怪怪的jar,经排除只需留下lib文件夹下的jar包即可,亲们在自己打包之后如果强迫症作祟可以删除多余的jar包,不过经测试这个不影响使用,只影响强迫症患者(比如我)的插件使用体验
 #### 版本
 
 | elasticsearch version | latest version | remark | isql version | 
@@ -24,6 +25,7 @@
 | 6.x | 6.7.0 | | 6.7.0.1 |
 | 6.x | 6.7.1 | | 6.7.1.1 |
 | 7.x | 7.0.0 | | 7.0.0.2 |
+| 7.x | 7.0.1 | | 7.0.1.1 |
 
 #### 安装
 
@@ -78,6 +80,7 @@ CHANGELOG
 |master|6.7.0|
 |master|6.7.1|
 |master|7.0.0|
+|master|7.0.1|
 
 
 感谢

@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>${elasticsearch.version}.2</version>
+    <version>${elasticsearch.version}.1</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
 
     <properties>
-        <elasticsearch.version>7.0.0</elasticsearch.version>
+        <elasticsearch.version>7.0.1</elasticsearch.version>
         <java.version>1.8</java.version>
         <elasticsearch.plugin.name>isql</elasticsearch.plugin.name>
         <elasticsearch.plugin.classname>io.github.iamazy.elasticsearch.dsl.plugin.SqlPlugin</elasticsearch.plugin.classname>
