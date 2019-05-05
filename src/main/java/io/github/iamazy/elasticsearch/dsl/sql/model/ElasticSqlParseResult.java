@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
@@ -43,7 +45,7 @@ public class ElasticSqlParseResult {
     private String scrollId;
 
     private List<String> indices;
-//    private String type = "_doc";
+    private String type = "_doc";
     private String queryAs;
     /**
      * 需要高亮显示的字段
@@ -57,12 +59,15 @@ public class ElasticSqlParseResult {
     private transient List<AggregationBuilder> groupBy;
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
+    private GetMappingsRequest mappingsRequest;
+    private GetFieldMappingsRequest fieldMappingsRequest;
+
     public DeleteByQueryRequest toDelRequest() {
         DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
         deleteByQueryRequest.setQuery(searchSourceBuilder.query());
-//        if (StringUtils.isNotBlank(type)) {
-//            deleteByQueryRequest.types(type);
-//        }
+        if (StringUtils.isNotBlank(type)) {
+            deleteByQueryRequest.types(type);
+        }
         if (CollectionUtils.isNotEmpty(routingBy)) {
             deleteByQueryRequest.setRouting(routingBy.get(0));
         }
@@ -73,6 +78,14 @@ public class ElasticSqlParseResult {
             deleteByQueryRequest.setSize(size);
         }
         return deleteByQueryRequest;
+    }
+
+    public GetFieldMappingsRequest toFieldMapping(){
+        return fieldMappingsRequest;
+    }
+
+    public GetMappingsRequest toMapping(){
+        return mappingsRequest;
     }
 
     public SearchResponse toResponse(RestHighLevelClient restHighLevelClient, RequestOptions requestOptions) throws IOException {
@@ -93,9 +106,9 @@ public class ElasticSqlParseResult {
         if (CollectionUtils.isNotEmpty(indices)) {
             searchRequest.indices(indices.toArray(new String[0]));
         }
-//        if (StringUtils.isNotBlank(type)) {
-//            searchRequest.types(type);
-//        }
+        if (StringUtils.isNotBlank(type)) {
+            searchRequest.types(type);
+        }
 
 
         if (from < 0) {
@@ -111,6 +124,7 @@ public class ElasticSqlParseResult {
         } else {
             searchSourceBuilder.size(size);
         }
+
 
         if(CollectionUtils.isNotEmpty(highlighter)) {
             HighlightBuilder highlightBuilder = HighlightBuilders.highlighter(highlighter);
@@ -156,6 +170,7 @@ public class ElasticSqlParseResult {
             final Scroll scroll = new Scroll(TimeValue.parseTimeValue(scrollExpire, StringUtils.EMPTY));
             searchRequest.scroll(scroll);
         }
+
         return searchRequest.source(searchSourceBuilder);
     }
 

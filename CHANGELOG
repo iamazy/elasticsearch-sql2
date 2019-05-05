@@ -15,3 +15,6 @@
 2019-4-24: 将elasticsearch-sql添加为elasticsearch插件
 
 2019-4-28: 添加like not like 查询
+
+2019-5-5: 添加desc语法获取index(或者index/field)的mapping,无法直接获取实际的mapping,必须结合restClient使用,且desc后面只能加一个index的名称
+
