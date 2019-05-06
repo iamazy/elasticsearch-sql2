@@ -207,6 +207,7 @@ public Map<String, Object> get(String cluster,String index,String type, String i
 - [x] ES Boosting
 - [x] ES Function Score
 - [x] SQL Like
+- [x] SQL Desc
 
 #### 未来将要添加的功能
 - [x] ES Highlighter
