@@ -68,7 +68,6 @@ public class SqlParserSelectFieldTest {
     @Test
     public void test2(){
         String sql="select * from fruit where query_string('h#苹果','fields:weight*,name','analyzer:ik_smart,phrase_slop:1')";
-        sql=String.format(sql,"device_search");
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -76,7 +75,7 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void test3(){
-        String sql="select * from aa where bb not like '%dfs_fsdf%' and cc in (1,2,3,4)";
+        String sql="select * from apple order by minPrice desc, advicePrice asc";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

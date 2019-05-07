@@ -26,7 +26,21 @@ public class NestedAggTest {
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
         System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
+    }
 
+    @Test
+    public void geoDistanceAgg(){
+        String sql="select * from regions group by geo_distance(distance#km,origin(0.0,11.0),range(1.0,3.0))";
+        ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
+        System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
+    }
 
+    @Test
+    public void agg(){
+        String sql="select * from apple group by terms(productName,10)>(terms(provider,10),cardinality(provider))";
+        ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult elasticSqlParseResult = elasticSql2DslParser.parse(sql);
+        System.out.println(elasticSqlParseResult.toPrettyDsl(elasticSqlParseResult.toRequest()));
     }
 }
