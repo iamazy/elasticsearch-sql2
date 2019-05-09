@@ -14,6 +14,8 @@ public interface CoreConstants {
     String COLON = ":";
     String DOLLAR = "$";
     String DOT=".";
+    String GRAVE_ACCENT="`";
+    String UP_ARROW="^";
     String POUND="#";
     String HIGHLIGHTER="h#";
     String DEFAULT_ES_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

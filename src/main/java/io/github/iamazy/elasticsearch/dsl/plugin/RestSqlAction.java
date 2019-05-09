@@ -53,7 +53,11 @@ public class RestSqlAction extends BaseRestHandler {
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
-            } else {
+            }
+            else if(restRequest.path().endsWith("/_export")){
+                return null;
+            }
+            else {
                 if (parseResult.toFieldMapping() != null) {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.toFieldMapping()).actionGet())));
                 } else if (parseResult.toMapping()!=null) {

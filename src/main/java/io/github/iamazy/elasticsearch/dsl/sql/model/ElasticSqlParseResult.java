@@ -153,7 +153,20 @@ public class ElasticSqlParseResult {
         }
 
         if (CollectionUtils.isNotEmpty(queryFieldList)) {
-            searchSourceBuilder.fetchSource(queryFieldList.toArray(new String[0]), null);
+            List<String> includes=new ArrayList<>(0);
+            List<String> excludes=new ArrayList<>(0);
+            for(String field:queryFieldList) {
+                if(field.startsWith(CoreConstants.UP_ARROW)){
+                    excludes.add(field.substring(1));
+                }
+                else if(field.startsWith("`^")){
+                    excludes.add(field.replaceAll(CoreConstants.GRAVE_ACCENT,StringUtils.EMPTY).substring(1));
+                }
+                else{
+                    includes.add(field.replaceAll(CoreConstants.GRAVE_ACCENT,StringUtils.EMPTY));
+                }
+            }
+            searchSourceBuilder.fetchSource(includes.toArray(new String[0]), excludes.toArray(new String[0]));
         }
 
         if (CollectionUtils.isNotEmpty(routingBy)) {

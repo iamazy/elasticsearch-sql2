@@ -30,7 +30,7 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void testHasChild(){
-        String sql="select * from fruit where has_child('apple',price in (10,20,30),1,4)";
+        String sql="select `name*`,`^age*` from fruit where has_child('apple',price in (10,20,30),1,4)";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

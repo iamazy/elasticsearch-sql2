@@ -2,8 +2,13 @@ package io.github.iamazy.elasticsearch.dsl.sql.druid;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.*;
+import com.alibaba.druid.sql.ast.statement.SQLSelectQuery;
 import com.alibaba.druid.sql.parser.*;
+import com.alibaba.druid.util.FnvHash;
+import com.alibaba.druid.util.JdbcConstants;
 import com.google.common.collect.Lists;
+
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -33,7 +38,12 @@ public class ElasticSqlExprParser extends SQLExprParser {
             } else {
                 return expr;
             }
-        } else {
+        }
+        else if(this.lexer.token()==Token.CARET){
+            this.lexer.nextToken();
+            return new SQLIdentifierExpr("^"+expr());
+        }
+        else {
             SQLExpr expr = this.primary();
             Token token = this.lexer.token();
             if (token == Token.COMMA) {
