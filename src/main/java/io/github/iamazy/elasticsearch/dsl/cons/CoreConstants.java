@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.cons;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.codecs.ObjectIdGenerator;
 
 /**
  * @author iamazy
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public interface CoreConstants {
 
     ObjectMapper OBJECT_MAPPER=new ObjectMapper();
+    ObjectIdGenerator OBJECT_ID_GENERATOR=new ObjectIdGenerator();
 
     String COMMA = ",";
     String COLON = ":";
