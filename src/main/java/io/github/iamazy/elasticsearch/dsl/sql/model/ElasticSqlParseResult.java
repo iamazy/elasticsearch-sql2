@@ -204,7 +204,7 @@ public class ElasticSqlParseResult {
     public String toString() {
         String ptn = "index:%s,type:%s,query_as:%s,from:%s,size:%s,routing:%s,dsl:%s";
         return String.format(
-                ptn, indices,/* type,*/ queryAs, from, size,
+                ptn, indices, type, queryAs, from, size,
                 (routingBy != null ? routingBy.toString() : "[]"), toDsl(toRequest())
         );
     }
