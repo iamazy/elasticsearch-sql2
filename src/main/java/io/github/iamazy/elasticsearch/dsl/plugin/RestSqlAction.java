@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.plugin;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ElasticSql2DslParser;
@@ -13,6 +14,7 @@ import org.elasticsearch.common.xcontent.*;
 import org.elasticsearch.rest.*;
 
 import java.io.IOException;
+import java.util.concurrent.*;
 
 
 /**
@@ -30,14 +32,13 @@ public class RestSqlAction extends BaseRestHandler {
         restController.registerHandler(RestRequest.Method.GET, "/_isql", this);
     }
 
-
     @Override
     public String getName() {
         return "isql";
     }
 
     @Override
-    protected RestChannelConsumer prepareRequest(RestRequest restRequest, NodeClient nodeClient) throws IOException {
+    protected RestChannelConsumer prepareRequest(RestRequest restRequest, NodeClient nodeClient) {
         try (XContentParser parser = restRequest.contentOrSourceParamParser()) {
             parser.mapStrings().forEach((k, v) -> restRequest.params().putIfAbsent(k, v));
         } catch (IOException e) {
@@ -54,9 +55,6 @@ public class RestSqlAction extends BaseRestHandler {
             if (restRequest.path().endsWith("/_explain")) {
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
             }
-            else if(restRequest.path().endsWith("/_export")){
-                return null;
-            }
             else {
                 if (parseResult.toFieldMapping() != null) {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.toFieldMapping()).actionGet())));
@@ -70,8 +68,10 @@ public class RestSqlAction extends BaseRestHandler {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
                 }
             }
-        } catch (ElasticSql2DslException e) {
+        } catch (Exception e) {
             return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.INTERNAL_SERVER_ERROR, XContentType.JSON.mediaType(), "{\"error\":\"" + e.getMessage() + "\"}"));
         }
     }
+
+
 }
