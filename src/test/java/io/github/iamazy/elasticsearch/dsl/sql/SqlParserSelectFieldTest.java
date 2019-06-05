@@ -2,8 +2,9 @@ package io.github.iamazy.elasticsearch.dsl.sql;
 
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ElasticSql2DslParser;
-import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * @author iamazy
@@ -75,10 +76,11 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void test3(){
-        String sql="select * from apple-aaa order by minPrice desc, advicePrice asc";
+        String sql="select * from `apple-aaa-01-.*` order by minPrice desc, advicePrice asc";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(Arrays.toString(parseResult.toRequest().indices()));
     }
 
 

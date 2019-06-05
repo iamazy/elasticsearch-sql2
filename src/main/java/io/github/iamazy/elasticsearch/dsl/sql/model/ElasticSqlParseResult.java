@@ -28,6 +28,7 @@ import org.elasticsearch.search.sort.SortBuilder;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -103,8 +104,9 @@ public class ElasticSqlParseResult {
 
     public SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
-        if (CollectionUtils.isNotEmpty(indices)) {
-            searchRequest.indices(indices.toArray(new String[0]));
+        List<String> indexList=indices.parallelStream().map(index->index.replace("`","")).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(indexList)) {
+            searchRequest.indices(indexList.toArray(new String[0]));
         }
         if (StringUtils.isNotBlank(type)) {
             searchRequest.types(type);
