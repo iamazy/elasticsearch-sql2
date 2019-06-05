@@ -75,10 +75,11 @@ public class SqlParserSelectFieldTest {
 
     @Test
     public void test3(){
-        String sql="select * from apple order by minPrice desc, advicePrice asc";
+        String sql="select * from apple-aaa order by minPrice desc, advicePrice asc";
         ElasticSql2DslParser sql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
     }
+
 
 }

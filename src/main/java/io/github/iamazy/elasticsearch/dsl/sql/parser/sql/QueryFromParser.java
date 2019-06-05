@@ -1,5 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.sql;
 
+import com.alibaba.druid.sql.ast.expr.SQLBinaryOpExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.expr.SQLQueryExpr;
@@ -52,6 +53,11 @@ public class QueryFromParser implements QueryParser {
             String index = ((SQLIdentifierExpr) idxExpr.getOwner()).getName();
             dslContext.getParseResult().setIndices(Lists.newArrayList(index));
 //            dslContext.getParseResult().setType(idxExpr.getName());
+            return;
+        }
+        if(tableSource.getExpr() instanceof SQLBinaryOpExpr){
+            String index=tableSource.getExpr().toString().replace(" ","");
+            dslContext.getParseResult().setIndices(Lists.newArrayList(index));
             return;
         }
 

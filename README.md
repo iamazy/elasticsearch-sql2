@@ -29,7 +29,7 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>7.1.0.1</version>
+  <version>7.1.1.1</version>
 </dependency>
 ```
 
@@ -47,6 +47,7 @@
 | 7.x | 7.0.0 | | 7.0.0.2 |
 | 7.x | 7.0.1 | | 7.0.1.1 |
 | 7.x | 7.1.0 | | 7.1.0.1 |
+| 7.x | 7.1.1 | | 7.1.1.1 |
 
 #### 安装
 
@@ -101,6 +102,7 @@ CHANGELOG
 2019-4-28: 添加like not like 查询<br/>
 2019-5-5: 添加desc语法获取index(或者index/field)的mapping,无法直接获取实际的mapping,必须结合restClient使用,且desc后面只能加一个index的名称</br>
 2019-5-8: 添加excludes字段（在字段前加[^]）<br/>
+2019-6-5: 解决了索引名带中划线【-】报错的bug<br/>
 
 [CHANGELOG](https://github.com/iamazy/elasticsearch-sql/edit/master/CHANGELOG)
 
