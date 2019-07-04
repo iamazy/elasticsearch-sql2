@@ -29,7 +29,7 @@
 <dependency>
   <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
   <artifactId>elasticsearch-sql</artifactId>
-  <version>7.1.1.1</version>
+  <version>${elasticsearch-sql-version}</version>
 </dependency>
 ```
 
