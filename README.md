@@ -1,6 +1,10 @@
 基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
 
+说明
+---------------
+这个版本的elasticsearch-sql是基于Alibaba的Druid中的SqlParser组件，由于elasticsearch许多功能并不适合使用sql表达，导致实现elasticsearch一些高级功能的时候越来越受到SqlParser的限制，所以这个版本的elasticsearch-sql仅供交流，现已另起一个Repository[elasticsql](https://github.com/iamazy/elasticsql)，使用Antlr4来解析sql生成dsl，使elasticsql完全可控，不受其他组件的限制，并将提供多语言的支持，尽请期待！
+
 目录
 ---------------
 
