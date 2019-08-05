@@ -1,5 +1,7 @@
 基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
+请移步[elasticsql](https://github.com/iamazy/elasticsql)
+---------------
 
 说明
 ---------------
