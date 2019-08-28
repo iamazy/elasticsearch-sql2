@@ -1,6 +1,6 @@
 基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
 ==========================
-PLEASE REMOVE TO [elasticsql](https://github.com/iamazy/elasticsql)
+<font color='red'> PLEASE REMOVE TO </font> [elasticsql](https://github.com/iamazy/elasticsql)
 ---------------
 
 说明
