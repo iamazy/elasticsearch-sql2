@@ -1,4 +1,4 @@
-基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件
+基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件【STALLED】
 ==========================
 PLEASE MOVE TO [elasticsql](https://github.com/iamazy/elasticsql)
 ---------------
