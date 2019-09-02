@@ -1,11 +1,11 @@
 基于Elasticsearch的Java Rest High Level Client的elasticsearch-sql查询组件【STALLED】
 ==========================
-PLEASE MOVE TO [elasticsql](https://github.com/iamazy/elasticsql)
+PLEASE MOVE TO [elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)
 ---------------
 
 说明
 ---------------
-这个版本的elasticsearch-sql是基于Alibaba的Druid中的SqlParser组件，由于elasticsearch许多功能并不适合使用sql表达，导致实现elasticsearch一些高级功能的时候越来越受到SqlParser的限制，所以这个版本的elasticsearch-sql仅供交流，现已另启一个项目👉[elasticsql](https://github.com/iamazy/elasticsql)，使用**Antlr4**来解析sql生成dsl，使elasticsql完全可控，并将提供**多语言**的支持，尽请期待！
+这个版本的elasticsearch-sql是基于Alibaba的Druid中的SqlParser组件，由于elasticsearch许多功能并不适合使用sql表达，导致实现elasticsearch一些高级功能的时候越来越受到SqlParser的限制，所以这个版本的elasticsearch-sql仅供交流，现已另启一个项目👉[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)，使用**Antlr4**来解析sql生成dsl，使elasticsql完全可控，并将提供**多语言**的支持，尽请期待！
 
 目录
 ---------------
